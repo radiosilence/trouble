@@ -82,7 +82,7 @@ class model_kill extends model
 			LIMIT 20
 		" );
 		
-		$sth->execute():
+		$sth->execute();
 		return $sth->fetchAll();
 	}
 }
