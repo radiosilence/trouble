@@ -9,13 +9,14 @@
  */
 
 # Definitions
+define( "DEBUG", 0 );
 
 define( "DIRSEP", DIRECTORY_SEPARATOR );
 define( "LOCALE", "en_GB" );
 define( "SITE_PATH", realpath( dirname( __FILE__ ) . DIRSEP . '..' . DIRSEP ) . DIRSEP );
 define( "BASE_HREF", preg_replace( "/(.*?)\/index.php/", "$1", $_SERVER[ 'PHP_SELF' ] ) );
 define( "CONFIG_PATH", SITE_PATH . DIRSEP . "config" );
-define( "CORE_PATH", SITE_PATH . DIRSEP . "core" );
+define( "CORE_PATH", SITE_PATH . "core" );
 define( "HOST", $_SERVER[ "HTTP_HOST" ] );
 
 # If this is set to 1, searching will far faster but less det
