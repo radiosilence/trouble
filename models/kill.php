@@ -63,14 +63,15 @@ class model_kill extends model
 	public function killboard_list()
 	{
 		$db = $this->db;
-		
 		$sth = $db->prepare( "
 			SELECT kills.id as id,
 				kills.description 	as description,
 				kills.timestamp 	as timestamp,
 				assassins.name 		as assassin,
 				targets.name 		as target,
-				weapons.name 		as weapon
+				weapons.name 		as weapon,
+				kills.assassin		as aid,
+				kills.target		as tid
 			FROM kills
 			LEFT JOIN agents 		as assassins
 				ON kills.assassin 	= assassins.id
@@ -83,7 +84,29 @@ class model_kill extends model
 		" );
 		
 		$sth->execute();
-		return $sth->fetchAll();
+		
+		$kills = $sth->fetchAll( PDO::FETCH_ASSOC );
+		
+		foreach( $kills as $k => $kill )
+		{
+			$aurl = new seo_url(
+				array(
+					"id" => $kill[ "id" ],
+					"title" => $kill[ "assassin" ]
+				)
+			);
+			$kills[ $k ][ "aurl" ] = $aurl->url;
+			
+			$turl = new seo_url(
+				array(
+					"id" => $kill[ "id" ],
+					"title" => $kill[ "target" ]
+				)
+			);
+			$kills[ $k ][ "turl" ] = $turl->url;
+		}
+		
+		return $kills;
 	}
 }
 ?>

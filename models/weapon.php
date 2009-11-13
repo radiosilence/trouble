@@ -7,6 +7,7 @@ class models_weapon extends model
 		$this->db = $db;
 		$this->define();
 	}
+
 	protected function define()
 	{
 		$t = $this;
@@ -15,11 +16,18 @@ class models_weapon extends model
 		$t->primary_table	= "weapons";
 		$t->primary_key		= "weapons.id";
 		
+		$classes = array(
+			"Melee",
+			"Ranged",
+			"Poison",
+			"Special"
+		);
+		
 		$t->table( "weapons", array(
 			"id"		=> $t->primary_key	(),
 			"name"		=> $t->char_field	( "Name" ),
-			"class"		=> $t->foreign_key	( "Class", "class", "select" ),
-			"customised" 	=> $t->boolean_field	( "Customised" )
+			"class" 	=> $t->char_field	( "Class", array( "choices" => $classes ) )
+			"order" 	=> $t->hidden_field	( "Order" )
 		));
 	}
 	
@@ -28,8 +36,7 @@ class models_weapon extends model
 		return array(
 			"Weapon" => array(
 				"name",
-				"class",
-				"customised"
+				"class"
 			)
 		);
 	}

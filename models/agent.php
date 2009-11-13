@@ -1,6 +1,6 @@
 <?php
 
-class models_agent extends model
+class model_agent extends model
 {	
 	public function __construct( $db )
 	{

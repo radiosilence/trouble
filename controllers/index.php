@@ -10,11 +10,10 @@ class controller_index extends controller
 		$this->load_locale( "lang" );
 		
 		MODEL::set_db( $db );
-		$kills = array();
-		$kill = MODEL::create( "kill" );
-		$kill->load( 1 );
-		$kill->save();		
-		$view->set( "kills", $kills );
+		
+		$kill 	= MODEL::create( "kill" );
+		
+		$view->set( "kills", $kill->killboard_list() );
 		$view->set( "page_title", L_PAGE_TITLE );
 		$view->set( "site_name", L_SITE_NAME );
 		$view->show( "home" );
