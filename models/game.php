@@ -5,7 +5,7 @@ class model_game extends model
 	{
 		$this->db = $db;
 	}
-	protected function define();
+	protected function define()
 	{
 		$t = $this;
 		
@@ -28,15 +28,54 @@ class model_game extends model
 		));
 	}
 	
-	public static function current_games()
+	public function default_form()
 	{
-		$db = $this->db;
+		return array(
+			"Dates" => array(
+				"signup_date",
+				"start_date",
+				"end_date"
+			),
+			"Info" => array(
+				"location",
+				"description",
+				"entry_fee"
+			),
+			"Status" => array(
+				"finalised",
+				"victor",
+				"entry_fee"
+			)
+		);
+	}
+	
+	/**
+	 * Asks the database what games are currently running.
+	 */
+	public static function current_games( $db = 0 )
+	{
+		if( !$db )
+		{
+			$db = REGISTRY::get( "db" );
+		}
+		
 		$sth = $db->prepare( "
 			SELECT 	id
 			FROM 	games
 			WHERE	start_date < CURRENT_TIMESTAMP()
 			AND	end_date > CURRENT_TIMESTAMP()
-		";
+		" );
+		
+		$sth->execute();
+		
+		if( $sth->rowCount() > 0 )
+		{
+			return $sth->fetchAll( PDO::FETCH_COLUMN, 0 );
+		}
+		else
+		{
+			return 0;
+		}
 	}
 }
 ?>

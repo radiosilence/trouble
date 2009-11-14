@@ -80,33 +80,29 @@ class model_kill extends model
 				ON kills.target 	= targets.id
 			LEFT JOIN weapons
 				ON kills.weapon 	= weapons.id
+			WHERE	kills.game = :curgame
 			ORDER BY kills.timestamp DESC
 			LIMIT 20
 		" );
 		
-		$sth->execute();
+		$sth->bindParam( ":curgame", $gid );
+		$curgame = MODEL_GAME::current_games();
 		
-		$kills = $sth->fetchAll( PDO::FETCH_ASSOC );
-		
-		foreach( $kills as $k => $kill )
+		if( !is_array( $curgame ) )
 		{
-			$aurl = new seo_url(
-				array(
-					"id" => $kill[ "id" ],
-					"title" => $kill[ "assassin" ]
-				)
-			);
-			$kills[ $k ][ "aurl" ] = $aurl->url;
-			
-			$turl = new seo_url(
-				array(
-					"id" => $kill[ "id" ],
-					"title" => $kill[ "target" ]
-				)
-			);
-			$kills[ $k ][ "turl" ] = $turl->url;
+			return 0;
 		}
-		
+		else
+		{
+			foreach( $curgame as $gid )
+			{
+				$sth->execute();
+			
+				$res = $sth->fetchAll( PDO::FETCH_ASSOC );
+				//print_r( $res );
+				$kills[ $gid ] = $res;
+			}
+		}
 		return $kills;
 	}
 }
