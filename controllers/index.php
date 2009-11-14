@@ -9,9 +9,7 @@ class controller_index extends controller
 		
 		$this->load_locale( "lang" );
 		
-		MODEL::set_db( $db );
-		
-		$kill 	= MODEL::create( "kill" );
+		$kill 	= new model_kill( $db );
 		
 		$view->set( "kills", $kill->killboard_list() );
 		$view->set( "page_title", L_PAGE_TITLE );

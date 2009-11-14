@@ -29,6 +29,8 @@ class model_agent extends model
 			"societies"	=> $t->text_field	( "Societies" ),
 			"clubs"		=> $t->text_field	( "Bars, Clubs & Pubs" ),
 			"timetable"	=> $t->text_field	( "Timetable (+Times and Locations)" ),
+			"kill_count"	=> $t->integer_field	( "Frags" ),
+			"death_count"	=> $t->integer_field	( "Deaths" ),
 		));
 	}
 	

@@ -26,7 +26,8 @@ class model_kill extends model
 			"target"	=> $t->foreign_key	( "Target", "agent", "search" ),
 			"contested"	=> $t->boolean_field	( "Contested" ),
 			"contest"	=> $t->text_field	( "Contest Description" ),
-			"timestamp"	=> $t->datetime_field	( "Time of Death" )
+			"timestamp"	=> $t->datetime_field	( "Time of Death" ),
+			"game"		=> $t->foreign_key	( "Game", "game", "select" )
 		));
 	}
 
