@@ -4,8 +4,15 @@ class controller_index extends controller
 {
 	public function index( $args )
 	{
-		$view 	= new view( $this->registry );
+		$view 	= new view();
 		$db 	= $this->database();
+
+		$id_of_assassin = 1;
+		// $db is a pdo database object
+		$a = new model_agent( $db );
+		$a->load( 1 );
+		$t = new model_agent( $db );
+		$t->load( $a->target );
 	
 		$this->load_locale( "lang" );
 		

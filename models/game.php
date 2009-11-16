@@ -9,7 +9,7 @@ class model_game extends model
 	{
 		$t = $this;
 		
-		$t->name = "game";
+		$t->model_name = "game";
 		$t->nice_name = "Game";
 		
 		$t->primary_table = "games";

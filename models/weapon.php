@@ -11,7 +11,7 @@ class models_weapon extends model
 	protected function define()
 	{
 		$t = $this;
-		$t->name		= "weapon";
+		$t->model_name		= "weapon";
 		$t->nice_name		= "Weapon";
 		$t->primary_table	= "weapons";
 		$t->primary_key		= "weapons.id";

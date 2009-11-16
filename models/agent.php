@@ -12,7 +12,7 @@ class model_agent extends model
 	{
 		$t = $this;
 		
-		$t->name		= "agent";
+		$t->model_name		= "agent";
 		$t->nice_name		= "Agent";
 		
 		$t->primary_table	= "agents";

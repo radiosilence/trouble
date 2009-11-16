@@ -99,7 +99,6 @@ class model_kill extends model
 				$sth->execute();
 			
 				$res = $sth->fetchAll( PDO::FETCH_ASSOC );
-				//print_r( $res );
 				$kills[ $gid ] = $res;
 			}
 		}
