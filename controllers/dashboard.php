@@ -21,7 +21,6 @@ class controller_dashboard extends controller
 	public function games( $args )
 	{
 		# Interface for joining games, current games, etc.
-		# HI KARL
 	}
 }
 

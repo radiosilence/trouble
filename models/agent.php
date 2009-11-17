@@ -20,7 +20,7 @@ class model_agent extends model
 		
 		$t->table( "agents", array(
 			"id"		=> $t->primary_key	(),
-			"name"		=> $t->char_field	( "Name" ),
+			"fullname"	=> $t->char_field	( "Full Name" ),
 			"alias"		=> $t->char_field	( "Alias" ),
 			"email"		=> $t->char_field	( "E-Mail", array( "validation" => "email" )),
 			"phone"		=> $t->char_field	( "Phone Number" ),

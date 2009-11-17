@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Nov 15, 2009 at 08:57 PM
+-- Generation Time: Nov 17, 2009 at 04:56 PM
 -- Server version: 5.1.36
 -- PHP Version: 5.3.0
 
@@ -27,7 +27,7 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
 CREATE TABLE IF NOT EXISTS `agents` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
+  `fullname` varchar(255) NOT NULL,
   `alias` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
   `phone` varchar(255) NOT NULL,
@@ -45,9 +45,9 @@ CREATE TABLE IF NOT EXISTS `agents` (
 -- Dumping data for table `agents`
 --
 
-INSERT INTO `agents` (`id`, `name`, `alias`, `email`, `phone`, `address`, `course`, `societies`, `clubs`, `timetable`, `kill_count`, `death_count`) VALUES
-(1, 'James Cleveland', 'twat', 'jamescleveland@gmail.com', '07865998857', '30 Wokingham Road\r\nReading\r\nRG6 1JH', 'Computer Science & Cybernetics (BSc)', 'Indie Society\r\nVideo Game Society', 'Iguana\r\nUpin Arms', 'Blahh', 0, 0),
-(2, 'Amy Garrett', 'Amycus', 'amycus@hotmail.com', '0223209382', 'Adasdasd', 'Classical Studies (BSc)', 'None', 'Upin Arms\r\nDogma', 'Latin and stuff', 0, 0);
+INSERT INTO `agents` (`id`, `fullname`, `alias`, `email`, `phone`, `address`, `course`, `societies`, `clubs`, `timetable`, `kill_count`, `death_count`) VALUES
+(1, 'James Cleveland', 'radiosilence', 'jamescleveland@gmail.com', '07865998857', '30 Wokingham Road\r\nReading\r\nRG6 1JH', 'Computer Science & Cybernetics (BSc)', 'Indie Society\r\nVideo Game Society', 'Iguana\r\nUpin Arms', 'Blahh', 0, 0),
+(2, 'Amy Garrett', 'amycus', 'amycus@hotmail.com', '0223209382', 'Adasdasd', 'Classical Studies (BSc)', 'None', 'Upin Arms\r\nDogma', 'Latin and stuff', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -73,7 +73,24 @@ CREATE TABLE IF NOT EXISTS `games` (
 --
 
 INSERT INTO `games` (`id`, `start_date`, `end_date`, `signup_date`, `location`, `victor`, `description`, `finalised`, `entry_fee`) VALUES
-(1, '2009-11-13 13:59:17', '2009-11-16 13:59:22', '2009-11-12 13:59:28', 'Reading, UK', 0, 'Blahhh', 1, 3);
+(1, '2009-11-13 13:59:17', '2009-11-30 13:59:22', '2009-11-12 13:59:28', 'Reading, UK', 0, 'Blahhh', 1, 3);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `info_known`
+--
+
+CREATE TABLE IF NOT EXISTS `info_known` (
+  `owner` int(11) NOT NULL,
+  `owned` int(11) NOT NULL,
+  `field` varchar(255) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `info_known`
+--
+
 
 -- --------------------------------------------------------
 

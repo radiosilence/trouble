@@ -68,8 +68,8 @@ class model_kill extends model
 			SELECT kills.id as id,
 				kills.description 	as description,
 				kills.timestamp 	as timestamp,
-				assassins.name 		as assassin,
-				targets.name 		as target,
+				assassins.alias		as assassin,
+				targets.alias 		as target,
 				weapons.name 		as weapon,
 				kills.assassin		as aid,
 				kills.target		as tid
