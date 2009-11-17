@@ -3,7 +3,7 @@ class model_game extends model
 {
 	private $agents;
 	private $targets;
-	private $assassins;
+	private $hunters;
 	public function __construct( $db, $id = 0 )
 	{
 		$this->db = $db;
@@ -47,7 +47,7 @@ class model_game extends model
 		
 		$this->targets = json_decode( '{"Edward":["Adam","Boris","Zacharia"],"Gunther":["Adam","Louis","Ralph"],"Steven":["Adam","Imogen","Norman"],"Francesca":["Boris","Deiniol","Paris"],"Urma":["Boris","Gunther","Karl"],"Zacharia":["Caroline","Vera","Xandria"],"Oscar":["Caroline","Harriet","Quentin"],"Norman":["Caroline","Tomas","Xandria"],"Paris":["Deiniol","James","Norman"],"Vera":["Deiniol","Oscar","Steven"],"Caroline":["Edward","Tomas","Yusef"],"Quentin":["Edward","Harriet","Yusef"],"Adam":["Edward","James","Mike"],"Boris":["Francesca","James","Oscar"],"Xandria":["Francesca","Norman","Ralph"],"Deiniol":["Francesca","Urma","Zacharia"],"Ralph":["Gunther","Karl","Quentin"],"Tomas":["Gunther","Mike","Oscar"],"Mike":["Harriet","Louis","Zacharia"],"Karl":["Imogen","Urma","Vera"],"Louis":["Imogen","Ralph","Yusef"],"Yusef":["Karl","Quentin","Vera"],"Harriet":["Louis","Paris","Urma"],"James":["Mike","Paris","Steven"],"Imogen":["Steven","Tomas","Xandria"]}', 1 );
 		
-		$this->assassins = json_decode( '{"Adam":["Edward","Gunther","Steven"],"Boris":["Edward","Francesca","Urma"],"Caroline":["Zacharia","Oscar","Norman"],"Deiniol":["Paris","Vera","Francesca"],"Edward":["Caroline","Quentin","Adam"],"Francesca":["Boris","Xandria","Deiniol"],"Gunther":["Ralph","Tomas","Urma"],"Harriet":["Mike","Oscar","Quentin"],"Imogen":["Steven","Karl","Louis"],"James":["Adam","Paris","Boris"],"Karl":["Urma","Yusef","Ralph"],"Louis":["Mike","Harriet","Gunther"],"Mike":["James","Adam","Tomas"],"Norman":["Xandria","Steven","Paris"],"Oscar":["Vera","Tomas","Boris"],"Paris":["James","Francesca","Harriet"],"Quentin":["Oscar","Yusef","Ralph"],"Ralph":["Louis","Xandria","Gunther"],"Steven":["James","Imogen","Vera"],"Tomas":["Norman","Imogen","Caroline"],"Urma":["Deiniol","Harriet","Karl"],"Vera":["Zacharia","Yusef","Karl"],"Xandria":["Imogen","Zacharia","Norman"],"Yusef":["Louis","Caroline","Quentin"],"Zacharia":["Mike","Deiniol","Edward"]}', 1 );
+		$this->hunters = json_decode( '{"Adam":["Edward","Gunther","Steven"],"Boris":["Edward","Francesca","Urma"],"Caroline":["Zacharia","Oscar","Norman"],"Deiniol":["Paris","Vera","Francesca"],"Edward":["Caroline","Quentin","Adam"],"Francesca":["Boris","Xandria","Deiniol"],"Gunther":["Ralph","Tomas","Urma"],"Harriet":["Mike","Oscar","Quentin"],"Imogen":["Steven","Karl","Louis"],"James":["Adam","Paris","Boris"],"Karl":["Urma","Yusef","Ralph"],"Louis":["Mike","Harriet","Gunther"],"Mike":["James","Adam","Tomas"],"Norman":["Xandria","Steven","Paris"],"Oscar":["Vera","Tomas","Boris"],"Paris":["James","Francesca","Harriet"],"Quentin":["Oscar","Yusef","Ralph"],"Ralph":["Louis","Xandria","Gunther"],"Steven":["James","Imogen","Vera"],"Tomas":["Norman","Imogen","Caroline"],"Urma":["Deiniol","Harriet","Karl"],"Vera":["Zacharia","Yusef","Karl"],"Xandria":["Imogen","Zacharia","Norman"],"Yusef":["Louis","Caroline","Quentin"],"Zacharia":["Mike","Deiniol","Edward"]}', 1 );
 
 	}
 	
@@ -166,7 +166,7 @@ class model_game extends model
 						else
 						{
 							$loops 				= 0;
-							$assassins[ $agents[ $i ] ][]	= $target;
+							$hunters[ $agents[ $i ] ][]	= $target;
 							$targets[ $target ][]		= $agents[ $i ];
 							$ok 				= 1;
 						}
@@ -174,6 +174,7 @@ class model_game extends model
 					while ( !$ok && $loops <= 20 );
 				}
 			}
+			
 			$outer++;
 		}
 		while ( !$ok && $outer <= 20 );
@@ -184,7 +185,7 @@ class model_game extends model
 		}
 		
 		$this->targets = $targets;
-		$this->assassins = $assassins;
+		$this->hunters = $hunters;
 		
 /*		echo json_encode( $this->targets );
 		echo "\nassassins:";
@@ -195,30 +196,63 @@ class model_game extends model
 	
 	public function kill_agent( $target )
 	{
+		echo "Killing $target, that fucker!\n";
+		print_r( $this->hunters );
+		
 		$this->agents[ "living" ] = array( 1, 1, 1, 1 ); //debug
 		if( count( $this->agents[ "living" ] ) > 3 )
 		{
 			# 1. Target's targets as a list.
-			echo "\n{$target}'s' targets:\n";
-			print_r( $this->get_targets( $target ) );
+			$ts = $this->get_targets( $target );
 			# 2. Find target's assassins as a list.
-			echo "\n{$target}'s' hunters:\n";
-			print_r( $this->get_assassins( $target ) );
-			# 3. Assign target's targets to assassins.
+			$hs = $this->get_hunters( $target );
+			# 3. Assign target's targets to hunters.
+			foreach( $ts as $t )
+			{
+				$h = $hs[ 0 ];
+				$ht = $this->get_targets( $h );
+				
+				if( $t != $h && !in_array( $t, $ht ) )
+				{
+					$this->replace_target( $h, $target, $t );
+				}
+				else
+				{
+					# BAD
+				}
+				array_shift( $hs );
+			}
+
 			# 4. Make sure lists are updated.
+			# 5. Take the agent out of the target list and hunter list.
+			unset( $this->hunters[ $target ] );
+			unset( $this->targets[ $target ] );		
 		}
 		else
 		{
 			# All on all code.
 		}
+		print_r( $this->hunters );
 	}
 	
+	private function replace_target( $agent, $old, $new )
+	{
+		# Replace the target's hunter with new one.
+		$th = $this->targets[ $new ];
+		$k  = array_search( $old, $th );
+		$this->targets[ $new ][ $k ] = $agent;
+				
+		# Replace the hunter's target with new one.
+		$ht = $this->hunters[ $agent ];
+		$k = array_search( $old, $ht );
+		$this->hunters[ $agent ][ $k ] = $new;
+	}
 	private function get_targets( $agent )
 	{
-		return $this->assassins[ $agent ];
+		return $this->hunters[ $agent ];
 	}
 	
-	private function get_assassins( $agent )
+	private function get_hunters( $agent )
 	{
 		return $this->targets[ $agent ];
 	}
