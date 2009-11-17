@@ -38,7 +38,7 @@ class model_agent extends model
 	{
 		return array(
 			"Contact Information" => array(
-				"name",
+				"fullname" => "title",
 				"alias",
 				"email",
 				"phone",
