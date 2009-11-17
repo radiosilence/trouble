@@ -8,12 +8,18 @@ class controller_index extends controller
 		$db 	= $this->database();
 			
 		$this->load_locale( "lang" );
+		$g = new model_game( $db );
 		
-		$kill 	= new model_kill( $db );
-		$view->set( "games", $kill->killboard_list() );
+//		$g->assign_targets();
+		$g->kill_agent( "Edward" );
+		$view->set( "games", MODEL_KILL::killboard_list() );		
 		$view->set( "page_title", L_PAGE_TITLE );
 		$view->set( "site_name", L_SITE_NAME );
 		$view->show( "home" );
+	}
+	
+	public function hi( $args )
+	{
 	}
 }
 

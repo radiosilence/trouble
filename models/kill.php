@@ -61,9 +61,9 @@ class model_kill extends model
 		);
 	}
 	
-	public function killboard_list()
+	public static function killboard_list()
 	{
-		$db = $this->db;
+		$db = REGISTRY::get( "db" );
 		$sth = $db->prepare( "
 			SELECT kills.id as id,
 				kills.description 	as description,
