@@ -1,7 +1,7 @@
 <?php
 class model_game extends model
 {
-	private $agents;
+	public $agents;
 	private $targets;
 	private $hunters;
 	public function __construct( $db, $id = 0 )
@@ -48,6 +48,9 @@ class model_game extends model
 		$this->targets = json_decode( '{"Edward":["Adam","Boris","Zacharia"],"Gunther":["Adam","Louis","Ralph"],"Steven":["Adam","Imogen","Norman"],"Francesca":["Boris","Deiniol","Paris"],"Urma":["Boris","Gunther","Karl"],"Zacharia":["Caroline","Vera","Xandria"],"Oscar":["Caroline","Harriet","Quentin"],"Norman":["Caroline","Tomas","Xandria"],"Paris":["Deiniol","James","Norman"],"Vera":["Deiniol","Oscar","Steven"],"Caroline":["Edward","Tomas","Yusef"],"Quentin":["Edward","Harriet","Yusef"],"Adam":["Edward","James","Mike"],"Boris":["Francesca","James","Oscar"],"Xandria":["Francesca","Norman","Ralph"],"Deiniol":["Francesca","Urma","Zacharia"],"Ralph":["Gunther","Karl","Quentin"],"Tomas":["Gunther","Mike","Oscar"],"Mike":["Harriet","Louis","Zacharia"],"Karl":["Imogen","Urma","Vera"],"Louis":["Imogen","Ralph","Yusef"],"Yusef":["Karl","Quentin","Vera"],"Harriet":["Louis","Paris","Urma"],"James":["Mike","Paris","Steven"],"Imogen":["Steven","Tomas","Xandria"]}', 1 );
 		
 		$this->hunters = json_decode( '{"Adam":["Edward","Gunther","Steven"],"Boris":["Edward","Francesca","Urma"],"Caroline":["Zacharia","Oscar","Norman"],"Deiniol":["Paris","Vera","Francesca"],"Edward":["Caroline","Quentin","Adam"],"Francesca":["Boris","Xandria","Deiniol"],"Gunther":["Ralph","Tomas","Urma"],"Harriet":["Mike","Oscar","Quentin"],"Imogen":["Steven","Karl","Louis"],"James":["Adam","Paris","Boris"],"Karl":["Urma","Yusef","Ralph"],"Louis":["Mike","Harriet","Gunther"],"Mike":["James","Adam","Tomas"],"Norman":["Xandria","Steven","Paris"],"Oscar":["Vera","Tomas","Boris"],"Paris":["James","Francesca","Harriet"],"Quentin":["Oscar","Yusef","Ralph"],"Ralph":["Louis","Xandria","Gunther"],"Steven":["James","Imogen","Vera"],"Tomas":["Norman","Imogen","Caroline"],"Urma":["Deiniol","Harriet","Karl"],"Vera":["Zacharia","Yusef","Karl"],"Xandria":["Imogen","Zacharia","Norman"],"Yusef":["Louis","Caroline","Quentin"],"Zacharia":["Mike","Deiniol","Edward"]}', 1 );
+		
+		$this->assign_targets();
+		print_r( $this->hunters );
 
 	}
 	
@@ -137,53 +140,41 @@ class model_game extends model
 		{
 			die( "Not enough agents for a 3-agent game." );
 		}
-		$target_pool = array_merge( $this->agents, $this->agents, $this->agents);
+		$target_pool = array( $this->agents, $this->agents, $this->agents );
 		$agents = $this->agents;
 		$outer = 0;
-		do
+
+		foreach( $target_pool as $pool )
 		{
-			shuffle( $target_pool );
-			for( $i = 0; $i < count( $agents ); $i++ )
-			{
-				$assassins[ $agents[ $i ] ] = array();
-				$loops = 0;
-				for( $x = 0; $x < 3; $x++ )
-				{
-					do
-					{
-						$ok = 0;
-						$target = array_pop( $target_pool );
-						if( ( $target == $agents[ $i ]
-							|| in_array( $target, $assassins[ $agents[ $i ] ] )
-							&& $outer < 20
-							&& $loops < 20 )
-						)
-						{
-							$loops++;
-							array_push( $target_pool, $target );
-							shuffle( $target_pool );
-						}
-						else
-						{
-							$loops 				= 0;
-							$hunters[ $agents[ $i ] ][]	= $target;
-							$targets[ $target ][]		= $agents[ $i ];
-							$ok 				= 1;
-						}
-					}
-					while ( !$ok && $loops <= 20 );
-				}
-			}
-			
-			$outer++;
+			shuffle( $pool );
 		}
-		while ( !$ok && $outer <= 20 );
+		foreach( $agents as $i => $agent )
+		{
+			$hunters[ $agent ] = array();
+			for( $p = 0; $p < 3; $p++ )
+			{
+				$tmp_pool = array();
+				foreach( $target_pool[ $p ] as $k => $fish )
+				{
+					if( $fish != $agent && !in_array( $fish, $hunters[ $agent ] ) )
+					{
+						$tmp_pool[] = $k;
+					}
+				}
+				echo $luckyfish = rand( 0, count( $tmp_pool ) - 1 );
+				$fish = $target_pool[ $p ][ $tmp_pool[ $luckyfish ] ];
+				echo "[$fish]";
+				$hunters[ $agent ][] = $fish;
+				$targets[ $fish ][]  = $agent;
+				unset( $target_pool[ $p ][ $tmp_pool[ $luckyfish ] ] );
+			}
+		}
 		
 		if( $outer > 20 )
 		{
 			die( "Super unlucky target allocation error or target allocation impossible." );
 		}
-		
+		print_r( $hunters );
 		$this->targets = $targets;
 		$this->hunters = $hunters;
 		
@@ -197,32 +188,23 @@ class model_game extends model
 	public function kill_agent( $target )
 	{
 		echo "Killing $target, that fucker!\n";
-		print_r( $this->hunters );
-		
-		$this->agents[ "living" ] = array( 1, 1, 1, 1 ); //debug
-		if( count( $this->agents[ "living" ] ) > 3 )
+		if( count( $this->hunters ) > 4 )
 		{
+			
+			echo "\n\nREPLACEMENT CYCLE FOR $target ITERATION $iters\n\n";
 			# 1. Target's targets as a list.
 			$ts = $this->get_targets( $target );
+			shuffle( $ts );
 			# 2. Find target's assassins as a list.
 			$hs = $this->get_hunters( $target );
 			# 3. Assign target's targets to hunters.
-			foreach( $ts as $t )
+			$this->target_hunter_match( $ts, $hs, $target );
+			$replacements = array();
+			for( $i = 0; $i < count( $ts ); $i++ )
 			{
-				$h = $hs[ 0 ];
-				$ht = $this->get_targets( $h );
-				
-				if( $t != $h && !in_array( $t, $ht ) )
-				{
-					$this->replace_target( $h, $target, $t );
-				}
-				else
-				{
-					# BAD
-				}
-				array_shift( $hs );
+				$this->replace_target( $hs[ $i ], $target, $ts[ $i ] );
 			}
-
+				
 			# 4. Make sure lists are updated.
 			# 5. Take the agent out of the target list and hunter list.
 			unset( $this->hunters[ $target ] );
@@ -231,17 +213,24 @@ class model_game extends model
 		else
 		{
 			# All on all code.
+			print_r( $this->hunters );
+			die( "ALL ON ALL" );
 		}
-		print_r( $this->hunters );
+//		print_r( $this->hunters );
 	}
 	
 	private function replace_target( $agent, $old, $new )
 	{
 		# Replace the target's hunter with new one.
 		$th = $this->targets[ $new ];
+		if( !is_array( $th ) )
+		{
+			die("no targets for $new!!\n");
+		}
 		$k  = array_search( $old, $th );
 		$this->targets[ $new ][ $k ] = $agent;
-				
+		echo "{$agent} <- $old <- $new\n";
+		
 		# Replace the hunter's target with new one.
 		$ht = $this->hunters[ $agent ];
 		$k = array_search( $old, $ht );
@@ -255,6 +244,47 @@ class model_game extends model
 	private function get_hunters( $agent )
 	{
 		return $this->targets[ $agent ];
+	}
+	
+	private function target_hunter_match( &$ts, &$hs, $ag )
+	{
+		$ht = array();
+		shuffle( $ts );
+		$loops = 0;
+		
+		while( !$ok )
+		{
+			$ok = 1;
+			
+			echo "$t iteration $loops\n";
+			foreach( $ts as $tk => $t )
+			{
+				foreach( $hs as $hk => $h )
+				{
+					if( $h != $t && !in_array( $h, $ht ) && !in_array( $t, $this->get_targets( $h )))
+					{
+						$ht[ $tk ] = $h;
+					}
+				}
+				if( !isset( $ht[ $tk ] ) )
+				{
+					$ok = 0;
+				}
+			}
+			print_r( $ht );
+			# Try again
+			shuffle( $hs );
+			
+			$loops++;
+			
+			if( $loops > 30 )
+			{
+				print_r( $this->hunters );
+				print_r( $this->targets );
+				die("LOOP OVERRUN");
+			}
+		}
+		$hs = $ht;
 	}
 }
 ?>

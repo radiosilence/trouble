@@ -11,7 +11,10 @@ class controller_index extends controller
 		$g = new model_game( $db );
 		
 //		$g->assign_targets();
-		$g->kill_agent( "Edward" );
+foreach( $g->agents as $agent )
+{
+		$g->kill_agent( $agent );	
+}
 		$view->set( "games", MODEL_KILL::killboard_list() );		
 		$view->set( "page_title", L_PAGE_TITLE );
 		$view->set( "site_name", L_SITE_NAME );
