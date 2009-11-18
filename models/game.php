@@ -3,7 +3,7 @@ class model_game extends model
 {
 	public $agents;
 	private $targets;
-	private $hunters;
+	public $hunters;
 	public function __construct( $db, $id = 0 )
 	{
 		$this->db = $db;
@@ -38,6 +38,7 @@ class model_game extends model
 			"Tomas",
 			"Urma",
 			"Vera",
+			"Winston",
 			"Xandria",
 			"Yusef",
 			"Zacharia"
@@ -200,6 +201,7 @@ class model_game extends model
 			# 3. Assign target's targets to hunters.
 			$this->target_hunter_match( $ts, $hs, $target );
 			$replacements = array();
+			
 			for( $i = 0; $i < count( $ts ); $i++ )
 			{
 				$this->replace_target( $hs[ $i ], $target, $ts[ $i ] );
@@ -214,9 +216,8 @@ class model_game extends model
 		{
 			# All on all code.
 			print_r( $this->hunters );
-			die( "ALL ON ALL" );
+			echo( "\n!!!!!!!!!ALL ON ALL!!!!!!!!\n" );
 		}
-//		print_r( $this->hunters );
 	}
 	
 	private function replace_target( $agent, $old, $new )
@@ -248,11 +249,22 @@ class model_game extends model
 	
 	private function target_hunter_match( &$ts, &$hs, $ag )
 	{
+		echo "\n================\n$ag hunters\n";
+		print_r( $this->get_hunters( $ag ) );
+		echo "\n$ag targets\n";
+		print_r( $this->get_targets( $ag ) );
+		echo "$ag hunters targets\n";
+		foreach( $this->get_hunters( $ag ) as $v )
+		{
+			echo "\n$ag/$v targets\n";
+			print_r( $this->get_targets( $v ) );
+		}
+		echo "\n------------\n";
 		$ht = array();
 		shuffle( $ts );
 		$loops = 0;
 		
-		while( !$ok )
+		while( !$ok && $loops < 32 )
 		{
 			$ok = 1;
 			
@@ -279,9 +291,7 @@ class model_game extends model
 			
 			if( $loops > 30 )
 			{
-				print_r( $this->hunters );
-				print_r( $this->targets );
-				die("LOOP OVERRUN");
+				echo "=========LOOP OVERRUN=========";
 			}
 		}
 		$hs = $ht;
