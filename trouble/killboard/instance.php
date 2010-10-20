@@ -12,7 +12,11 @@
 namespace Trouble\Killboard;
 
 import('core.superclasses');
+import('trouble.game.instance');
 
 class Instance extends \Core\PDODependentClass {
-
+    private $game;
+    public function attach_game(\Trouble\Game\Instance $game) {
+        $this->game = $game;
+    }
 }

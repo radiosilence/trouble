@@ -14,6 +14,24 @@ namespace Trouble\Game;
 import('core.superclasses');
 
 class Instance extends \Core\PDODependentClass {
-	public function __construct() {	}
+    private $loaded = False;
+
+    public function load($id) {
+        $sth = $this->pdo->prepare( "
+            SELECT *
+            FROM games
+            WHERE id = :id
+        ");
+
+        $sth->execute(array(
+            ':id' => $id
+        ));
+        $this->data = $sth->fetchObject();
+        $this->loaded = True;
+    }
+
+    public function is_loaded() {
+        return $this->loaded;
+    }
 }
 ?>

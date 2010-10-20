@@ -56,6 +56,6 @@ abstract class GamePage extends StandardPage {
         $game_c = new \Trouble\Game\Container(array(
             'pdo' => $this->pdo
         ));
-        $this->game = $game_c->get_game($this->args['game']);   
+        $this->game = $game_c->get_game($this->args['game']);
     }
 }

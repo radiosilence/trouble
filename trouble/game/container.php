@@ -19,6 +19,7 @@ class Container extends \Core\Container {
         $game = new \Trouble\Game\Instance();
         $this->test_valid_parameter('pdo','\PDO');
         $game->attach_pdo($this->parameters['pdo']);
+        $game->load($game_id);
         return $game;
     }
 }

@@ -18,8 +18,7 @@ import('trouble.killboard.container');
 class Index extends \Trouble\GamePage {
     public function index() {
         \Trouble\WEAPON::attach_pdo($this->pdo);
-    
-        if(!$game->is_loaded) {
+        if(!$this->game->is_loaded()) {
             die("Game was not loaded, so killboard not made.");
         }
         $killboard_c = new \Trouble\Killboard\Container(array(
