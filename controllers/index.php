@@ -14,6 +14,7 @@ namespace Controllers;
 import('trouble.weapon');
 import('trouble.pages');
 import('trouble.killboard.container');
+import('core.types');
 
 class Index extends \Trouble\GamePage {
     public function index() {
@@ -25,6 +26,7 @@ class Index extends \Trouble\GamePage {
             'pdo' => $this->pdo
         ));
         $killboard = $killboard_c->get_game_killboard($this->game);
+//        $this->view->set('kills', $killboard->get_kills())
     }
 
 }

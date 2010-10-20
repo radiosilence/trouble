@@ -11,9 +11,9 @@
 
 namespace Trouble\Game;
 
-import('core.superclasses');
+import('core.superclass.pdo');
 
-class Instance extends \Core\PDODependentClass {
+class Instance extends \Core\Superclass\PDODependent {
     private $loaded = False;
 
     public function load($id) {

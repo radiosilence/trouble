@@ -11,12 +11,21 @@
 
 namespace Trouble\Killboard;
 
-import('core.superclasses');
+import('core.superclass.pdo');
 import('trouble.game.instance');
 
-class Instance extends \Core\PDODependentClass {
+class Instance extends \Core\Superclass\PDODependent {
     private $game;
     public function attach_game(\Trouble\Game\Instance $game) {
         $this->game = $game;
+    }
+    
+    public function load_kills() {
+        
+    }
+    
+    public function get_kills() {
+        $kill_ids = array(1,2,3);
+        $kill = new kill();
     }
 }
