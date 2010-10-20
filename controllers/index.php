@@ -13,7 +13,7 @@ namespace Controllers;
 
 import('trouble.weapon');
 import('trouble.pages');
-import('trouble.killboard.container');
+import('trouble.killboard');
 import('core.types');
 
 class Index extends \Trouble\GamePage {
@@ -21,7 +21,7 @@ class Index extends \Trouble\GamePage {
         if(!$this->game->is_loaded()) {
             die("Game was not loaded, so killboard not made.");
         }
-        $killboard_c = new \Trouble\Killboard\Container();
+        $killboard_c = new \Trouble\KillboardContainer();
         $killboard = $killboard_c->get_game_killboard($this->game);
         $killboard->get_data();
 

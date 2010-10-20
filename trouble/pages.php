@@ -48,12 +48,12 @@ abstract class StandardPage extends \Core\Controller {
 abstract class GamePage extends StandardPage {
     protected $game;
     public function __construct($args) {
-        import('trouble.game.container');
+        import('trouble.game');
         parent::__construct($args);
         $this->init_game();
     }
     private function init_game() {
-        $game_c = new \Trouble\Game\Container(array(
+        $game_c = new \Trouble\GameContainer(array(
             'pdo' => $this->pdo
         ));
         $this->game = $game_c->get_game($this->args['game']);
