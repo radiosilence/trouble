@@ -51,8 +51,8 @@ abstract class GamePage extends StandardPage {
         import('trouble.game.container');
         parent::__construct($args);
         $this->init_game();
-    } 
-    protected function init_game() {
+    }
+    private function init_game() {
         $game_c = new \Trouble\Game\Container(array(
             'pdo' => $this->pdo
         ));

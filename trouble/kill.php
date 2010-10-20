@@ -15,8 +15,10 @@ import('core.superclass.pdo');
 
 class Kill extends \Core\Superclass\PDOStored {
 
-    public static $table = 'kills';
+    protected static $table = "kills";
     
+    protected function load_from_pdo() {
+    }
 	/**
 	 * Registers kill of $assassin's target.
 	 * Sets target as dead, makes a killboard stub.

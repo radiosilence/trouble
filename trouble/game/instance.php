@@ -13,25 +13,24 @@ namespace Trouble\Game;
 
 import('core.superclass.pdo');
 
-class Instance extends \Core\Superclass\PDODependent {
-    private $loaded = False;
+class Instance extends \Core\Superclass\PDOStored {
+    protected static $table = 'games';
 
-    public function load($id) {
-        $sth = $this->pdo->prepare( "
-            SELECT *
-            FROM games
-            WHERE id = :id
-        ");
-
-        $sth->execute(array(
-            ':id' => $id
-        ));
-        $this->data = $sth->fetchObject();
-        $this->loaded = True;
+    private $kills;
+            
+    public function load_kills() {
+        \Trouble\KILL::attach_pdo(static::$pdo);
+        $kill_ids = array(1,2,3);
+        \Trouble\KILL::populate_cache($kill_ids);
+        $kill = new \Trouble\Kill();
+    }
+    
+    private function populate_kill_ids() {
+    
+    }
+    
+    public function get_kills() {
     }
 
-    public function is_loaded() {
-        return $this->loaded;
-    }
 }
 ?>

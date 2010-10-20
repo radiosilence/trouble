@@ -18,7 +18,7 @@ class Container extends \Core\Container {
     public function get_game($game_id) {
         $game = new \Trouble\Game\Instance();
         $this->test_valid_parameter('pdo','\PDO');
-        $game->attach_pdo($this->parameters['pdo']);
+        INSTANCE::attach_pdo($this->parameters['pdo']);
         $game->load($game_id);
         return $game;
     }

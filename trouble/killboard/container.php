@@ -18,8 +18,8 @@ import('core.container');
 class Container extends \Core\Container {
     public function get_game_killboard(\Trouble\Game\Instance $game) {
         $killboard = new Instance();
-        \Trouble\WEAPON::attach_pdo($this->parameters['pdo']);
         $killboard->attach_game($game);
+        return $killboard;
     }
 }
 

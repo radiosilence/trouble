@@ -18,15 +18,13 @@ import('core.types');
 
 class Index extends \Trouble\GamePage {
     public function index() {
-        \Trouble\WEAPON::attach_pdo($this->pdo);
         if(!$this->game->is_loaded()) {
             die("Game was not loaded, so killboard not made.");
         }
-        $killboard_c = new \Trouble\Killboard\Container(array(
-            'pdo' => $this->pdo
-        ));
+        $killboard_c = new \Trouble\Killboard\Container();
         $killboard = $killboard_c->get_game_killboard($this->game);
-//        $this->view->set('kills', $killboard->get_kills())
+        $killboard->get_data();
+
     }
 
 }
