@@ -1,15 +1,23 @@
 <?php
 
-class model_kill extends model
-{
-	public function __construct( $db )
-	{
+/*
+ * This file is part of the core framework.
+ *
+ * (c) James Cleveland <jamescleveland@gmail.com>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
+namespace Trouble;
+
+class Kill {
+	public function __construct( $db ) {
 		$this->db = $db;
 		$this->define();
 	}
 
-	protected function define()
-	{
+	protected function define() {
 		$t = $this;
 		
 		$t->name		= "kill";
@@ -35,8 +43,7 @@ class model_kill extends model
 	 * Registers kill of $assassin's target.
 	 * Sets target as dead, makes a killboard stub.
 	 */
-	public function register_kill()
-	{
+	public function register_kill() {
 		# 1. Initialise target
 		# 2. Set target dead
 		# 3. Initialise assassin
@@ -44,8 +51,7 @@ class model_kill extends model
 		# 5. Assign new target
 		# 6. E-mail killer new target?
 	}
-	public function default_form()
-	{
+	public function default_form() {
 		return array(
 			"Kill" => array(
 				"weapon",
@@ -61,8 +67,7 @@ class model_kill extends model
 		);
 	}
 	
-	public static function killboard_list()
-	{
+	public static function killboard_list() {
 		$db = REGISTRY::get( "db" );
 		$sth = $db->prepare( "
 			SELECT kills.id as id,
@@ -88,14 +93,11 @@ class model_kill extends model
 		$sth->bindParam( ":curgame", $gid );
 		$curgame = MODEL_GAME::current_games();
 		
-		if( !is_array( $curgame ) )
-		{
+		if( !is_array( $curgame ) ) {
 			return 0;
 		}
-		else
-		{
-			foreach( $curgame as $gid )
-			{
+		else {
+			foreach( $curgame as $gid ) {
 				$sth->execute();
 			
 				$res = $sth->fetchAll( PDO::FETCH_ASSOC );

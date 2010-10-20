@@ -1,15 +1,23 @@
 <?php
 
-class model_agent extends model
-{	
-	public function __construct( $db )
-	{
+/*
+ * This file is part of the core framework.
+ *
+ * (c) James Cleveland <jamescleveland@gmail.com>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
+namespace Trouble;
+
+class Agent {	
+	public function __construct( $db ) {
 		$this->db = $db;
 		$this->define();
 	}
 	
-	protected function define()
-	{
+	protected function define() {
 		$t = $this;
 		
 		$t->model_name		= "agent";
@@ -34,8 +42,7 @@ class model_agent extends model
 		));
 	}
 	
-	public function default_form()
-	{
+	public function default_form() {
 		return array(
 			"Contact Information" => array(
 				"fullname" => "title",

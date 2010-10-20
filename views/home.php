@@ -6,7 +6,7 @@
 	<title><?php echo $page_title?> | <?php echo $site_name?></title>
   </head>
   <body>
-	<h1><?php echo $page_title?></h1>
+	<h1>Killboard</h1>
 	<div id="kills">
 	<?php foreach( $games as $gid => $kills ): ?>
 	  <?php if( count( $games ) > 1 ): ?>
