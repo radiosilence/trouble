@@ -18,12 +18,9 @@ import('core.types');
 
 class Index extends \Trouble\GamePage {
     public function index() {
-        if(!$this->game->is_loaded()) {
-            die("Game was not loaded, so killboard not made.");
-        }
         $killboard_c = new \Trouble\KillboardContainer();
         $killboard = $killboard_c->get_game_killboard($this->game);
-        $killboard->get_data();
+        var_dump($killboard->get_data());
 
     }
 

@@ -11,53 +11,17 @@
 
 namespace Trouble;
 
-class Weapon {
-	private static $pdo;
-	private static $cache = array();
+import('core.superclass.mapping');
 
-	public $id;
-	private $data;
+class Weapon extends \Core\Superclass\Mapped {
 
-	public static function attach_pdo(\PDO $pdo) {
-		self::$pdo = $pdo;
-	}
+}
 
-	public function __construct($id=False) {
-		if(!(self::$pdo instanceof \PDO)) {
-			throw new Exception("Weapons does not have database attached.");
-		}
-		if(empty(self::$cache)) {
-			self::populate_cache();
-		}
-		if($id) {
-			$this->id = $id;
-			$this->load_from_cache();
-		}
-	}
-
-	private function load_from_cache() {
-		$this->data = self::$cache[$this->id];
-	}
-
-	/**
-	 * Loads all of the weapons into the cache. This should be fine for < 100
-	 * or so weapons. Can always be modified if more weapons needed. Fairly schema ignorant.
-	 **/
-	private static function populate_cache() {
-			$sth = self::$pdo->prepare("
-				SELECT *
-				FROM weapons
-			");
-			$sth->execute();
-			while($item = $sth->fetchObject()) {
-				self::$cache[$item->id] = $item;
-			}
-	}
-
-	public function __get($key) {
-		return $this->data->$key;		
-	}
-	public function __set($key, $value) {
-		return $this->data->$key = $value;		
-	}
+class WeaponMapper extends \Core\Superclass\Mapper {
+    private $_select = 'SELECT * FROM weapons';
+    private $_joins = null;
+    
+    public function create_object($data) {
+        return new Weapon($data);
+    }
 }

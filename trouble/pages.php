@@ -40,8 +40,7 @@ abstract class StandardPage extends \Core\Controller {
     }
 
     protected function init_db() {
-        $c_database = new \Core\Database\Container();
-        $this->pdo = $c_database->get_pdo();
+        $this->pdo = \Core\Database\Container::get_default_pdo();
     }
 }
 
@@ -53,9 +52,6 @@ abstract class GamePage extends StandardPage {
         $this->init_game();
     }
     private function init_game() {
-        $game_c = new \Trouble\GameContainer(array(
-            'pdo' => $this->pdo
-        ));
-        $this->game = $game_c->get_game($this->args['game']);
+        $this->game = Game::Mapper()->find_by_id($this->args['game']);
     }
 }
