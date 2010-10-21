@@ -51,6 +51,6 @@ abstract class GamePage extends StandardPage {
         $this->init_game();
     }
     private function init_game() {
-        $this->game = Game::mapper()->find_by_id($this->args['game']);
+        $this->game = Game::mapper()->find_by_id($this->args['game_id']);
     }
 }

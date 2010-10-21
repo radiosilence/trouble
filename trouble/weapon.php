@@ -18,8 +18,8 @@ class Weapon extends \Core\Mapping\PDOMapped {
 }
 
 class WeaponMapper extends \Core\Mapping\PDOMapper {
-    private $_select = 'SELECT * FROM weapons';
-    private $_joins = null;
+    protected $_select = 'SELECT * FROM weapons';
+    protected $_joins = null;
     
     public function create_object($data) {
         return new Weapon($data);

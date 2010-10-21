@@ -34,14 +34,15 @@ class Kill extends \Core\Mapping\PDOMapped {
 }
 
 class KillMapper extends \Core\Mapping\PDOMapper {
-	private $_select = '
+	protected $_select = '
 	   SELECT
            kills.*,
 	       assassin.alias as a_alias,
 	       target.alias as t_alias,
 	       weapons.name as w_name
-	   FROM kills';
-    private $_joins = '
+	   FROM kills
+	';
+    protected $_joins = '
 	   LEFT JOIN weapons ON kills.weapon = weapons.id
 	   LEFT JOIN agents assassin ON kills.assassin = assassin.id
 	   LEFT JOIN agents target ON kills.target = target.id
@@ -64,19 +65,19 @@ class KillMapper extends \Core\Mapping\PDOMapper {
     }
     
     public function create_object($data) {
-        $assassin = Agent::mapper()->create_object((object)array(
+        $assassin = Agent::mapper()->create_object(array(
             'id' => $data->assassin,
             'alias' => $data->a_alias
         ));
-        $target = Agent::mapper()->create_object((object)array(
+        $target = Agent::mapper()->create_object(array(
             'id' => $data->target,
             'alias' => $data->t_alias
         ));
-        $weapon = Weapon::mapper()->create_object((object)array(
+        $weapon = Weapon::mapper()->create_object(array(
             'id' => $data->weapon,
             'name' => $data->w_name
         ));
-        return new Kill((object)array(
+        return Kill::create(array(
             'id' => $data->id,
             'description' => $data->description,
             'assassin' => $assassin,

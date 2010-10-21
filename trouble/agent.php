@@ -16,11 +16,11 @@ import('core.mapping.pdo');
 class Agent extends \Core\Mapping\PDOMapped {}
 
 class AgentMapper extends \Core\Mapping\PDOMapper {
-    private $_select = 'SELECT * FROM agents';
-    private $_joins = null;
+    protected $_select = 'SELECT * FROM agents';
+    protected $_joins = Null;
     
     public function create_object($data) {
-        return new Agent($data);
+        return Agent::create($data);
     }
     
 }

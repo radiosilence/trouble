@@ -16,13 +16,20 @@ import('trouble.game');
 import('trouble.kill');
 
 class Killboard extends \Core\Contained {
-    private $game;
+    public function __construct() {
+        $this->games = new \Core\Arr();
+    }
     
     public function attach_game(\Trouble\Game $game) {
-        $this->game = $game;
+        $this->games->append($game);
+        return $this;
     }
-    public function get_data() {
-        return Kill::mapper()->find_by_game($this->game);
+
+    public function load_data() {
+        $this->games->map(function($game){
+            $game->load_kills();
+        });
+        return $this;
     }
 }
 

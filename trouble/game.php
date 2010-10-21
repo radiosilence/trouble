@@ -15,20 +15,27 @@ import('core.mapping.pdo');
 import('core.containment');
 
 class Game extends \Core\Mapping\PDOMapped {
-    private $kills;
-    
+
+    public function __construct() {
+        $this->kills = \Core\Arr::create();
+    }
     private function populate_kill_ids() {
     
     }
-    
-    public function get_kills() {
+    public function load_kills() {
+        $this->kills->extend(Kill::mapper()->find_by_game($this));
     }
 
 }
 
 class GameMapper extends \Core\Mapping\PDOMapper {
-    private $_select = 'SELECT *, games.id as id FROM games';
-    private $_joins = '
+    protected $_select = '
+        SELECT games.*,
+            games.id as id,
+            victor.alias as victor_alias
+        FROM games
+    ';
+    protected $_joins = '
         LEFT JOIN agents victor
             ON games.victor = victor.id
     ';
@@ -41,10 +48,15 @@ class GameMapper extends \Core\Mapping\PDOMapper {
         $sth->execute(array(
             ':id' => $id
         ));
-        return $this->create_object($sth->fetchObject());
+        return $this->create_object($sth->fetch(\PDO::FETCH_ASSOC));
     }
     public function create_object($data) {
-        return new Game($data);
+        $data['victor'] = Agent::mapper()->create_object(array(
+            'id' => $data['victor'],
+            'alias' => $data['victor_alias']
+        ));
+        unset($data['victor_alias']);
+        return Game::create($data);
     }
 }
 
