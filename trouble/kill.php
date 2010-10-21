@@ -11,12 +11,12 @@
 
 namespace Trouble;
 
-import('core.superclass.mapping');
+import('core.mapping.pdo');
 import('trouble.game');
 import('trouble.agent');
 import('trouble.weapon');
 
-class Kill extends \Core\Superclass\Mapped {
+class Kill extends \Core\Mapping\PDOMapped {
 
     protected static $table = "kills";
 	/**
@@ -33,7 +33,7 @@ class Kill extends \Core\Superclass\Mapped {
 	}
 }
 
-class KillMapper extends \Core\Superclass\Mapper {
+class KillMapper extends \Core\Mapping\PDOMapper {
 	private $_select = '
 	   SELECT
            kills.*,

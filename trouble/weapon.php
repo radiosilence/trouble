@@ -11,13 +11,13 @@
 
 namespace Trouble;
 
-import('core.superclass.mapping');
+import('core.mapping.pdo');
 
-class Weapon extends \Core\Superclass\Mapped {
+class Weapon extends \Core\Mapping\PDOMapped {
 
 }
 
-class WeaponMapper extends \Core\Superclass\Mapper {
+class WeaponMapper extends \Core\Mapping\PDOMapper {
     private $_select = 'SELECT * FROM weapons';
     private $_joins = null;
     

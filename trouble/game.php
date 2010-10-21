@@ -11,10 +11,10 @@
 
 namespace Trouble;
 
-import('core.container');
-import('core.superclass.mapping');
+import('core.mapping.pdo');
+import('core.containment');
 
-class Game extends \Core\Superclass\Mapped {
+class Game extends \Core\Mapping\PDOMapped {
     private $kills;
     
     private function populate_kill_ids() {
@@ -26,7 +26,7 @@ class Game extends \Core\Superclass\Mapped {
 
 }
 
-class GameMapper extends \Core\Superclass\Mapper {
+class GameMapper extends \Core\Mapping\PDOMapper {
     private $_select = 'SELECT *, games.id as id FROM games';
     private $_joins = '
         LEFT JOIN agents victor

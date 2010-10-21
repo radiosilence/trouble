@@ -11,11 +11,11 @@
 
 namespace Trouble;
 
-import('core.superclass.mapping');
+import('core.mapping.pdo');
 
-class Agent extends \Core\Superclass\Mapped {}
+class Agent extends \Core\Mapping\PDOMapped {}
 
-class AgentMapper extends \Core\Superclass\Mapper {
+class AgentMapper extends \Core\Mapping\PDOMapper {
     private $_select = 'SELECT * FROM agents';
     private $_joins = null;
     

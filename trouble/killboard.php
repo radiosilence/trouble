@@ -11,12 +11,13 @@
 
 namespace Trouble;
 
-import('core.container');
+import('core.containment');
 import('trouble.game');
 import('trouble.kill');
 
-class Killboard {
+class Killboard extends \Core\Contained {
     private $game;
+    
     public function attach_game(\Trouble\Game $game) {
         $this->game = $game;
     }

@@ -12,10 +12,10 @@
 namespace Trouble;
 
 import('core.exceptions');
-import('core.database.container');
-import('core.session.container');
+import('core.session.handler');
 import('core.controller');
 import('core.view');
+import('core.database.pdo');
 
 abstract class StandardPage extends \Core\Controller {
     protected $pdo;
@@ -33,14 +33,13 @@ abstract class StandardPage extends \Core\Controller {
         if(!($this->pdo instanceof \PDO)) {
             throw new \Core\Error("Trying to initialize a session without a db.");
         }
-        $c_session = new \Core\Session\Container(array(
+        $this->session = \Core\Session\Handler::container(array(
                 'pdo' => $this->pdo
-        ));
-        $this->session = $c_session->get_standard_session();
+        ))->get_standard_session();
     }
 
     protected function init_db() {
-        $this->pdo = \Core\Database\Container::get_default_pdo();
+        $this->pdo = \Core\Database\PDOContainer::get_default_pdo();
     }
 }
 
@@ -52,6 +51,6 @@ abstract class GamePage extends StandardPage {
         $this->init_game();
     }
     private function init_game() {
-        $this->game = Game::Mapper()->find_by_id($this->args['game']);
+        $this->game = Game::mapper()->find_by_id($this->args['game']);
     }
 }

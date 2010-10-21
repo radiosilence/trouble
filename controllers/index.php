@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the core framework.
+ * This file is part of trouble.
  *
  * (c) James Cleveland <jamescleveland@gmail.com>
  *
@@ -18,10 +18,6 @@ import('core.types');
 
 class Index extends \Trouble\GamePage {
     public function index() {
-        $killboard_c = new \Trouble\KillboardContainer();
-        $killboard = $killboard_c->get_game_killboard($this->game);
-        var_dump($killboard->get_data());
-
     }
 
 }
