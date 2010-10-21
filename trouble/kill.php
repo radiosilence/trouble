@@ -47,15 +47,16 @@ class KillMapper extends \Core\Superclass\Mapper {
 	   LEFT JOIN agents target ON kills.target = target.id
 	';
     
-    public function find_by_game(\Trouble\Game $game) {
+    public function find_by_game(\Trouble\Game $game, $limit=20) {
         $kills = array();
         $sth = $this->pdo->prepare(
             $this->_select . $this->_joins .
             'WHERE game = :game
+            LIMIT :limit
         ');
-        $sth->execute(array(
-            ':game' => $game->id
-        ));
+        $sth->bindValue(':limit', $limit, \PDO::PARAM_INT);
+        $sth->bindValue(':game', $game->id, \PDO::PARAM_INT);
+        $sth->execute();
         while($data = $sth->fetchObject()) {
             $kills[]=$this->create_object($data);
         }
