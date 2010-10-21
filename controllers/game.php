@@ -19,10 +19,10 @@ class Game extends \Trouble\GamePage {
     public function index() {
     }
     public function killboard() {
-        $killboard = \Trouble\Killboard::container()->get_game_killboard($this->game);
-        echo "<pre>Killboard data\n";
-        var_dump($killboard);
-        $this->view->show('home');
+        $this->view->killboard = \Trouble\Killboard::container()
+            ->get_game_killboard($this->game)
+            ->load_data();
+        $this->view->show('killboard');
     }
 
 }
