@@ -39,7 +39,7 @@ abstract class StandardPage extends \Core\Controller {
     }
 
     protected function init_db() {
-        $this->pdo = \Core\Database\PDOContainer::get_default_pdo();
+        $this->pdo = \Core\Database\PDOUtils::container->get_pdo();
     }
 }
 
