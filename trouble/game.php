@@ -24,7 +24,7 @@ class Game extends \Core\Mapped {
     }
 
     public function load_kills() {
-        $this->kills->extend(Kill::mapper()
+        $this->kills->extend($this->mappers['kill']
                 ->find_by_game($this));
     }
 }

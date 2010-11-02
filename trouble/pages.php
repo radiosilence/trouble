@@ -15,7 +15,7 @@ import('core.exceptions');
 import('core.session.handler');
 import('core.controller');
 import('core.template');
-import('core.provision.pdo');
+import('core.containment.pdo');
 
 abstract class StandardPage extends \Core\Controller {
     protected $pdo;
@@ -24,12 +24,20 @@ abstract class StandardPage extends \Core\Controller {
    
     public function __construct($args) {
         parent::__construct($args);
+        $this->init_pdo();
         $this->init_session();
     }
 
     protected function init_session() {
-        $this->session = \Core\Session\Handler::container()
+        $this->session = \Core\Session\Handler::container(array(
+                'pdo' => $this->pdo
+            ))
             ->get_standard_session();
+    }
+
+    protected function init_pdo() {
+        $c = new \Core\Containment\PDOContainer();
+        $this->pdo = $c->get_connection();
     }
 }
 
@@ -42,6 +50,7 @@ abstract class GamePage extends StandardPage {
     }
     private function init_game() {
         $this->game = Game::mapper()
+            ->attach_pdo($this->pdo)
             ->find_by_id($this->args['game_id']);
     }
 }
