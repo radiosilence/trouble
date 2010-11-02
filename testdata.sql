@@ -1,5 +1,5 @@
 ﻿INSERT INTO agents (id, fullname, alias, email, phone, address, course, societies, clubs, timetable) VALUES
-(1, 'James Cleveland', 'radiosilence', 'jamescleveland@gmail.com', '07865998857', '30 Wokingham Road\r\nReading\r\nRG6 1JH', 'Computer Science & Cybernetics (BSc)', 'Indie Society\r\nVideo Game Society', 'Iguana\r\nUpin Arms', 'Blahh'),
+(1, 'James Cleveland', 'radiosilence', 'jamescleveland@gmail.com', '567567567', '38 MANCHESTER LANE\r\n NOWHERE', 'Computer Science & Cybernetics (BSc)', 'Indie Society\r\nVideo Game Society', 'Iguana\r\nUpin Arms', 'Blahh'),
 (2, 'Ruth Sullivan', 'littlespy', 'littlespy87@gmail.com', '02223382', 'Adasdasd', 'History at Wexham', 'None', 'Pavs\r\n', 'Dogs');
 
 INSERT INTO games (id, start_date, end_date, signup_date, location, victor, description, finalised, entry_fee) VALUES
