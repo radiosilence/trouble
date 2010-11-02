@@ -1,7 +1,7 @@
 RewriteEngine on
 
 RewriteRule ^/?game/([0-9]{1,9})/(.*)$ index.php?route=game/$2/game_id:$1
-RewriteRule ^/?agent/([0-9]{1,9})/.*?(\.html)?$ index.php?route=agent/id:$1
+RewriteRule ^/?agent/([\w]+).*?(\.html)?$ index.php?route=agent/alias:$1
 
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^(.+?)(\.html)?$ index.php?route=$1

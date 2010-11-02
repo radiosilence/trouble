@@ -16,9 +16,8 @@ import('trouble.game');
 import('trouble.agent');
 import('trouble.weapon');
 
-class Kill extends \Core\Mapping\PDOMapped {
+class Kill extends \Core\Mapped {
 
-    protected static $table = "kills";
 	/**
 	 * Registers kill of $assassin's target.
 	 * Sets target as dead, makes a killboard stub.
@@ -83,7 +82,7 @@ class KillMapper extends \Core\Mapping\PDOMapper {
             'assassin' => $assassin,
             'target' => $target,
             'weapon' => $weapon,
-            'timestamp' => $data->timestamp
+            'when_happened' => $data->when_happened
         ));
     }
 }

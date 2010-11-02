@@ -15,15 +15,12 @@ import('trouble.weapon');
 import('trouble.pages');
 import('trouble.killboard');
 import('core.types');
-class Game extends \Trouble\GamePage {
-    public function index() {}
-    public function killboard() {
+class Agent extends \Trouble\AgentPage {
+    public function index() {
         $t = new \Core\Template();
-        $t->killboard = \Trouble\Killboard::container()
-                ->get_game_killboard($this->game)
-                ->load_data();
-        $t->content = $t->render('killboard.php');
-        $t->title = "Killboard";
+        $t->agent = $this->agent;
+        $t->content = $t->render('agent.php');
+
         echo $t->render('main.php');
     }
 }

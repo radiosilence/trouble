@@ -11,18 +11,28 @@
 
 namespace Trouble;
 
+import('core.mapping');
 import('core.mapping.pdo');
 
-class Agent extends \Core\Mapping\PDOMapped {}
+class Agent extends \Core\Mapped {}
 
 class AgentMapper extends \Core\Mapping\PDOMapper {
     protected $_select = 'SELECT * FROM agents';
-    protected $_joins = Null;
     
     public function create_object($data) {
         return Agent::create($data);
     }
     
+    public function find_by_alias($alias) {
+        $sth = $this->pdo->prepare(sprintf(
+                "%s\nWHERE alias = :alias",
+                $this->_select
+        ));
+        $sth->execute(array(
+            ':alias' => $alias
+        ));
+        return $this->create_object($sth->fetch(\PDO::FETCH_ASSOC));
+    }
 }
 
 ?>

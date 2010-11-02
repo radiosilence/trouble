@@ -11,9 +11,10 @@
 
 namespace Trouble;
 
+import('core.mapping');
 import('core.mapping.pdo');
 
-class Weapon extends \Core\Mapping\PDOMapped {
+class Weapon extends \Core\Mapped {
 
 }
 

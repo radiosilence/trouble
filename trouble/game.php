@@ -11,21 +11,22 @@
 
 namespace Trouble;
 
+import('core.mapping');
 import('core.mapping.pdo');
 import('core.containment');
 
-class Game extends \Core\Mapping\PDOMapped {
+import('trouble.kill');
+
+class Game extends \Core\Mapped {
 
     public function __construct() {
         $this->kills = \Core\Arr::create();
     }
-    private function populate_kill_ids() {
-    
-    }
-    public function load_kills() {
-        $this->kills->extend(Kill::mapper()->find_by_game($this));
-    }
 
+    public function load_kills() {
+        $this->kills->extend(Kill::mapper()
+                ->find_by_game($this));
+    }
 }
 
 class GameMapper extends \Core\Mapping\PDOMapper {
