@@ -1,8 +1,3 @@
-<div>
-<ul>
-<li>
-<strong>Alias</strong><br />
-<?=$agent->alias?>
-</li>
-</ul>
-</div>
+<article><h1><?=$agent->alias?></h1>
+<p>Sorry, you don't have any intel on this agent.
+</article>

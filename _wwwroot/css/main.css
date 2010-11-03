@@ -1,0 +1,131 @@
+body {
+    background-color: black;
+    font-family: sans-serif;
+    color: white;
+}
+
+a {
+    color: white;
+    text-decoration: underline;
+    text-shadow: 0 0 .2em rgba(255,255,255,.4);
+}
+
+h1, h2 {
+    text-shadow: 0 0 .2em rgba(255,255,255,.4),
+                 0 0 2em rgba(255,255,255,0.5);
+}
+
+section h1 {
+    font-size: 18pt;
+}
+
+nav h1 {
+    font-size: 14pt;
+}
+
+nav ul {
+    
+}
+
+nav ul li {
+    margine-left: 0px;
+    padding-left: 10px;
+    clear: none;
+}
+
+#content article {
+    padding: 1em;
+    border: 1px solid rgba(255,255,255,.06);
+    border-radius: 10px;
+    margin: 1em;
+    background:-webkit-gradient(
+        linear,
+        left top,
+        left bottom,
+        color-stop(0.02, rgb(10,10,10)),
+        color-stop(0.51, rgb(10,10,10)),
+        color-stop(0.87, rgb(00,00,00))
+        );
+    background: -moz-linear-gradient(
+        center top,
+        rgb(10,10,10) 2%,
+        rgb(10,10,10) 51%,
+        rgb(00,00,00) 87%
+        );
+    -webkit-box-shadow: 0px 0px 15px rgba(255,255,255,.1); 
+    -moz-box-shadow: 0px 0px 15px rgba(255,255,255,.1); 
+}
+
+#content article h1 {
+    font-size: 16pt;
+    margin: 5px;
+    padding: 0px;
+}
+
+#content article h2 {
+    font-size: 12pt;
+    font-style: italic;
+    margin: 5px;
+    padding: 0px;
+}
+
+#content article h3 {
+    font-size: 10pt;
+    color:#444;
+    margin: 5px;
+    padding: 0px;
+}
+
+table {
+    line-height: 1.4em;
+    border-collapse:collapse;
+}
+
+thead th {
+    background:-webkit-gradient(
+        linear,
+        left top,
+        left bottom,
+        color-stop(0.02, #101010),
+        color-stop(0.41, #1a1a1a),
+        color-stop(0.61, #181818),
+        color-stop(0.87, #101010)
+        );
+    background: -moz-linear-gradient(
+        center top,
+        #101010 2%,
+        #1a1a1a 41%,
+        #181818 61%,
+        #101010 87%
+        );
+    background-color: #111;
+    padding: 0px 80px 0px 80px;
+}
+
+tbody th {
+    padding-right: 5px;
+}
+tbody :nth-last-child(1) th {
+    border-radius: 0px 0px 0px 5px;
+}
+
+thead th:nth-last-child(1) {
+    border-radius: 0px 5px 0px 0px;
+}
+thead th:nth-child(1) {
+    border-radius: 5px 0px 0px 0px;
+}
+thead th:empty {
+    background: transparent;
+    border:none;
+}
+
+tbody td, tbody th {
+    padding: 0px 5px 0px 5px;
+    border: 0px solid #111;
+    border-width: 0px 1px 1px 0px;
+}
+
+tbody th:nth-child(1) {
+    border-width: 0px 1px 1px 1px;
+}
