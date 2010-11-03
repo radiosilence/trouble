@@ -15,6 +15,10 @@ h1, h2 {
                  0 0 2em rgba(255,255,255,.2);
 }
 
+section {
+    margin: 10px;
+}
+
 section h1 {
     font-size: 18pt;
 }
@@ -74,6 +78,11 @@ nav ul li {
     color:#444;
     margin: 5px;
     padding: 0px;
+}
+
+td.message {
+    text-align: center;
+    padding:10px;
 }
 
 table {
