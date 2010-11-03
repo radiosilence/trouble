@@ -16,8 +16,10 @@ import('trouble.pages');
 import('trouble.killboard');
 import('core.types');
 
-class Index extends \Trouble\GamePage {
+class Index extends \Trouble\StandardPage {
     public function index() {
+        $t = new \Core\Template();
+        echo $t->render('main.php');
     }
 
 }

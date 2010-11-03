@@ -57,13 +57,14 @@ class KillMapper extends \Core\Mapping\PDOMapper {
         $sth->bindValue(':limit', $limit, \PDO::PARAM_INT);
         $sth->bindValue(':game', $game->id, \PDO::PARAM_INT);
         $sth->execute();
-        while($data = $sth->fetchObject()) {
+        while($data = $sth->fetch(\PDO::FETCH_ASSOC)) {
             $kills[]=$this->create_object($data);
         }
         return $kills;
     }
     
     public function create_object($data) {
+        $data = \Core\Arr::create($data);
         $assassin = Agent::mapper()->create_object(array(
             'id' => $data->assassin,
             'alias' => $data->a_alias

@@ -40,7 +40,24 @@ class GameMapper extends \Core\Mapping\PDOMapper {
         LEFT JOIN agents victor
             ON games.victor = victor.id
     ';
-    
+
+    public function get_list($order='games.start_date desc', $limit=20, $filter=null) {
+        $sth = $this->pdo->prepare(sprintf(
+            "%s\n%s\n%s\nORDER BY %s\nLIMIT %s",
+            $this->_select,
+            $this->_joins,
+            $filter,
+            $order,
+            (int)$limit
+        ));
+        $sth->execute();
+        $games = \Core\Arr::create();
+        while($data = $sth->fetch(\PDO::FETCH_ASSOC)) {
+            $games->append($this->create_object($data));
+        }
+        return $games;
+    }
+
     public function find_by_id($id){
         $sth = $this->pdo->prepare(
             $this->_select . $this->_joins .
@@ -51,13 +68,17 @@ class GameMapper extends \Core\Mapping\PDOMapper {
         ));
         return $this->create_object($sth->fetch(\PDO::FETCH_ASSOC));
     }
+
     public function create_object($data) {
         $data['victor'] = Agent::mapper()->create_object(array(
             'id' => $data['victor'],
             'alias' => $data['victor_alias']
         ));
         unset($data['victor_alias']);
-        return Game::create($data);
+        $game = Game::create($data);
+        $game->attach_mapper('kill', Kill::mapper()
+            ->attach_pdo($this->pdo));
+        return $game;
     }
 }
 

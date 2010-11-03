@@ -23,6 +23,6 @@ class WeaponMapper extends \Core\Mapping\PDOMapper {
     protected $_joins = null;
     
     public function create_object($data) {
-        return new Weapon($data);
+        return Weapon::create($data);
     }
 }
