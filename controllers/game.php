@@ -33,7 +33,7 @@ class Game extends \Trouble\GamePage {
 
         
         $t->content = $t->render('killboard.php');
-        $t->title = $t->game->name;
+        $t->title = $t->game->name . ': Killboard';
         echo $t->render('main.php');
     }
 
@@ -50,6 +50,22 @@ class Game extends \Trouble\GamePage {
         
         $t->content = $t->render('games_list.php');
         $t->title = "Games Ending Soon";
+        echo $t->render('main.php');
+    }
+
+    public function starting_soon() {
+        $t = new \Core\Template();
+
+        $time = new \DateTime("now");
+        $t->games = \Trouble\Game::mapper()
+            ->attach_pdo($this->pdo)
+            ->get_list('games.start_date asc', 20, sprintf("where games.state < 1"));
+        $t->games->map(function($game) {
+            $game->load_kills();
+        });
+        
+        $t->content = $t->render('games_list.php');
+        $t->title = "Games Starting Soon";
         echo $t->render('main.php');
     }
 }
