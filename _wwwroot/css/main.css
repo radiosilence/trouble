@@ -12,7 +12,7 @@ a {
 
 h1, h2 {
     text-shadow: 0 0 .2em rgba(255,255,255,.4),
-                 0 0 2em rgba(255,255,255,0.5);
+                 0 0 2em rgba(255,255,255,.2);
 }
 
 section h1 {
@@ -39,18 +39,18 @@ nav ul li {
     border-radius: 10px;
     margin: 1em;
     background:-webkit-gradient(
-        linear,
-        left top,
-        left bottom,
-        color-stop(0.02, rgb(10,10,10)),
-        color-stop(0.51, rgb(10,10,10)),
-        color-stop(0.87, rgb(00,00,00))
+            linear,
+            left top,
+            left bottom,
+            color-stop(0.02, rgb(10,10,10)),
+            color-stop(0.51, rgb(10,10,10)),
+            color-stop(0.87, rgb(00,00,00))
         );
     background: -moz-linear-gradient(
-        center top,
-        rgb(10,10,10) 2%,
-        rgb(10,10,10) 51%,
-        rgb(00,00,00) 87%
+            center top,
+            rgb(10,10,10) 2%,
+            rgb(10,10,10) 51%,
+            rgb(00,00,00) 87%
         );
     -webkit-box-shadow: 0px 0px 15px rgba(255,255,255,.1); 
     -moz-box-shadow: 0px 0px 15px rgba(255,255,255,.1); 
@@ -83,20 +83,20 @@ table {
 
 thead th {
     background:-webkit-gradient(
-        linear,
-        left top,
-        left bottom,
-        color-stop(0.02, #101010),
-        color-stop(0.41, #1a1a1a),
-        color-stop(0.61, #181818),
-        color-stop(0.87, #101010)
+            linear,
+            left top,
+            left bottom,
+            color-stop(0.02, #101010),
+            color-stop(0.41, #1a1a1a),
+            color-stop(0.61, #181818),
+            color-stop(0.87, #101010)
         );
     background: -moz-linear-gradient(
-        center top,
-        #101010 2%,
-        #1a1a1a 41%,
-        #181818 61%,
-        #101010 87%
+            center top,
+            #101010 2%,
+            #1a1a1a 41%,
+            #181818 61%,
+            #101010 87%
         );
     background-color: #111;
     padding: 0px 80px 0px 80px;
