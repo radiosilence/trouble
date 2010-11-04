@@ -1,6 +1,6 @@
 <?php
 require_once('core_path.php');
-require_once($core_path);
+require_once(CORE_PATH . '/core.php');
 
 import('core.routing');
 

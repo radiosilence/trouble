@@ -1,11 +1,11 @@
 <?php
 
 $cfg['database'] = array(
-    'driver' => 'mysql',
+    'driver' => 'pgsql',
     'host' => 'localhost',
     'database' => 'trouble',
     'user' => 'trouble',
-    'password' => 'sZZ3FJRnXZKndQMu',
+    'password' => 'mofo99',
 );
 
 $cfg['crypto'] = array(
