@@ -1,4 +1,4 @@
-﻿CREATE TABLE agents
+create table agents
 (
 	id SERIAL PRIMARY KEY,
 	fullname varchar,
@@ -15,14 +15,17 @@
 create table games
 (
 	id serial primary key,
+	name varchar,
 	start_date timestamp with time zone ,
 	end_date timestamp with time zone ,
 	signup_date timestamp with time zone ,
 	location text,
 	victor integer,
 	description text,
-	finalised integer,
-	entry_fee float
+	state integer,
+	invite_only integer,
+	entry_fee integer,
+	local_currency integer
 );
 
 create table kills
@@ -55,3 +58,20 @@ create table weapons
 	description text,
 	link varchar
 );
+
+create table codes
+(
+    id serial primary key,
+    code character varying(64),
+    active int,
+    type int
+);
+
+create table tempaliases
+(
+    id serial primary key,
+    game int,
+    agent int,
+    alias varchar
+);
+
