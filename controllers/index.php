@@ -11,9 +11,7 @@
 
 namespace Controllers;
 
-import('trouble.weapon');
 import('trouble.pages');
-import('trouble.killboard');
 import('core.types');
 
 class Index extends \Trouble\StandardPage {

@@ -16,9 +16,9 @@ create table games
 (
 	id serial primary key,
 	name varchar,
-	start_date timestamp with time zone ,
-	end_date timestamp with time zone ,
-	signup_date timestamp with time zone ,
+	start_date timestamp with time zone,
+	end_date timestamp with time zone,
+	signup_date timestamp with time zone,
 	location text,
 	victor integer,
 	description text,
@@ -31,11 +31,11 @@ create table games
 create table kills
 (
 	id serial primary key,
-	weapon integer,
+	weapon integer references weapon(id),
 	description text,
-	assassin integer,
-	target integer,
-	when_happened timestamp with time zone ,
+	assassin integer references agent(id),
+	target integer references agent(id),
+	when_happened timestamp with time zone,
 	game integer
 );
 
@@ -63,15 +63,16 @@ create table codes
 (
     id serial primary key,
     code character varying(64),
-    active int,
-    type int
+    active integer,
+    type integer,
+    game integer references game(id)
 );
 
 create table tempaliases
 (
     id serial primary key,
-    game int,
-    agent int,
+    game int references game(id),
+    agent int references agent(id),
     alias varchar
 );
 
