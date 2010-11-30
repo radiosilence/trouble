@@ -58,15 +58,9 @@ abstract class GamePage extends StandardPage {
 abstract class AgentPage extends StandardPage {
     protected $agent;
 
-    public function __construct($args) {
-        import('trouble.agent');
-        parent::__construct($args);
-        $this->init_agent();
-    }
-
-    private function init_agent() {
-        $this->agent = Agent::mapper()
+    protected function init_agent($alias) {
+        $this->agent = \Trouble\Agent::mapper()
             ->attach_pdo($this->pdo)
-            ->find_by_alias($this->args['alias']);
+            ->find_by_alias($alias);
     }
 }

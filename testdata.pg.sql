@@ -2,15 +2,6 @@ INSERT INTO agents (id, fullname, alias, email, phone, address, course, societie
 (1,'James Cleveland', 'radiosilence', 'jamescleveland@example.com', '567567567', '38 MANCHESTER LANE, NOWHERE', 'Computer Science & Cybernetics (BSc)', 'Indie Society, Video Game Society', 'Iguana, Upin Arms', 'Blahh'),
 (2, 'Ruth Sullivan', 'littlespy', 'littlespy@example.com', '02223382', 'Adasdasd', 'History at Wexham', 'None', 'Pavs', 'Dogs');
 
-
-INSERT INTO games (id, name, start_date, end_date, signup_date, location, victor, description, state, entry_fee, local_currency, invite_only) VALUES
-(1, 'Test Game', '2010-11-13 13:59:17', '2010-11-30 13:59:22', '2010-11-12 13:59:28', 'Reading, UK', 0, 'Blahhh', 1, 3, 0, 0),
-(2, 'Stupid Game', '2011-01-01 01:54:06', '3010-11-30 01:54:08', '2010-11-01 01:54:11', 'Hull', 0, 'Worst game ever', 0, 555, 0, 0);
-
-INSERT INTO kills (weapon, description, assassin, target, when_happened, game) VALUES
-(8, 'Blah bla', 2, 1, '2010-11-13 17:09:09', 1),
-(2, 'Bleop', 1, 2, '2010-11-04 17:09:33', 1);
-
 INSERT INTO weapons (name, class, ord) VALUES
 ('Nerf N-Strike Maverick', 'Ranged', 0),
 ('Nerf N-Strike Longshot CS6', 'Ranged', 0),
@@ -44,3 +35,12 @@ INSERT INTO weapons (name, class, ord) VALUES
 ('Letter Bomb', 'Special', 0),
 ('Electrocution', 'Special', 0),
 ('AIDS', 'Special', 0);
+
+
+INSERT INTO games (id, name, start_date, end_date, signup_date, location, victor, description, state, entry_fee, local_currency, invite_only) VALUES
+(1, 'Test Game', '2010-11-13 13:59:17', '2010-11-30 13:59:22', '2010-11-12 13:59:28', 'Reading, UK', 0, 'Blahhh', 1, 3, 0, 0),
+(2, 'Stupid Game', '2011-01-01 01:54:06', '3010-11-30 01:54:08', '2010-11-01 01:54:11', 'Hull', 0, 'Worst game ever', 0, 555, 0, 0);
+
+INSERT INTO kills (weapon, description, assassin, target, when_happened, game) VALUES
+(8, 'Blah bla', 2, 1, '2010-11-13 17:09:09', 1),
+(2, 'Bleop', 1, 2, '2010-11-04 17:09:33', 1);

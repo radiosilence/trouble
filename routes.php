@@ -16,6 +16,7 @@ $routes = array(
     '^game/([0-9]{1,9})/?(.*)$' => 'Game:method=$2;game_id=$1',
     '^games/starting-soon(.*)$' => 'Game:method=starting_soon',
     '^games(.*)$' => 'Game:method=ending_soon',
+    '^agent/create' => 'Agent:method=create',
     '^agent/([0-9]{1,9})$' => 'Agent:method=agent;alias=$1',
     '^$' => 'Index:method=index'
 );

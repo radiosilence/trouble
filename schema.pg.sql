@@ -1,42 +1,51 @@
 create table agents
 (
-	id SERIAL PRIMARY KEY,
-	fullname varchar,
-	alias varchar,
-	email varchar,
-	phone varchar,
-	address text,
-	course varchar,
-	societies varchar,
-	clubs varchar,
-	timetable varchar
+    id SERIAL PRIMARY KEY,
+    fullname varchar,
+    alias varchar,
+    email varchar,
+    phone varchar,
+    address text,
+    course varchar,
+    societies varchar,
+    clubs varchar,
+    timetable varchar
 );
 
 create table games
 (
-	id serial primary key,
-	name varchar,
-	start_date timestamp with time zone,
-	end_date timestamp with time zone,
-	signup_date timestamp with time zone,
-	location text,
-	victor integer,
-	description text,
-	state integer,
-	invite_only integer,
-	entry_fee integer,
-	local_currency integer
+    id serial primary key,
+    name varchar,
+    start_date timestamp with time zone,
+    end_date timestamp with time zone,
+    signup_date timestamp with time zone,
+    location text,
+    victor integer,
+    description text,
+    state integer,
+    invite_only integer,
+    entry_fee integer,
+    local_currency integer
 );
 
+create table weapons
+(
+    id serial primary key,
+    name varchar,
+    class varchar,
+    ord integer,
+    description text,
+    link varchar
+);
 create table kills
 (
-	id serial primary key,
-	weapon integer references weapon(id),
-	description text,
-	assassin integer references agent(id),
-	target integer references agent(id),
-	when_happened timestamp with time zone,
-	game integer
+    id serial primary key,
+    weapon integer references weapons(id),
+    description text,
+    assassin integer references agents(id),
+    target integer references agents(id),
+    when_happened timestamp with time zone,
+    game integer
 );
 
 CREATE TABLE sessions
@@ -49,15 +58,6 @@ CREATE TABLE sessions
   latest timestamp with time zone NOT NULL
 );
 
-create table weapons
-(
-	id serial primary key,
-	name varchar,
-	class varchar,
-	ord integer,
-	description text,
-	link varchar
-);
 
 create table codes
 (
@@ -65,14 +65,14 @@ create table codes
     code character varying(64),
     active integer,
     type integer,
-    game integer references game(id)
+    game integer references games(id)
 );
 
 create table tempaliases
 (
     id serial primary key,
-    game int references game(id),
-    agent int references agent(id),
+    game int references games(id),
+    agent int references agents(id),
     alias varchar
 );
 

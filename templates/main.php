@@ -8,7 +8,7 @@
   </head>
   <body>
     <header>
-      <h1>Trouble</h1>
+      <h1><a href="http://<?=HOST?><?=BASE_HREF?>/">Trouble</a></h1>
     </header>
     <nav>
      <h1>Navigation</h1>
