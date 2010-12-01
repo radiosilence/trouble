@@ -120,6 +120,14 @@ nav ul li a {
     font-weight: bold;
 }
 
+#content h1 {
+    margin-top: 0.5em;
+}
+
+#content article h1 {
+    margin-top: 0em;
+}
+
 #content article, fieldset {
     padding: 1em;
     border: 1px solid rgba(255,255,255,.06);
@@ -142,6 +150,10 @@ nav ul li a {
     -webkit-box-shadow: 0px 0px 10px rgba(255,255,255,.1); 
     -moz-box-shadow: 0px 0px 10px rgba(255,255,255,.1);
     color: white;
+}
+
+#content article.killboard{
+    padding: 0em;
 }
 
 input, textarea {
@@ -295,21 +307,20 @@ thead th {
             #101010 87%
         );
     background-color: #111;
-    padding: 0px 80px 0px 80px;
 }
 
 tbody th {
     padding-right: 5px;
 }
 tbody :nth-last-child(1) th {
-    border-radius: 0px 0px 0px 5px;
+    border-radius: 0px 0px 0px 10px;
 }
 
 thead th:nth-last-child(1) {
-    border-radius: 0px 5px 0px 0px;
+    border-radius: 0px 10px 0px 0px;
 }
 thead th:nth-child(1) {
-    border-radius: 5px 0px 0px 0px;
+    border-radius: 10px 0px 0px 0px;
 }
 thead th:empty {
     background: transparent;
@@ -349,4 +360,8 @@ form#agent input, form#agent textarea {
 form#agent textarea {
     height: 8em;
     width: 97%;
+}
+
+table.kills th {
+    width: 200px;
 }
