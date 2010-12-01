@@ -34,7 +34,17 @@
     <p><label for="clubs">Clubs/Societies<br/>
     <input type="text" name="clubs" id="clubs" value="<?=$agent->clubs?>" placeholder="Ex: Rock, Rowing, Indie"/></p>
     <p><label for="timetable">Timetable (Detailed, may take some time)</label><br/>
-    <textarea name="timetable" id="timetable" placeholder="Ex. Mon: 1200-1300 SSE G12, 1400-1600 Palmer 108; Tues: 0900-1000 Urban Studies LLT
-    Wed: 1000-1600 Starbucks, Riverside"><?=$agent->timetable?></textarea></p>
+    <textarea name="timetable" id="timetable" placeholder="Ex: Mon: 1200-1300 SSE G12, 1400-1600 Palmer 108; Tues: 0900-1000 Urban Studies LLT; Wed: 1000-1600 Starbucks, Riverside"><?=$agent->timetable?></textarea></p>
   </fieldset>
+  <fieldset>
+    <?php if($new): ?>
+      <p>Lastly, we'll need a password and captcha confirmation for your account.</p>
+    <?php endif; ?>
+    <p><label for="password">Password<br/>
+    <input type="password" name="password" id="password"/></p>
+    <p><label for="password_confirm">Password (Confirm)<br/>
+    <input type="password" name="password_confirm" id="password_confirm"/></p>
+    <?php if($new):?>
+     Captcha goes here.
+    <?php endif;?>
 </form>

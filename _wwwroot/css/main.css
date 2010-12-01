@@ -83,6 +83,8 @@ input, textarea {
     -moz-box-shadow: 0px 0px 5px rgba(128,128,128,.01);
     color: white;
     margin-top: 0.5em;
+    font-family: sans-serif;
+    font-size: 12pt;
 }
 
 #content article h1 {
@@ -178,4 +180,12 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
 }
 input:-moz-placeholder {
     color: rgba(255,255,255,0.2);
+}
+
+form#agent input, form#agent textarea {
+    width: 25em;
+}
+
+form#agent textarea {
+    height: 8em;
 }
