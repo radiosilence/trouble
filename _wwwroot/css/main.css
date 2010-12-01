@@ -81,7 +81,7 @@ nav ul {
     font-size: 14pt;
 }
 
-nav ul li {
+nav ul li a {
     padding: 0.5em 0em 0.5em 0em;
     float: left;
     display: block;
@@ -89,16 +89,16 @@ nav ul li {
 }
 
 
-nav ul li {
+nav ul li a {
     padding-right: 1em;
     border-right: 1px solid rgba(255,255,255,.06);
 }
 
-nav ul li:last-child {
+nav ul li a:last-child {
     border-right: 0px solid white;
 }
 
-nav ul li:hover {
+nav ul li a:hover {
     background:-webkit-gradient(
             linear,
             left top,
