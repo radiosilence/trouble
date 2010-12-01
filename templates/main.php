@@ -4,21 +4,29 @@
     <base href="http://<?=HOST?><?=BASE_HREF?>/">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <link rel="stylesheet" href="css/main.css" type="text/css"/>
+    <link rel="stylesheet" href="css/grid.css" type="text/css"/>
     <title><?=$title?> | Trouble</title>
   </head>
   <body>
-    <header>
+  <div class="container_12">
+    <header class="grid_12">
       <h1><a href="http://<?=HOST?><?=BASE_HREF?>/">Trouble</a></h1>
     </header>
-    <nav>
-     <h1>Navigation</h1>
+    <nav class="grid_12">
      <ul>
+      <li><a href="news">News</a></li>
       <li><a href="games">Games</a></li>
+      <li><a href="highscores">Highscores</a></li>
+      <li><a href="forums">Forums</a></li>
      </ul>
     </nav>
-    <section id="content">
+    <section id="content" class="grid_9">
     <h1><?=$title?></h1>
     <?=$content?>
     </section>
+    <section id="fuck" class="grid_3">
+    <p>Think of something useful to put here.</p>
+    </section>
+  </div>
   </body>
 </html>

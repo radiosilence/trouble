@@ -30,7 +30,7 @@ class Agent extends \Trouble\AgentPage {
         $agent = \Trouble\Agent::mapper()
         ->attach_pdo($this->pdo);
         $t = new \Core\Template();
-        $t->title = "Create an agent.";
+        $t->title = "Agent Application";
         $t->new = True;
         $t->content = $t->render('forms/agent.php');
         echo $t->render('main.php');

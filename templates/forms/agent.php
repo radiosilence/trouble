@@ -47,4 +47,6 @@
     <?php if($new):?>
      Captcha goes here.
     <?php endif;?>
+  </fieldset>
+  <p class="submit"><button class="submit">Process Application</button></p>
 </form>
