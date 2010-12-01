@@ -9,7 +9,7 @@ create table agents
     course varchar,
     societies varchar,
     clubs varchar,
-    timetable varchar
+    timetable text
 );
 
 create table games

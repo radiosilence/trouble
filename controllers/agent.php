@@ -16,7 +16,6 @@ import('trouble.pages');
 import('trouble.killboard');
 import('trouble.agent');
 import('core.types');
-import('trouble.wizards.new_agent');
 class Agent extends \Trouble\AgentPage {
     public function index() {
         $this->init_agent($this->args['alias']);
@@ -28,11 +27,11 @@ class Agent extends \Trouble\AgentPage {
     }
 
     public function create() {
-        echo"<pre>";
         $agent = \Trouble\Agent::mapper()
         ->attach_pdo($this->pdo);
-        $wizard = \Trouble\Wizards\NewAgent::wizard()
-            ->attach_mapped($agent);
-
+        $t = new \Core\Template();
+        $t->new = True;
+        $t->content = $t->render('forms/agent.php');
+        echo $t->render('main.php');
     }
 }
