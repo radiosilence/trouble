@@ -18,6 +18,7 @@
       <li><a href="games">Games</a></li>
       <li><a href="highscores">Highscores</a></li>
       <li><a href="forums">Forums</a></li>
+      <li><a href="agent/create">Create Agent</a></li>
      </ul>
     </nav>
     <section id="content" class="grid_9">

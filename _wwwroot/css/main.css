@@ -225,6 +225,24 @@ button, input[type=submit] {
     font-weight: bold;
 }
 
+button:hover, input[type=submit]:hover {
+    
+    background:-webkit-gradient(
+            linear,
+            left top,
+            left bottom,
+            color-stop(0.02, rgb(12,12,12)),
+            color-stop(0.51, rgb(12,12,12)),
+            color-stop(0.87, rgb(06,06,06))
+        );
+    background: -moz-linear-gradient(
+            center top,
+            rgb(12,12,12) 2%,
+            rgb(12,12,12) 51%,
+            rgb(06,06,06) 87%
+        );
+}
+
 p.submit {
     text-align: right;
 }
