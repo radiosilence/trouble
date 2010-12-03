@@ -1,3 +1,11 @@
+drop table agents;
+drop table games;
+drop table weapons;
+drop table kills;
+drop table sessions;
+drop table tempaliases;
+drop table codes;
+
 create table agents
 (
     id SERIAL PRIMARY KEY,
