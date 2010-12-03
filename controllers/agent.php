@@ -33,14 +33,15 @@ class Agent extends \Trouble\AgentPage {
      */
     public function edit() {
         $t = new \Core\Template();
-        $t->title = "Agent Application";
         $mapper = \Trouble\Agent::mapper()
             ->attach_pdo($this->pdo);
-
+        $t->errors = array();
         if($this->args['alias']) {
+            $t->title = "Edit Agent";
             $agent = $mapper
                 ->find_by('alias', $this->args['alias']);
         } else {
+            $t->title = "Agent Application";
             $t->new = True;
             $agent = new \Trouble\Agent();
         }
@@ -50,20 +51,18 @@ class Agent extends \Trouble\AgentPage {
                 ->attach_mapper('agent', $mapper);
             if(!$t->new) {
                 $validator->set_id($agent->id);
+                $_POST['alias'] = $agent->alias;
             }
             try {
                 $validator->validate($_POST, \Trouble\Agent::validation());
-                $agent->update($_POST,
-                    array('exclude' => array('alias'))
-                );
+                $agent->update($_POST);
                 // Authentication here. If currently logged in
                 // user can update agent of alias x
                 $mapper
                     ->save($agent);
             
             } catch(\Core\ValidationError $e) {
-                $errors = $e->get_errors();
-                print_r($errors);
+                $t->errors = $e->get_errors();
             } catch(PDOException $e) {
                 throw new \Core\Error(sprintf('Database Error: %s',
                     $e->getMessage()));
@@ -74,7 +73,20 @@ class Agent extends \Trouble\AgentPage {
         echo $t->render('main.php');
     }
 
-    public function ajax_validate() {
-        
+    public function async_validate() {
+        $validator = \Core\Validator::validator()
+            ->attach_mapper('agent', \Trouble\Agent::mapper()
+                ->attach_pdo($this->pdo));
+        try {
+            $validator->validate(
+                $_POST,
+                \Trouble\Agent::validation(),
+                $this->args['field']
+            );
+            $errors = null;
+        } catch(\Core\ValidationError $e) {
+            $errors = $e->get_errors();
+        }
+        echo json_encode($errors);
     }
 }

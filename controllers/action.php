@@ -4,6 +4,9 @@ namespace Controllers;
 
 import('trouble.pages');
 class action extends \Trouble\StandardPage {
+    public function __construct($args) {
+        
+    }
     public function index() {}
     public function save_agent_image() {
         import('3rdparty.qquploader');

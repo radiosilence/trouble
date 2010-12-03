@@ -18,9 +18,12 @@ class Agent extends \Core\Mapped {
     public static function validation() {
        return array(
             'fullname' => 'default',
-            'alias' => array(
-                'type' => 'unique',
-                'mapper' => 'agent'
+            'alias' => array (
+                array(
+                    'type' => 'unique',
+                    'mapper' => 'agent'
+                ),
+                'default'
             ),
             'email' => array(
                 array(

@@ -128,6 +128,11 @@ nav ul li a {
     margin-top: 0em;
 }
 
+#content article img, fieldset img {
+    border: 1px solid rgba(255,255,255,.06);
+    border-radius: 10px;
+}
+
 #content article, fieldset {
     padding: 1em;
     border: 1px solid rgba(255,255,255,.06);
@@ -210,7 +215,7 @@ input:focus, textarea:focus {
     font-size: 12pt;
 }
 
-button, input[type=submit] {
+button, input[type=submit], .qq-upload-button {
     padding: 0.5em;
     border: 1px solid rgba(255,255,255,.06);
     border-radius: 15px;
@@ -237,7 +242,7 @@ button, input[type=submit] {
     font-weight: bold;
 }
 
-button:hover, input[type=submit]:hover {
+button:hover, input[type=submit]:hover,.qq-upload-button-hover,  {
     
     background:-webkit-gradient(
             linear,
@@ -253,6 +258,38 @@ button:hover, input[type=submit]:hover {
             rgb(12,12,12) 51%,
             rgb(06,06,06) 87%
         );
+}
+
+form ul.error {
+        padding: 0.5em 1em 0em 1em;
+    border: 1px solid rgba(255,255,255,.06);
+    border-radius: 10px;
+    margin-bottom: 1em;
+    background: url('../img_lib/errorbg.png');
+    background: url('../img_lib/errorbg.png'), -webkit-gradient(
+            linear,
+            left top,
+            left bottom,
+            color-stop(0.02, rgb(30,30,30)),
+            color-stop(0.51, rgb(30,30,30)),
+            color-stop(0.87, rgb(20,20,20))
+        );
+    background: url('../img_lib/errorbg.png'), -moz-linear-gradient(
+            center top,
+            rgb(20,10,10) 2%,
+            rgb(20,10,10) 51%,
+            rgb(00,00,00) 87%
+        );
+    -webkit-box-shadow: 0px 0px 10px rgba(255,255,255,.1); 
+    -moz-box-shadow: 0px 0px 10px rgba(255,255,255,.1);
+    color: white;
+    font-weight: bold;
+    list-style-type: disc;
+}
+
+form ul.error li {
+    padding-bottom: 0.5em;
+    margin-left: 1em;
 }
 
 p.submit {

@@ -19,6 +19,13 @@
   <?php if(!$new): ?>
     <input type="hidden" name="id" value="<?=$agent->id?>"/>
   <?php endif;?>
+  <?php if(count($errors) > 0):?>
+    <ul class="error">
+    <?php foreach($errors as $error): ?>
+      <li><?=$error?></li>
+    <?php endforeach; ?>
+    </ul>
+  <?php endif;?>
   <?php if($new): ?>
   <fieldset id="1">
     <h1>Welcome</h1>
@@ -77,5 +84,5 @@
      Captcha goes here.
     <?php endif;?>
   </fieldset>
-  <p class="submit"><button class="submit">Process Application</button></p>
+  <p class="submit"><button class="submit"><?=($new ? 'Process Application' : 'Save')?></button></p>
 </form>
