@@ -5,6 +5,15 @@ drop table kills;
 drop table sessions;
 drop table tempaliases;
 drop table codes;
+drop table authentication;
+
+create table authentication
+(
+    id SERIAL PRIMARY KEY,
+    user_id integer,
+    hash varchar,
+    salt varchar
+);
 
 create table agents
 (

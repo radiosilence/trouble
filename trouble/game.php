@@ -23,7 +23,7 @@ class Game extends \Core\Mapped {
         $this->kills = \Core\Arr::create();
     }
 
-    public function load_kills($args) {
+    public function load_kills($args=False) {
         $this->kills->extend($this->mappers['kill']
                 ->find_by_game($this, $args));
     }

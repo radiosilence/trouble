@@ -368,6 +368,7 @@ tbody td, tbody th {
     padding: 0px 5px 0px 5px;
     border: 0px solid #111;
     border-width: 0px 1px 1px 0px;
+    vertical-align: middle;
 }
 
 tbody th:nth-child(1) {
