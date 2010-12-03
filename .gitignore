@@ -4,3 +4,4 @@ config/*.php
 !config/*sample.php
 core/*
 _wwwroot/core_path.php
+_wwwroot/img/agent/*

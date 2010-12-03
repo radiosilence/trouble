@@ -23,9 +23,9 @@ class Game extends \Core\Mapped {
         $this->kills = \Core\Arr::create();
     }
 
-    public function load_kills() {
+    public function load_kills($args) {
         $this->kills->extend($this->mappers['kill']
-                ->find_by_game($this));
+                ->find_by_game($this, $args));
     }
 }
 
@@ -74,6 +74,9 @@ class GameMapper extends \Core\Mapping\PDOMapper {
             'id' => $data['victor'],
             'alias' => $data['victor_alias']
         ));
+        foreach(array('invite_only', 'local_currency', 'fake_names') as $v) {
+            $data[$v] = ($v == 1 ? True : False);
+        }
         unset($data['victor_alias']);
         $game = Game::create($data);
         $game->attach_mapper('kill', Kill::mapper()

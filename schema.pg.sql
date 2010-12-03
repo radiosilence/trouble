@@ -2,14 +2,15 @@ create table agents
 (
     id SERIAL PRIMARY KEY,
     fullname varchar,
-    alias varchar,
-    email varchar,
+    alias varchar UNIQUE,
+    email varchar UNIQUE,
     phone varchar,
     address text,
     course varchar,
     societies varchar,
     clubs varchar,
-    timetable text
+    timetable text,
+    imagefile varchar UNIQUE
 );
 
 create table games
@@ -25,7 +26,8 @@ create table games
     state integer,
     invite_only integer,
     entry_fee integer,
-    local_currency integer
+    local_currency integer,
+    temp_aliases integer
 );
 
 create table weapons

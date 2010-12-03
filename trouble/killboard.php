@@ -27,7 +27,8 @@ class Killboard extends \Core\Contained {
 
     public function load_data() {
         $this->games->map(function($game){
-            $game->load_kills();
+            $game->load_kills(True);
+
         });
         return $this;
     }

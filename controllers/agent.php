@@ -16,6 +16,8 @@ import('trouble.pages');
 import('trouble.killboard');
 import('trouble.agent');
 import('core.types');
+import('core.validation');
+
 class Agent extends \Trouble\AgentPage {
     public function index() {
         $this->init_agent($this->args['alias']);
@@ -26,13 +28,53 @@ class Agent extends \Trouble\AgentPage {
         echo $t->render('main.php');
     }
 
-    public function create() {
-        $agent = \Trouble\Agent::mapper()
-        ->attach_pdo($this->pdo);
+    /**
+     * TODO: Some form of authentication!
+     */
+    public function edit() {
         $t = new \Core\Template();
         $t->title = "Agent Application";
-        $t->new = True;
+        $mapper = \Trouble\Agent::mapper()
+            ->attach_pdo($this->pdo);
+
+        if($this->args['alias']) {
+            $agent = $mapper
+                ->find_by('alias', $this->args['alias']);
+        } else {
+            $t->new = True;
+            $agent = new \Trouble\Agent();
+        }
+
+        if (isset($_POST['submitted'])) {
+            $validator = \Core\Validator::validator()
+                ->attach_mapper('agent', $mapper);
+            if(!$t->new) {
+                $validator->set_id($agent->id);
+            }
+            try {
+                $validator->validate($_POST, \Trouble\Agent::validation());
+                $agent->update($_POST,
+                    array('exclude' => array('alias'))
+                );
+                // Authentication here. If currently logged in
+                // user can update agent of alias x
+                $mapper
+                    ->save($agent);
+            
+            } catch(\Core\ValidationError $e) {
+                $errors = $e->get_errors();
+                print_r($errors);
+            } catch(PDOException $e) {
+                throw new \Core\Error(sprintf('Database Error: %s',
+                    $e->getMessage()));
+            }
+        }
+        $t->agent = $agent;
         $t->content = $t->render('forms/agent.php');
         echo $t->render('main.php');
+    }
+
+    public function ajax_validate() {
+        
     }
 }

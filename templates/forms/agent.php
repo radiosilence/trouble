@@ -1,4 +1,24 @@
-<form id="agent"<?=($new ? ' class="wizard"' : null)?>>
+<script src="js_lib/fileuploader.js" type="text/javascript"></script>
+<script>        
+    jQuery(function(){      
+        var uploader = new qq.FileUploader({
+            element: document.getElementById('imagefile-uploader'),
+            action: 'action/save_agent_image',
+            onComplete: function(id, fileName, responseJSON){
+              var fn = responseJSON['filename']+'.'+responseJSON['ext'];
+              $('#imagefile_img').attr('src','img/agent/'+fn);
+              $('#imagefile_img').css('display','block');
+              $('#imagefile').val(fn);
+            },
+            debug: true
+        });           
+    });     
+</script>
+<form id="agent"<?=($new ? ' class="wizard"' : null)?> method="POST" action="agent/<?=($new ? 'create' : $agent->alias . '/edit' )?>">
+  <input type="hidden" name="submitted" value="1"/>
+  <?php if(!$new): ?>
+    <input type="hidden" name="id" value="<?=$agent->id?>"/>
+  <?php endif;?>
   <?php if($new): ?>
   <fieldset id="1">
     <h1>Welcome</h1>
@@ -29,6 +49,15 @@
       <p>NOTE: Without this, the game is pointless, and lacking or incorrect information is grounds for termination if joining a game that requires it.</p>
       <p>This information will stay internal to our system and will under no circumstance be sold to third parties or advertisers.</p>
     <?php endif;?>
+    <p>
+    <label for="imagefile">Photograph<br/>
+      <img src="img/agent/<?=$agent->imagefile?>" id="imagefile_img" style="display:<?=($agent->imagefile ? 'block' : 'none')?>"/>
+    <div id="imagefile-uploader">    
+      <noscript>      
+        <p>Please enable JavaScript to use file uploader.</p>
+      </noscript>         
+    </div>
+    <input type="hidden" name="imagefile" id="imagefile" value="<?=$agent->imagefile?>"/></p>
     <p><label for="course">Academic Course/Year<br/>
     <input type="text" name="course" id="course" value="<?=$agent->course?>" placeholder="Ex: 3rd year/Computer Science (BSc)"/></p>
     <p><label for="clubs">Clubs/Societies<br/>

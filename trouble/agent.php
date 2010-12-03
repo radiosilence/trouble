@@ -14,24 +14,37 @@ namespace Trouble;
 import('core.mapping');
 import('core.mapping.pdo');
 
-class Agent extends \Core\Mapped {}
+class Agent extends \Core\Mapped {
+    public static function validation() {
+       return array(
+            'fullname' => 'default',
+            'alias' => array(
+                'type' => 'unique',
+                'mapper' => 'agent'
+            ),
+            'email' => array(
+                array(
+                    'type' => 'unique',
+                    'mapper' => 'agent'
+                ),
+                'email'
+            )
+        );
+    }
+}
 
 class AgentMapper extends \Core\Mapping\PDOMapper {
     protected $_select = 'SELECT * FROM agents';
+    protected $_insert = "INSERT INTO agents";
+    protected $_update = "UPDATE agents SET ";
+    protected $_delete = "DELETE FROM agents ";
+    protected $_order = "ORDER BY agents.id DESC";
+    protected $_fields = array("id", "fullname", "alias", "email",
+        "phone", "address", "course", "societies", "clubs", "timetable",
+        "imagefile");
     
     public function create_object($data) {
         return Agent::create($data);
-    }
-    
-    public function find_by_alias($alias) {
-        $sth = $this->pdo->prepare(sprintf(
-                "%s\nWHERE alias = :alias",
-                $this->_select
-        ));
-        $sth->execute(array(
-            ':alias' => $alias
-        ));
-        return $this->create_object($sth->fetch(\PDO::FETCH_ASSOC));
     }
 }
 

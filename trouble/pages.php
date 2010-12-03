@@ -61,6 +61,6 @@ abstract class AgentPage extends StandardPage {
     protected function init_agent($alias) {
         $this->agent = \Trouble\Agent::mapper()
             ->attach_pdo($this->pdo)
-            ->find_by_alias($alias);
+            ->find_by('alias', $alias);
     }
 }
