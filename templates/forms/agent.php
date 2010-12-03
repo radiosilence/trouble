@@ -9,8 +9,7 @@
               $('#imagefile_img').attr('src','img/agent/'+fn);
               $('#imagefile_img').css('display','block');
               $('#imagefile').val(fn);
-            },
-            debug: true
+            }
         });           
     });     
 </script>

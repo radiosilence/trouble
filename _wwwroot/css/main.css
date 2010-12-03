@@ -390,7 +390,7 @@ input:-moz-placeholder, textarea:-moz-placeholder {
     color: rgba(255,255,255,0.2);
 }
 
-form#agent input, form#agent textarea {
+form#agent input[type=text], form#agent textarea {
     width: 25em;
 }
 
