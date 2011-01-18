@@ -16,26 +16,25 @@ import('core.session.handler');
 import('core.controller');
 import('core.template');
 import('core.containment.pdo');
+import('core.storage.pdo');
 
 abstract class StandardPage extends \Core\Controller {
     protected $pdo;
     protected $session;
     protected $template;
-   
+
     public function __construct($args) {
         parent::__construct($args);
-        $this->init_pdo();
-        $this->init_session();
+        $this->_init_pdo();
+        $this->_init_session();
     }
-
-    protected function init_session() {
+    protected function _init_session() {
         $this->session = \Core\Session\Handler::container(array(
                 'pdo' => $this->pdo
             ))
             ->get_standard_session();
     }
-
-    protected function init_pdo() {
+    protected function _init_pdo() {
         $c = new \Core\Containment\PDOContainer();
         $this->pdo = $c->get_connection();
     }
@@ -43,14 +42,17 @@ abstract class StandardPage extends \Core\Controller {
 
 abstract class GamePage extends StandardPage {
     protected $game;
+    
     public function __construct($args) {
         import('trouble.game');
         parent::__construct($args);
-        $this->init_game();
+        $this->_init_game();
     }
-    private function init_game() {
+    private function _init_game() {
+        $this->game_storage = \Core\Storage\PDO::create('Game')
+            ->attach_pdo($this->pdo);
         $this->game = Game::mapper()
-            ->attach_pdo($this->pdo)
+            ->attach_storage($this->game_storage)
             ->find_by_id($this->args['game_id']);
     }
 }
@@ -58,9 +60,11 @@ abstract class GamePage extends StandardPage {
 abstract class AgentPage extends StandardPage {
     protected $agent;
 
-    protected function init_agent($alias) {
+    protected function _init_agent($alias) {
+        $this->agent_storage = \Core\Storage\PDO::create('Agent')
+            ->attach_pdo($this->pdo);
         $this->agent = \Trouble\Agent::mapper()
-            ->attach_pdo($this->pdo)
+            ->attach_storage($this->agent_storage)
             ->find_by('alias', $alias);
     }
 }

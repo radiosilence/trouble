@@ -3,9 +3,9 @@
   <head>
     <base href="http://<?=HOST?><?=BASE_HREF?>/">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <link rel="stylesheet" href="css_lib/grid.css" type="text/css"/>
-    <link rel="stylesheet" href="css_lib/fileuploader.css" type="text/css"> 
-    <link rel="stylesheet" href="css/main.css" type="text/css"/>
+    <link rel="stylesheet" href="http://0xf.nl/css_lib/grid.css" type="text/css"/>
+    <link rel="stylesheet" href="http://0xf.nl/css_lib/fileuploader.css" type="text/css">
+    <link rel="stylesheet" href="http://0xf.nl/css/subverse.css" type="text/css"/>
     <script src="js_lib/jquery.js" type="text/javascript"></script>
     <title><?=$title?> | Trouble</title>
   </head>

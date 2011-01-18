@@ -16,14 +16,17 @@ import('trouble.pages');
 import('trouble.killboard');
 import('trouble.kill');
 import('trouble.game');
+import('trouble.agent');
 import('core.types');
 
 class Game extends \Trouble\GamePage {
     public function index() {}
     public function killboard() {
         $t = new \Core\Template();
-        $kill_mapper = \Trouble\Kill::mapper()
+        $kill_storage = \Trouble\Storage\PDO::create('Kill')
             ->attach_pdo($this->pdo);
+        $kill_mapper = \Trouble\Kill::mapper()
+            ->attach_storage($kill_storage);
         
         $this->game->attach_mapper('kill', $kill_mapper);
         $t->game = $this->game;
@@ -42,12 +45,17 @@ class Game extends \Trouble\GamePage {
 
         $time = new \DateTime("now");
         $t->games = \Trouble\Game::mapper()
-            ->attach_pdo($this->pdo)
-            ->get_list('games.end_date asc', 20, sprintf("where games.end_date > '%s'", $time->format('c')));
+            ->attach_storage($this->game_storage)
+            ->get_list(array(
+                "order" => new \Core\Order('end_date', 'asc'),
+                "filters" => array(
+                    new \Core\Filter("end_date", $time->format('c'), '>')
+                )
+            ));
+        
         $t->games->map(function($game) {
             $game->load_kills();
         });
-        
         $t->content = $t->render('games_list.php');
         $t->title = "Games Ending Soon";
         echo $t->render('main.php');
@@ -56,10 +64,16 @@ class Game extends \Trouble\GamePage {
     public function starting_soon() {
         $t = new \Core\Template();
 
-        $time = new \DateTime("now");
         $t->games = \Trouble\Game::mapper()
-            ->attach_pdo($this->pdo)
-            ->get_list('games.start_date asc', 20, sprintf("where games.state < 1"));
+            ->attach_storage($this->game_storage)
+            ->get_list(array(
+                "order" => new \Core\Order('end_date', 'asc'),
+                "filters" => array(
+                    new \Core\Filter("end_date", $time->format('c'), '>'),
+                    new \Core\Filter("state", 1, "<")
+                )
+            ));
+
         $t->games->map(function($game) {
             $game->load_kills();
         });

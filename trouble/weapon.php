@@ -12,16 +12,12 @@
 namespace Trouble;
 
 import('core.mapping');
-import('core.mapping.pdo');
 
 class Weapon extends \Core\Mapped {
 
 }
 
-class WeaponMapper extends \Core\Mapping\PDOMapper {
-    protected $_select = 'SELECT * FROM weapons';
-    protected $_joins = null;
-    
+class WeaponMapper extends \Core\Mapper {
     public function create_object($data) {
         return Weapon::create($data);
     }

@@ -12,15 +12,15 @@
 namespace Trouble;
 
 import('core.mapping');
-import('core.mapping.pdo');
 import('core.containment');
 
 import('trouble.kill');
+import('trouble.agent');
 
 class Game extends \Core\Mapped {
 
     public function __construct() {
-        $this->kills = \Core\Arr::create();
+        $this->kills = \Core\CoreList::create();
     }
 
     public function load_kills($args=False) {
@@ -29,44 +29,26 @@ class Game extends \Core\Mapped {
     }
 }
 
-class GameMapper extends \Core\Mapping\PDOMapper {
-    protected $_select = '
-        SELECT games.*,
-            games.id as id,
-            victor.alias as victor_alias
-        FROM games
-    ';
-    protected $_joins = '
-        LEFT JOIN agents victor
-            ON games.victor = victor.id
-    ';
+class GameMapper extends \Core\Mapper {
+    private $_default_order = array("start_date", "desc");
 
-    public function get_list($order='games.start_date desc', $limit=20, $filter=null) {
-        $sth = $this->pdo->prepare(sprintf(
-            "%s\n%s\n%s\nORDER BY %s\nLIMIT %s",
-            $this->_select,
-            $this->_joins,
-            $filter,
-            $order,
-            (int)$limit
-        ));
-        $sth->execute();
-        $games = \Core\Arr::create();
-        while($data = $sth->fetch(\PDO::FETCH_ASSOC)) {
-            $games->append($this->create_object($data));
+    public function get_list($parameters) {
+        if(!$order) {
+            $order = $_default_order;
+        }
+        $parameters['joins'] = array(
+            "victor" => "Agent"
+        );
+        $results = $this->_storage->fetch_many($parameters);
+        $games = \Core\CoreList::create();
+        foreach($results as $result) {
+            $games->append($this->create_object($result));
         }
         return $games;
     }
 
     public function find_by_id($id){
-        $sth = $this->pdo->prepare(
-            $this->_select . $this->_joins .
-            "WHERE games.id = :id"
-        );
-        $sth->execute(array(
-            ':id' => $id
-        ));
-        return $this->create_object($sth->fetch(\PDO::FETCH_ASSOC));
+        return $this->_storage->fetch($id);
     }
 
     public function create_object($data) {
@@ -80,7 +62,7 @@ class GameMapper extends \Core\Mapping\PDOMapper {
         unset($data['victor_alias']);
         $game = Game::create($data);
         $game->attach_mapper('kill', Kill::mapper()
-            ->attach_pdo($this->pdo));
+            ->attach_storage($this->_storage));
         return $game;
     }
 }

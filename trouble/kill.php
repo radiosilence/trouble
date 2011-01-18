@@ -11,7 +11,6 @@
 
 namespace Trouble;
 
-import('core.mapping.pdo');
 import('trouble.game');
 import('trouble.agent');
 import('trouble.weapon');
@@ -32,8 +31,8 @@ class Kill extends \Core\Mapped {
 	}
 }
 
-class KillMapper extends \Core\Mapping\PDOMapper {
-	protected $_select = '
+class KillMapper extends \Core\Mapper {
+/*	protected $_select = '
 	   SELECT
            kills.*,
 	       assassin.alias as a_alias,
@@ -46,25 +45,36 @@ class KillMapper extends \Core\Mapping\PDOMapper {
 	   LEFT JOIN agents assassin ON kills.assassin = assassin.id
 	   LEFT JOIN agents target ON kills.target = target.id
 	';
-    
+*/    
     public function find_by_game(\Trouble\Game $game, $limit=20) {
+        $results = $this->_storage->fetch_many(array(
+            "joins" => array(
+                "weapon" => "Weapon",
+                "assassin" => "Agent",
+                "target" => "Agent"
+            ),
+            "filters" => array(
+                "game", $game->id
+            )
+        ));
         $kills = array();
-        $sth = $this->pdo->prepare(
+/*        $sth = $this->pdo->prepare(
             $this->_select . $this->_joins .
             'WHERE game = :game
             LIMIT :limit
         ');
         $sth->bindValue(':limit', $limit, \PDO::PARAM_INT);
         $sth->bindValue(':game', $game->id, \PDO::PARAM_INT);
-        $sth->execute();
-        while($data = $sth->fetch(\PDO::FETCH_ASSOC)) {
-            $kills[]=$this->create_object($data);
+        $sth->execute();*/
+        $kills = \Core\CoreList::create();
+        foreach($results as $result) {
+            $kills->append($this->create_object($result));
         }
         return $kills;
     }
     
     public function create_object($data) {
-        $data = \Core\Arr::create($data);
+        $data = \Core\CoreDict::create($data);
         $assassin = Agent::mapper()->create_object(array(
             'id' => $data->assassin,
             'alias' => $data->a_alias
