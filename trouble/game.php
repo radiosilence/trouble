@@ -24,6 +24,8 @@ class Game extends \Core\Mapped {
     }
 
     public function load_kills($args=False) {
+    echo "Loading kills";
+        var_dump($this->mappers);
         $this->kills->extend($this->mappers['kill']
                 ->find_by_game($this, $args));
     }
@@ -32,12 +34,13 @@ class Game extends \Core\Mapped {
 class GameMapper extends \Core\Mapper {
     private $_default_order = array("start_date", "desc");
 
-    public function get_list($parameters) {
+    public function get_list(\Core\CoreDict $parameters) {
+    echo "<params>"; var_dump($parameters);  echo "</params>";   
         if(!$order) {
             $order = $_default_order;
         }
-        $parameters['joins'] = array(
-            "victor" => "Agent"
+        $parameters->joins = new \Core\CoreList(
+            new \Core\Join("victor", "Agent")
         );
         $results = $this->_storage->fetch_many($parameters);
         $games = \Core\CoreList::create();

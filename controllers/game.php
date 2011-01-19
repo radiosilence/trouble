@@ -42,20 +42,16 @@ class Game extends \Trouble\GamePage {
 
     public function ending_soon() {
         $t = new \Core\Template();
-
+echo "ENDING SOON";
         $time = new \DateTime("now");
         $t->games = \Trouble\Game::mapper()
             ->attach_storage($this->game_storage)
-            ->get_list(array(
+            ->get_list(new \Core\CoreDict(array(
                 "order" => new \Core\Order('end_date', 'asc'),
-                "filters" => array(
+                "filters" => new \Core\CoreList(
                     new \Core\Filter("end_date", $time->format('c'), '>')
-                )
+                ))
             ));
-        
-        $t->games->map(function($game) {
-            $game->load_kills();
-        });
         $t->content = $t->render('games_list.php');
         $t->title = "Games Ending Soon";
         echo $t->render('main.php');
@@ -63,15 +59,15 @@ class Game extends \Trouble\GamePage {
 
     public function starting_soon() {
         $t = new \Core\Template();
-
+echo "STARTING SOON";
         $t->games = \Trouble\Game::mapper()
             ->attach_storage($this->game_storage)
-            ->get_list(array(
+            ->get_list(new \CoreDict(array(
                 "order" => new \Core\Order('end_date', 'asc'),
                 "filters" => array(
                     new \Core\Filter("end_date", $time->format('c'), '>'),
                     new \Core\Filter("state", 1, "<")
-                )
+                ))
             ));
 
         $t->games->map(function($game) {

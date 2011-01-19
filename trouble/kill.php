@@ -47,17 +47,18 @@ class KillMapper extends \Core\Mapper {
 	';
 */    
     public function find_by_game(\Trouble\Game $game, $limit=20) {
-        $results = $this->_storage->fetch_many(array(
-            "joins" => array(
-                "weapon" => "Weapon",
-                "assassin" => "Agent",
-                "target" => "Agent"
+        var_dump($this->_storage);
+        $results = $this->_storage->fetch_many(new \Core\CoreDict(array(
+            "joins" => new \Core\CoreList(
+                new \Core\Join("weapon", "Weapon"),
+                new \Core\Join("assassin", "Agent"),
+                new \Core\Join("target", "Agent")
             ),
-            "filters" => array(
-                "game", $game->id
+            "filters" => new \Core\CoreList(
+                new \Core\Filter("game", $game->id)
             )
-        ));
-        $kills = array();
+        )));
+        $kills = new \Core\CoreList();
 /*        $sth = $this->pdo->prepare(
             $this->_select . $this->_joins .
             'WHERE game = :game
