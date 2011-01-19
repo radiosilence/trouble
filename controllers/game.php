@@ -11,30 +11,32 @@
 
 namespace Controllers;
 
+import('core.storage');
+import('core.types');
 import('trouble.weapon');
 import('trouble.pages');
 import('trouble.killboard');
 import('trouble.kill');
 import('trouble.game');
 import('trouble.agent');
-import('core.types');
 
 class Game extends \Trouble\GamePage {
     public function index() {}
     public function killboard() {
         $t = new \Core\Template();
-        $kill_storage = \Trouble\Storage\PDO::create('Kill')
-            ->attach_pdo($this->pdo);
+        $kill_storage = \Core\Storage::container()
+            ->get_storage('Kill');
         $kill_mapper = \Trouble\Kill::mapper()
             ->attach_storage($kill_storage);
-        
+        if(!($this->game instanceof \Trouble\Game)) {
+            throw new \Core\Error("No game.");
+        }
         $this->game->attach_mapper('kill', $kill_mapper);
         $t->game = $this->game;
         $t->killboard = \Trouble\Killboard::container()
                 ->get_game_killboard($this->game)
                 ->load_data();
 
-        
         $t->content = $t->render('killboard.php');
         $t->title = $t->game->name . ': Killboard';
         echo $t->render('main.php');
@@ -42,14 +44,14 @@ class Game extends \Trouble\GamePage {
 
     public function ending_soon() {
         $t = new \Core\Template();
-echo "ENDING SOON";
         $time = new \DateTime("now");
         $t->games = \Trouble\Game::mapper()
             ->attach_storage($this->game_storage)
-            ->get_list(new \Core\CoreDict(array(
+            ->get_list(new \Core\Dict(array(
                 "order" => new \Core\Order('end_date', 'asc'),
-                "filters" => new \Core\CoreList(
-                    new \Core\Filter("end_date", $time->format('c'), '>')
+                "filters" => new \Core\Li(
+                    new \Core\Filter("end_date", $time->format('c'), '<'),
+                    new \Core\Filter("name", "Test Game")
                 ))
             ));
         $t->content = $t->render('games_list.php');
@@ -59,10 +61,9 @@ echo "ENDING SOON";
 
     public function starting_soon() {
         $t = new \Core\Template();
-echo "STARTING SOON";
         $t->games = \Trouble\Game::mapper()
             ->attach_storage($this->game_storage)
-            ->get_list(new \CoreDict(array(
+            ->get_list(new \Dict(array(
                 "order" => new \Core\Order('end_date', 'asc'),
                 "filters" => array(
                     new \Core\Filter("end_date", $time->format('c'), '>'),

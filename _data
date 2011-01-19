@@ -1,0 +1,42 @@
+./controllers/agent.php:        $this->init_agent($this->args['alias']);
+./controllers/agent.php:        $t->agent = $this->agent;
+./controllers/agent.php:            ->attach_pdo($this->pdo);
+./controllers/agent.php:        if($this->args['alias']) {
+./controllers/agent.php:                ->find_by('alias', $this->args['alias']);
+./controllers/agent.php:                ->attach_pdo($this->pdo));
+./controllers/agent.php:                $this->args['field']
+./controllers/game.php:            ->attach_pdo($this->pdo);
+./controllers/game.php:        $this->game->attach_mapper('kill', $kill_mapper);
+./controllers/game.php:        $t->game = $this->game;
+./controllers/game.php:                ->get_game_killboard($this->game)
+./controllers/game.php:            ->attach_storage($this->game_storage)
+./controllers/game.php:            ->attach_storage($this->game_storage)
+./trouble/pages.php:        $this->_init_pdo();
+./trouble/pages.php:        $this->_init_session();
+./trouble/pages.php:        $this->session = \Core\Session\Handler::container(array(
+./trouble/pages.php:                'pdo' => $this->pdo
+./trouble/pages.php:        $this->pdo = $c->get_connection();
+./trouble/pages.php:        $this->_init_game();
+./trouble/pages.php:        $this->game_storage = \Core\Storage\PDO::create('Game')
+./trouble/pages.php:            ->attach_pdo($this->pdo);
+./trouble/pages.php:        $this->game = Game::mapper()
+./trouble/pages.php:            ->attach_storage($this->game_storage);
+./trouble/pages.php://            ->find_by_id($this->args['game_id']);
+./trouble/pages.php:        $this->agent_storage = \Core\Storage\PDO::create('Agent')
+./trouble/pages.php:            ->attach_pdo($this->pdo);
+./trouble/pages.php:        $this->agent = \Trouble\Agent::mapper()
+./trouble/pages.php:            ->attach_storage($this->agent_storage)
+./trouble/game.php:        $this->kills = \Core\Li::create();
+./trouble/game.php:        $this->kills->extend($this->mappers['kill']
+./trouble/game.php:        $results = $this->_storage->fetch($parameters);
+./trouble/game.php:            $games->append($this->create_object($result));            
+./trouble/game.php:        return $this->_storage->fetch($id);
+./trouble/game.php:            ->attach_storage($this->_storage));
+./trouble/killboard.php:        $this->games = new \Core\Arr();
+./trouble/killboard.php:        $this->games->append($game);
+./trouble/killboard.php:        $this->games->map(function($game){
+./trouble/kill.php:        var_dump($this->_storage);
+./trouble/kill.php:        $results = $this->_storage->fetch_many(new \Core\Dict(array(
+./trouble/kill.php:/*        $sth = $this->pdo->prepare(
+./trouble/kill.php:            $this->_select . $this->_joins .
+./trouble/kill.php:            $kills->append($this->create_object($result));

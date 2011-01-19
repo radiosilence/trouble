@@ -53,7 +53,7 @@ abstract class GamePage extends StandardPage {
             ->attach_pdo($this->pdo);
         $this->game = Game::mapper()
             ->attach_storage($this->game_storage)
-            ->find_by_id($this->args['game_id']);
+            ->find_by_id((int)$this->args['game_id']);
     }
 }
 

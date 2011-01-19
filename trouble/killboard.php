@@ -17,7 +17,7 @@ import('trouble.kill');
 
 class Killboard extends \Core\Contained {
     public function __construct() {
-        $this->games = new \Core\Arr();
+        $this->games = new \Core\Li();
     }
     
     public function attach_game(\Trouble\Game $game) {

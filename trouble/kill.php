@@ -47,27 +47,18 @@ class KillMapper extends \Core\Mapper {
 	';
 */    
     public function find_by_game(\Trouble\Game $game, $limit=20) {
-        var_dump($this->_storage);
-        $results = $this->_storage->fetch_many(new \Core\CoreDict(array(
-            "joins" => new \Core\CoreList(
-                new \Core\Join("weapon", "Weapon"),
-                new \Core\Join("assassin", "Agent"),
-                new \Core\Join("target", "Agent")
+        $results = $this->_storage->fetch(new \Core\Dict(array(
+            "joins" => new \Core\Li(
+                new \Core\Join("weapon", "Weapon", new \Core\Li('id', 'name')),
+                new \Core\Join("assassin", "Agent", new \Core\Li('alias')),
+                new \Core\Join("target", "Agent", new \Core\Li('alias'))
             ),
-            "filters" => new \Core\CoreList(
+            "filters" => new \Core\Li(
                 new \Core\Filter("game", $game->id)
             )
         )));
-        $kills = new \Core\CoreList();
-/*        $sth = $this->pdo->prepare(
-            $this->_select . $this->_joins .
-            'WHERE game = :game
-            LIMIT :limit
-        ');
-        $sth->bindValue(':limit', $limit, \PDO::PARAM_INT);
-        $sth->bindValue(':game', $game->id, \PDO::PARAM_INT);
-        $sth->execute();*/
-        $kills = \Core\CoreList::create();
+        $kills = new \Core\Li();
+        $kills = \Core\Li::create();
         foreach($results as $result) {
             $kills->append($this->create_object($result));
         }
@@ -75,14 +66,14 @@ class KillMapper extends \Core\Mapper {
     }
     
     public function create_object($data) {
-        $data = \Core\CoreDict::create($data);
+        $data = \Core\Dict::create($data);
         $assassin = Agent::mapper()->create_object(array(
-            'id' => $data->assassin,
-            'alias' => $data->a_alias
+            'id' => $data->assassin_id,
+            'alias' => $data->assassin_alias
         ));
         $target = Agent::mapper()->create_object(array(
-            'id' => $data->target,
-            'alias' => $data->t_alias
+            'id' => $data->target_id,
+            'alias' => $data->target_alias
         ));
         $weapon = Weapon::mapper()->create_object(array(
             'id' => $data->weapon,
