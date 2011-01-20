@@ -50,18 +50,6 @@ class GameMapper extends \Core\Mapper {
         return $games;
     }
 
-    public function find_by_id($id){
-        if(!is_int($id)) {
-            return False;
-        }
-        $result = $this->_storage->fetch(new \Core\Dict(array(
-                "filters" => new \Core\Li(
-                    new \Core\Filter("id", $id)
-                )
-        )));
-        return $this->create_object($result[0]);
-    }
-
     public function create_object($data) {
         $data['victor'] = Agent::mapper()->create_object(array(
             'id' => $data['victor'],

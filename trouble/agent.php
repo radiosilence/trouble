@@ -36,15 +36,6 @@ class Agent extends \Core\Mapped {
 }
 
 class AgentMapper extends \Core\Mapper {
-/*    protected $_select = 'SELECT * FROM agents';
-    protected $_insert = "INSERT INTO agents";
-    protected $_update = "UPDATE agents SET ";
-    protected $_delete = "DELETE FROM agents ";
-    protected $_order = "ORDER BY agents.id DESC";
-    protected $_fields = array("id", "fullname", "alias", "email",
-        "phone", "address", "course", "societies", "clubs", "timetable",
-        "imagefile");
-*/  
     public function create_object($data) {
         return Agent::create($data);
     }

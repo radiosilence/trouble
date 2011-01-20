@@ -20,11 +20,11 @@ import('core.validation');
 
 class Agent extends \Trouble\AgentPage {
     public function index() {
-        $this->init_agent($this->args['alias']);
+        $this->_init_agent($this->args['alias']);
         $t = new \Core\Template();
+        echo $this->__fullname__();
         $t->agent = $this->agent;
         $t->content = $t->render('agent.php');
-
         echo $t->render('main.php');
     }
 
@@ -33,8 +33,11 @@ class Agent extends \Trouble\AgentPage {
      */
     public function edit() {
         $t = new \Core\Template();
+        
+        $storage = \Core\Storage::container()
+            ->get_storage('Agent');
         $mapper = \Trouble\Agent::mapper()
-            ->attach_pdo($this->pdo);
+            ->attach_storage($storage);
         $t->errors = array();
         if($this->args['alias']) {
             $t->title = "Edit Agent";
@@ -47,8 +50,6 @@ class Agent extends \Trouble\AgentPage {
         }
 
         if (isset($_POST['submitted'])) {
-            $validator = \Core\Validator::validator()
-                ->attach_mapper('agent', $mapper);
             if(!$t->new) {
                 $validator->set_id($agent->id);
                 $_POST['alias'] = $agent->alias;
