@@ -35,7 +35,6 @@ class GameMapper extends \Core\Mapper {
     private $_default_order = array("start_date", "desc");
 
     public function get_list(\Core\Dict $parameters) {
-    //echo "<params>"; var_dump($parameters);  echo "</params>";   
         if(!$order) {
             $order = $_default_order;
         }

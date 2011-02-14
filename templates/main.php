@@ -3,6 +3,9 @@
   <head>
     <base href="http://<?=HOST?><?=BASE_HREF?>/">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+    <link rel="stylesheet" href="http://0xf.nl/css_lib/reset.css" type="text/css"/>
+
     <link rel="stylesheet" href="http://0xf.nl/css_lib/grid.css" type="text/css"/>
     <link rel="stylesheet" href="http://0xf.nl/css_lib/fileuploader.css" type="text/css">
     <link rel="stylesheet" href="http://0xf.nl/css/subverse.css" type="text/css"/>
@@ -17,7 +20,7 @@
     <nav class="grid_12">
      <ul>
       <li><a href="news">News</a></li>
-      <li><a href="games">Games</a></li>
+      <li><a href="games<?=$__xsrf__?>">Games</a></li>
       <li><a href="highscores">Highscores</a></li>
       <li><a href="forums">Forums</a></li>
       <li><a href="agent/create">Create Agent</a></li>

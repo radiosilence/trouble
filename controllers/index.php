@@ -16,7 +16,7 @@ import('core.types');
 
 class Index extends \Trouble\StandardPage {
     public function index() {
-        $t = new \Core\Template();
+        $t = $this->_template;
         echo $t->render('main.php');
     }
 

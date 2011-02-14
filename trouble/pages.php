@@ -17,17 +17,32 @@ import('core.controller');
 import('core.template');
 import('core.backend');
 import('core.storage');
+import('core.security.antixsrf');
 
 abstract class StandardPage extends \Core\Controller {
     protected $_backend;
     protected $_session;
     protected $_template;
+    protected $_antixsrf;
 
     public function __construct($args) {
         parent::__construct($args);
         $this->_init_backend();
         $this->_init_session();
+        $this->_antixsrf = \Core\Security\AntiXSRF::create($args['__antixsrf_reqid__'])
+            ->attach_session($this->_session);
+            
+        if($args['__antixsrf__']) {
+            $this->_antixsrf->check();
+        }
+        $this->_init_template();
     }
+
+    protected function _init_template() {
+        $this->_template = \Core\Template::create()
+            ->attach_util("antixsrf", $this->_antixsrf);
+    }
+
     protected function _init_session() {
         $this->_session = \Core\Session\Handler::container(array(
                 'pdo' => $this->_backend

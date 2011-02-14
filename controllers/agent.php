@@ -21,8 +21,7 @@ import('core.validation');
 class Agent extends \Trouble\AgentPage {
     public function index() {
         $this->_init_agent($this->args['alias']);
-        $t = new \Core\Template();
-        echo $this->__fullname__();
+        $t = $this->_template;
         $t->agent = $this->agent;
         $t->content = $t->render('agent.php');
         echo $t->render('main.php');
@@ -32,7 +31,7 @@ class Agent extends \Trouble\AgentPage {
      * TODO: Some form of authentication!
      */
     public function edit() {
-        $t = new \Core\Template();
+        $t = $this->_template;
         
         $storage = \Core\Storage::container()
             ->get_storage('Agent');

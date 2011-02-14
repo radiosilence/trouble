@@ -44,3 +44,6 @@ INSERT INTO games (id, name, start_date, end_date, signup_date, location, victor
 INSERT INTO kills (weapon, description, assassin, target, when_happened, game) VALUES
 (8, 'Blah bla', 2, 1, '2010-11-13 17:09:09', 1),
 (2, 'Bleop', 1, 2, '2010-11-04 17:09:33', 1);
+
+INSERT INTO articles(title,author,body,custom_url, posted_on) VALUES
+('Test ARticle', 1, 'Some random shit happened, blah lorem mooohappened, blah lorem mooohappened, blah lorem mooohappened, blah lorem mooohappened, blah lorem mooohappened, blah lorem mooohappened, blah lorem mooohappened, blah lorem mooohappened, blah lorem mooohappened, blah lorem mooo', 'stupid-article', current_timestamp);

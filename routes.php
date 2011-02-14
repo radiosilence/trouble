@@ -21,6 +21,7 @@ $routes = array(
     '^agent/([^/]+)$' => 'Agent:method=agent;alias=$1',
     '^agent/validate/([a-zA-Z_]+)$' => 'Agent:method=async_validate;field=$1',
     '^action/([a-zA-Z_]+)$' => 'Action:method=$1',
+    '^news(.*)$' => 'News',
     '^$' => 'Index:method=index'
 );
 /*

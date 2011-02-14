@@ -77,7 +77,6 @@ CREATE TABLE sessions
   latest timestamp with time zone NOT NULL
 );
 
-
 create table codes
 (
     id serial primary key,
@@ -95,3 +94,12 @@ create table tempaliases
     alias varchar
 );
 
+create table articles
+(
+    id serial primary key,
+    title varchar,
+    body text,
+    posted_on timestamp with time zone,
+    author integer references agents(id),
+    custom_url varchar
+);

@@ -23,7 +23,7 @@ import('trouble.agent');
 class Game extends \Trouble\GamePage {
     public function index() {}
     public function killboard() {
-        $t = new \Core\Template();
+        $t = $this->_template;
         $kill_storage = \Core\Storage::container()
             ->get_storage('Kill');
         $kill_mapper = \Trouble\Kill::mapper()
@@ -43,15 +43,14 @@ class Game extends \Trouble\GamePage {
     }
 
     public function ending_soon() {
-        $t = new \Core\Template();
+        $t = $this->_template;
         $time = new \DateTime("now");
         $t->games = \Trouble\Game::mapper()
             ->attach_storage($this->game_storage)
             ->get_list(new \Core\Dict(array(
                 "order" => new \Core\Order('end_date', 'asc'),
                 "filters" => new \Core\Li(
-                    new \Core\Filter("end_date", $time->format('c'), '<'),
-                    new \Core\Filter("name", "Test Game")
+                    new \Core\Filter("end_date", $time->format('c'), '<')
                 ))
             ));
         $t->content = $t->render('games_list.php');
@@ -60,7 +59,7 @@ class Game extends \Trouble\GamePage {
     }
 
     public function starting_soon() {
-        $t = new \Core\Template();
+        $t = $this->_template;
         $t->games = \Trouble\Game::mapper()
             ->attach_storage($this->game_storage)
             ->get_list(new \Dict(array(
