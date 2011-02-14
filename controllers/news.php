@@ -25,8 +25,12 @@ class News extends \Plugins\Articles\Controller {
     protected $_template;
     protected $_antixsrf;
 
-    public function index() {
+    public function __construct($args) {
+        parent::__construct($args);
         $this->_init();
+    }
+
+    public function index() {
         $t = $this->_template;
 
         $t->articles = $this->_get_latest_articles();
@@ -36,6 +40,15 @@ class News extends \Plugins\Articles\Controller {
         echo $t->render('main.php');
     }
 
+    public function display_article() {
+        $t = $this->_template;
+        $articles = $this->_get_article($this->_args['article_id']);
+        $t->article = $articles[0];
+
+        $t->content = $t->render('news_article.php');
+        $t->title = $article->title;
+        echo $t->render('main.php');
+    }
     protected function _init() {
         $this->_init_backend();
         $this->_init_session();

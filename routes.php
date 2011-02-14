@@ -21,12 +21,7 @@ $routes = array(
     '^agent/([^/]+)$' => 'Agent:method=agent;alias=$1',
     '^agent/validate/([a-zA-Z_]+)$' => 'Agent:method=async_validate;field=$1',
     '^action/([a-zA-Z_]+)$' => 'Action:method=$1',
+    '^news/([0-9]+)(.*)' => 'News:method=display_article;article_id=$1',
     '^news(.*)$' => 'News',
     '^$' => 'Index:method=index'
 );
-/*
-RewriteRule ^/?game/([0-9]{1,9})/(.*)$ index.php?route=game/$2/game_id:$1
-RewriteRule ^/?games(.*)$ index.php?route=game/ending_soon/$1
-RewriteRule ^/?games/starting-soon(.*)$ index.php?route=game/starting_soon/$1
-RewriteRule ^/?agent/([\w]+).*?(\.html)?$ index.php?route=agent/alias:$1
-*/

@@ -64,11 +64,11 @@ class Game extends \Trouble\GamePage {
             ->attach_storage($this->game_storage)
             ->get_list(new \Dict(array(
                 "order" => new \Core\Order('end_date', 'asc'),
-                "filters" => array(
+                "filters" => new \Core\Li(
                     new \Core\Filter("end_date", $time->format('c'), '>'),
                     new \Core\Filter("state", 1, "<")
-                ))
-            ));
+                )
+            )));
 
         $t->games->map(function($game) {
             $game->load_kills();
