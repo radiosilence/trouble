@@ -69,7 +69,11 @@ abstract class GamePage extends StandardPage {
             ->get_storage('Game');
         $this->game = Game::mapper()
             ->attach_storage($this->game_storage)
-            ->find_by('id', $this->args['game_id']);
+            ->get_list(new \Core\Dict(array(
+                'filter' => new \Core\Filter('id', $this->args['game_id'])
+            )));
+        $this->game = $this->game[0];
+
     }
 }
 
