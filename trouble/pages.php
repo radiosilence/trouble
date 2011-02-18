@@ -39,8 +39,16 @@ abstract class StandardPage extends \Core\Controller {
     }
 
     protected function _init_template() {
-        $this->_template = \Core\Template::create()
+        $t = \Core\Template::create()
             ->attach_util("antixsrf", $this->_antixsrf);
+        $t['__uri__'] = $this->_args['__uri__']; 
+        if(isset($this->_session['auth'])) {
+            $t['_user_box'] = $t->render('user_box.php');
+            $t['_user_data'] = $this->_session['auth']['data'];
+        } else {
+            $t['_user_box'] = $t->render('login_box.php');        
+        }
+        $this->_template = $t;
     }
 
     protected function _init_session() {
