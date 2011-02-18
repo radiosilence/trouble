@@ -32,20 +32,7 @@ class Kill extends \Core\Mapped {
 }
 
 class KillMapper extends \Core\Mapper {
-/*	protected $_select = '
-	   SELECT
-           kills.*,
-	       assassin.alias as a_alias,
-	       target.alias as t_alias,
-	       weapons.name as w_name
-	   FROM kills
-	';
-    protected $_joins = '
-	   LEFT JOIN weapons ON kills.weapon = weapons.id
-	   LEFT JOIN agents assassin ON kills.assassin = assassin.id
-	   LEFT JOIN agents target ON kills.target = target.id
-	';
-*/    
+
     public function find_by_game(\Trouble\Game $game, $limit=20) {
         $results = $this->_storage->fetch(new \Core\Dict(array(
             "joins" => new \Core\Li(
@@ -85,7 +72,7 @@ class KillMapper extends \Core\Mapper {
             'assassin' => $assassin,
             'target' => $target,
             'weapon' => $weapon,
-            'when_happened' => $data->when_happened
+            'when_happened' => new \DateTime($data->when_happened)
         ));
     }
 }
