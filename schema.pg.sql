@@ -20,6 +20,7 @@ create table agents
     id SERIAL PRIMARY KEY,
     fullname varchar,
     alias varchar UNIQUE,
+    password varchar,
     email varchar UNIQUE,
     phone varchar,
     address text,
