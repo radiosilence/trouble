@@ -2,8 +2,8 @@
 
 namespace Controllers;
 
-import('trouble.pages');
-class action extends \Trouble\StandardPage {
+import('controllers.standard_page');
+class action extends \Controllers\StandardPage {
     public function __construct($args) {
         
     }
