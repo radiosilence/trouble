@@ -26,12 +26,12 @@
       <li><a href="agent/create">Create Agent</a></li>
      </ul>
     </nav>
-    <section id="content" class="grid_10">
+    <section id="content" class="grid_9">
     <h1><?=$title?></h1>
     <?=$content?>
     </section>
-    <section id="fuck" class="grid_2">
-    <p>Think of something useful to put here.</p>
+    <section id="user" class="grid_3">
+    <?=$_user_box?>
     </section>
   </div>
   </body>
