@@ -11,11 +11,11 @@
 
 namespace Controllers;
 
-import('trouble.pages');
+import('controllers.standard_page');
 import('core.types');
 import('core.auth');
 
-class Index extends \Trouble\StandardPage {
+class Index extends \Controllers\StandardPage {
     public function index() {
         $t = $this->_template;
         echo $t->render('main.php');

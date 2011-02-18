@@ -11,14 +11,14 @@
 
 namespace Controllers;
 
+import('controllers.standard_page');
 import('trouble.weapon');
-import('trouble.pages');
 import('trouble.killboard');
 import('trouble.agent');
 import('core.types');
 import('core.validation');
 
-class Agent extends \Trouble\AgentPage {
+class Agent extends \Controllers\AgentPage {
     public function index() {
         $this->_init_agent($this->args['alias']);
         $t = $this->_template;

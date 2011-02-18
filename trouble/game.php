@@ -25,7 +25,7 @@ class Game extends \Core\Mapped {
     }
 
     public function load_kills($args=False) {
-        $this->kills = \Core\Li::create($this->mappers['kill']
+        $this->kills = \Core\Li::create($this->mappers['Kill']
                 ->find_by_game($this, $args)
         );
     }
@@ -59,7 +59,7 @@ class GameMapper extends \Core\Mapper {
         }
         unset($data['victor_alias']);
         $game = Game::create($data);
-        $game->attach_mapper('kill',
+        $game->attach_mapper('Kill',
             Kill::mapper()
                 ->attach_storage($this->_storage)
         );

@@ -13,14 +13,14 @@ namespace Controllers;
 
 import('core.storage');
 import('core.types');
+import('controllers.standard_page');
 import('trouble.weapon');
-import('trouble.pages');
 import('trouble.killboard');
 import('trouble.kill');
 import('trouble.game');
 import('trouble.agent');
 
-class Game extends \Trouble\GamePage {
+class Game extends \Controllers\GamePage {
     public function index() {}
     public function killboard() {
         $t = $this->_template;
@@ -31,7 +31,7 @@ class Game extends \Trouble\GamePage {
         if(!($this->game instanceof \Trouble\Game)) {
             throw new \Core\Error("No game.");
         }
-        $this->game->attach_mapper('kill', $kill_mapper);
+        $this->game->attach_mapper('Kill', $kill_mapper);
         $t->game = $this->game;
         $t->killboard = \Trouble\Killboard::container()
                 ->get_game_killboard($this->game)

@@ -30,7 +30,7 @@
     <h1><?=$title?></h1>
     <?=$content?>
     </section>
-    <section id="user" class="grid_3">
+    <section id="userbox" class="grid_3">
     <?=$_user_box?>
     </section>
   </div>

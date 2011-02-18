@@ -12,28 +12,19 @@
 namespace Controllers;
 
 import('core.types');
-import('plugins.articles.controller');
-import('core.session.handler');
-import('core.template');
-import('core.backend');
-import('core.storage');
-import('core.security.antixsrf');
+import('plugins.articles.article');
+import('controllers.standard_page');
 
-class News extends \Plugins\Articles\Controller {
-    protected $_backend;
-    protected $_session;
-    protected $_template;
-    protected $_antixsrf;
-
-    public function __construct($args) {
-        parent::__construct($args);
-        $this->_init();
-    }
+class News extends \Controllers\StandardPage {
 
     public function index() {
         $t = $this->_template;
 
-        $t->articles = $this->_get_latest_articles();
+        $t->articles = \Plugins\Articles\Article::mapper()
+            ->attach_storage(\Core\Storage::container()
+                ->get_storage('Article')
+            )
+            ->get_latest_articles();
 
         $t->content = $t->render('news.php');
         $t->title = 'News';
@@ -42,20 +33,15 @@ class News extends \Plugins\Articles\Controller {
 
     public function display_article() {
         $t = $this->_template;
-        $articles = $this->_get_article($this->_args['article_id']);
-        $t->article = $articles[0];
+        $t->article = \Plugins\Articles\Article::mapper()
+            ->attach_storage(\Core\Storage::container()
+                ->get_storage('Article')
+            )
+            ->get_article($this->_args['article_id']);
 
         $t->content = $t->render('news_article.php');
         $t->title = $article->title;
         echo $t->render('main.php');
-    }
-    protected function _init() {
-        $this->_init_backend();
-        $this->_init_session();
-        $this->_antixsrf = \Core\Security\AntiXSRF::create($args['__antixsrf_reqid__'])
-            ->attach_session($this->_session);
-        $this->_init_template();
-        $this->_init_storage();
     }
 
     protected function _init_session() {
