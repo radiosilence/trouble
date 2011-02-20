@@ -1,0 +1,23 @@
+body.loggedin nav li#create_agent {
+    display: none;
+}
+
+header h1 a {
+    display: block;
+    width: 175px;
+    height: 45px;
+    background-image: url('/img/header.png');
+    text-indent: -9999px;
+    margin-left: -5px;
+}
+
+
+table.kills th {
+    width: 200px;
+    font-weight: bold;
+    padding: 4px;
+    padding-left: 10px;
+}
+table.kills .date {
+    width: 120px;
+}
