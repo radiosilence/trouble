@@ -18,6 +18,17 @@ import('core.auth');
 class Index extends \Controllers\StandardPage {
     public function index() {
         $t = $this->_template;
+        import('trouble.agent');
+        /*var_dump("<pre>",\Trouble\Agent::mapper()
+            ->attach_storage(\Core\Storage::container()
+                ->get_storage('Agent')
+            )
+            ->get_list(array(
+                'fields' => array(
+                    'alias'
+                )
+            ))
+        , "</pre>");*/
         echo $t->render('main.php');
     }
     public function login() {
@@ -28,13 +39,18 @@ class Index extends \Controllers\StandardPage {
         
         try {
             $auth->attempt($_POST['username'], $_POST['password']);        
+            header("Location: {$_POST['uri']}");
         } catch(\Core\InvalidUserError $e) {
-            echo "invalid user";
+            $this->_login_fail();
         } catch(\Core\IncorrectPasswordError $e) {
-            echo "invalid password";
+            $this->_login_fail();
         }
+    }
 
-        header("Location: {$_POST['uri']}");
+    protected function _login_fail() {
+        $this->_template->msg_login = "Invalid user/password.";
+        $this->_t_login_box();
+        $this->index();
     }
 
     public function logout() {

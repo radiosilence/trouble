@@ -34,11 +34,13 @@ abstract class StandardPage extends \Core\Controller {
         $this->_init_template();
 
         if(isset($this->_session['auth'])) {
-            $this->_init_user();
+            $this->_t_user_box();
+        } else {
+            $this->_t_login_box();
         }
     }
 
-    protected function _init_user() {
+    protected function _t_user_box() {
         $t = $this->_template;
         $this->_user = \Trouble\Agent::mapper()
             ->attach_storage(\Core\Storage::container()
@@ -49,19 +51,24 @@ abstract class StandardPage extends \Core\Controller {
         $t['_user_box'] = $t->render('user_box.php');
     }
 
+    protected function _t_login_box() {
+        $t = $this->_template;
+        $t['_user_box'] = $t->render('login_box.php');
+    }
+
     protected function _init_template() {
         $t = \Core\Template::create();
         $t['__uri__'] = $this->_args['__uri__']; 
-        $t['_user_box'] = $t->render('login_box.php');
         $t->_jsapps = array();
         $this->_template = $t;
     }
+
 
     protected function _init_session() {
         $this->_session = \Core\Session\Handler::container(array(
                 'pdo' => $this->_backend
             ))
-            ->get_standard_session();
+            ->get_mc_session();
     }
     protected function _init_backend() {
         $this->_backend = \Core\Backend::container()

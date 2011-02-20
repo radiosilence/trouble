@@ -43,19 +43,4 @@ class News extends \Controllers\StandardPage {
         $t->title = $article->title;
         echo $t->render('main.php');
     }
-
-    protected function _init_session() {
-        $this->_session = \Core\Session\Handler::container(array(
-                'pdo' => $this->_backend
-            ))
-            ->get_standard_session();
-    }
-    protected function _init_backend() {
-        $this->_backend = \Core\Backend::container()
-            ->get_backend();
-    }
-    protected function _init_template() {
-        $this->_template = \Core\Template::create()
-            ->attach_util("antixsrf", $this->_antixsrf);
-    }
 }

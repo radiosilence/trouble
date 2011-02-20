@@ -46,7 +46,7 @@ class KillMapper extends \Core\Mapper {
         $kills = \Core\Li::create();
         foreach($results as $result) {
             $kills->append($this->create_object($result));
-        }
+        }  
         return $kills;
     }
     
