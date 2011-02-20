@@ -6,8 +6,8 @@
     <h2><?=$game->location?></h2>
     <p><?=$game->description?></p>
     <nav>
-    [ <a href="game/<?=$game->id?>/killboard<?=$__xsrf__?>">Killboard</a> ] 
-    <?php if($game->state<1):?>[ <a href="game/<?=$game->id?>/join<?=$__xsrf__?>">Join</a> ]<?php endif; ?>
+    [ <a href="game/<?=$game->id?>/killboard">Killboard</a> ] 
+    <?php if($game->state<1):?>[ <a class="join_game" game_id="<?=$game->id?>" href="#">Join</a> ]<?php endif; ?>
     </nav>
   </article>
 <?php }); ?>

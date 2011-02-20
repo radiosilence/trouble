@@ -48,6 +48,36 @@ create table games
     temp_aliases integer
 );
 
+
+create table credits
+(
+    id serial primary key,
+    agent integer references agents(id),
+    game integer,
+    balance integer
+);
+
+create table stats
+(
+    id serial primary key,
+    name varchar
+);
+
+create table agents_games
+(
+    id serial primary key,
+    agent integer references agents(id),
+    game integer references games(id),
+    target integer references agents(id)
+);
+
+create table agents_stats
+(
+    id serial primary key,
+    stat integer references stats(id),
+    value integer
+);
+
 create table weapons
 (
     id serial primary key,

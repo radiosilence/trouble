@@ -34,16 +34,14 @@ class Kill extends \Core\Mapped {
 class KillMapper extends \Core\Mapper {
 
     public function find_by_game(\Trouble\Game $game, $limit=20) {
-        $results = $this->_storage->fetch(new \Core\Dict(array(
-            "joins" => new \Core\Li(
+        $results = $this->_storage->fetch(array(
+            "joins" => array(
                 new \Core\Join("weapon", "Weapon", new \Core\Li('id', 'name')),
                 new \Core\Join("assassin", "Agent", new \Core\Li('alias')),
                 new \Core\Join("target", "Agent", new \Core\Li('alias'))
             ),
-            "filters" => new \Core\Li(
-                new \Core\Filter("game", $game->id)
-            )
-        )));
+            "filter" => new \Core\Filter("game", $game['id'])
+        ));
         $kills = new \Core\Li();
         $kills = \Core\Li::create();
         foreach($results as $result) {
@@ -63,8 +61,8 @@ class KillMapper extends \Core\Mapper {
             'alias' => $data->target_alias
         ));
         $weapon = Weapon::mapper()->create_object(array(
-            'id' => $data->weapon,
-            'name' => $data->w_name
+            'id' => $data->weapon_id,
+            'name' => $data->weapon_name
         ));
         return Kill::create(array(
             'id' => $data->id,

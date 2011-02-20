@@ -19,28 +19,33 @@ import('trouble.agent');
 
 class Game extends \Core\Mapped {
     public $kills;
+    public $players;
 
     public function __construct($array=False) {
         parent::__construct($array);
     }
 
     public function load_kills($args=False) {
-        $this->kills = \Core\Li::create($this->mappers['Kill']
-                ->find_by_game($this, $args)
-        );
+        $this->kills = $this->_mappers['Kill']
+                ->find_by_game($this, $args);
+    }
+
+    public function get_players() {
+        $x = $this->_mappers['Agent']
+            ->get_list(array(
+                'in' => new \Core\In('Games', $this->id)
+            ));
     }
 }
 
 class GameMapper extends \Core\Mapper {
     private $_default_order = array("start_date", "desc");
 
-    public function get_list(\Core\Dict $parameters) {
+    public function get_list($parameters=False) {
         if(!$order) {
             $order = $_default_order;
         }
-        $parameters->joins = new \Core\Li(
-            new \Core\Join("victor", "Agent", new \Core\Li('alias'))
-        );
+        $parameters['joins'][] = new \Core\Join("victor", "Agent", new \Core\Li('alias'));
         $results = $this->_storage->fetch($parameters);
         $games = new \Core\Li();
         foreach($results as $result) {
@@ -49,20 +54,27 @@ class GameMapper extends \Core\Mapper {
         return $games;
     }
 
+
     public function create_object($data) {
         $data['victor'] = Agent::mapper()->create_object(array(
             'id' => $data['victor'],
             'alias' => $data['victor_alias']
         ));
-        foreach(array('invite_only', 'local_currency', 'fake_names') as $v) {
-            $data[$v] = ($v == 1 ? True : False);
-        }
         unset($data['victor_alias']);
         $game = Game::create($data);
         $game->attach_mapper('Kill',
             Kill::mapper()
                 ->attach_storage($this->_storage)
         );
+        $game->attach_mapper('Agent',
+            Agent::mapper()
+                ->attach_storage(
+                \Core\Storage::container()
+                    ->get_storage('Agent')
+                )
+            );
+
+        //$game->get_players();
         return $game;
     }
 }

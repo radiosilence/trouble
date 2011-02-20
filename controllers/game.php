@@ -22,19 +22,21 @@ import('trouble.agent');
 
 class Game extends \Controllers\GamePage {
     public function index() {}
+
     public function killboard() {
         $t = $this->_template;
+        $g = $this->_game;
         $kill_storage = \Core\Storage::container()
             ->get_storage('Kill');
         $kill_mapper = \Trouble\Kill::mapper()
             ->attach_storage($kill_storage);
-        if(!($this->game instanceof \Trouble\Game)) {
+        if(!($this->_game instanceof \Trouble\Game)) {
             throw new \Core\Error("No game.");
         }
-        $this->game->attach_mapper('Kill', $kill_mapper);
-        $t->game = $this->game;
+        $g->attach_mapper('Kill', $kill_mapper);
+        $t->game = $g;
         $t->killboard = \Trouble\Killboard::container()
-                ->get_game_killboard($this->game)
+                ->get_game_killboard($g)
                 ->load_data();
 
         $t->content = $t->render('killboard.php');
@@ -47,11 +49,9 @@ class Game extends \Controllers\GamePage {
         $time = new \DateTime("now");
         $t->games = \Trouble\Game::mapper()
             ->attach_storage($this->game_storage)
-            ->get_list(new \Core\Dict(array(
+            ->get_list(array(
                 "order" => new \Core\Order('end_date', 'asc'),
-                "filters" => new \Core\Li(
-                    new \Core\Filter("end_date", $time->format('c'), '<')
-                ))
+                "filter" => new \Core\Filter("end_date", $time->format('c'), '>')
             ));
         $t->content = $t->render('games_list.php');
         $t->title = "Games Ending Soon";
@@ -62,13 +62,13 @@ class Game extends \Controllers\GamePage {
         $t = $this->_template;
         $t->games = \Trouble\Game::mapper()
             ->attach_storage($this->game_storage)
-            ->get_list(new \Dict(array(
+            ->get_list(array(
                 "order" => new \Core\Order('end_date', 'asc'),
-                "filters" => new \Core\Li(
+                "filters" => array(
                     new \Core\Filter("end_date", $time->format('c'), '>'),
                     new \Core\Filter("state", 1, "<")
                 )
-            )));
+            ));
 
         $t->games->map(function($game) {
             $game->load_kills();
@@ -77,5 +77,9 @@ class Game extends \Controllers\GamePage {
         $t->content = $t->render('games_list.php');
         $t->title = "Games Starting Soon";
         echo $t->render('main.php');
+    }
+
+    public function join() {
+        echo "blargh";
     }
 }

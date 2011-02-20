@@ -20,7 +20,7 @@ $routes = array(
     '^agent/([^/]+)/edit$' => 'Agent:method=edit;alias=$1',
     '^agent/([^/]+)$' => 'Agent:method=agent;alias=$1',
     '^agent/validate/([a-zA-Z_]+)$' => 'Agent:method=async_validate;field=$1',
-    '^action/([a-zA-Z_]+)$' => 'Action:method=$1',
+    '^put/([a-zA-Z_]+)$' => 'Put:method=$1;__csrf__=on',
     '^news/([0-9]+)(.*)' => 'News:method=display_article;article_id=$1',
     '^news(.*)$' => 'News',
     '^login/?$' => 'Index:method=login',

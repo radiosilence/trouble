@@ -27,16 +27,10 @@ abstract class StandardPage extends \Core\Controller {
     protected $_antixsrf;
     protected $_user;
 
-    public function __construct($args) {
+    public function __construct($args=False) {
         parent::__construct($args);
         $this->_init_backend();
         $this->_init_session();
-        $this->_antixsrf = \Core\Security\AntiXSRF::create($args['__antixsrf_reqid__'])
-            ->attach_session($this->_session);
-            
-        if($args['__antixsrf__']) {
-            $this->_antixsrf->check();
-        }
         $this->_init_template();
 
         if(isset($this->_session['auth'])) {
@@ -56,10 +50,10 @@ abstract class StandardPage extends \Core\Controller {
     }
 
     protected function _init_template() {
-        $t = \Core\Template::create()
-            ->attach_util("antixsrf", $this->_antixsrf);
+        $t = \Core\Template::create();
         $t['__uri__'] = $this->_args['__uri__']; 
         $t['_user_box'] = $t->render('login_box.php');
+        $t->_jsapps = array();
         $this->_template = $t;
     }
 
@@ -77,23 +71,23 @@ abstract class StandardPage extends \Core\Controller {
 }
 
 abstract class GamePage extends StandardPage {
-    protected $game;
+    protected $_game;
     
     public function __construct($args) {
         import('trouble.game');
         parent::__construct($args);
         $this->_init_game();
+        $this->_template->add('_jsapps', 'games');
     }
     private function _init_game() {
         $this->game_storage = \Core\Storage::container()
             ->get_storage('Game');
-        $this->game = \Trouble\Game::mapper()
+        $games = \Trouble\Game::mapper()
             ->attach_storage($this->game_storage)
-            ->get_list(new \Core\Dict(array(
-                'filter' => new \Core\Filter('id', $this->args['game_id'])
-            )));
-        $this->game = $this->game[0];
-
+            ->get_list(array(
+                'filter' => new \Core\Filter('id', $this->_args['game_id'])
+            ));
+        $this->_game = $games[0];
     }
 }
 
