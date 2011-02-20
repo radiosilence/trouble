@@ -19,7 +19,7 @@ class Index extends \Controllers\StandardPage {
     public function index() {
         $t = $this->_template;
         import('trouble.agent');
-        /*var_dump("<pre>",\Trouble\Agent::mapper()
+        $agents = \Trouble\Agent::mapper()
             ->attach_storage(\Core\Storage::container()
                 ->get_storage('Agent')
             )
@@ -27,8 +27,13 @@ class Index extends \Controllers\StandardPage {
                 'fields' => array(
                     'alias'
                 )
-            ))
-        , "</pre>");*/
+            ));
+        $list = "<article><p>Current Agents:</p><ul>";
+        foreach($agents as $agent) {
+            $list .= "<li>{$agent->alias}</li>";
+        }
+        $list .= "<ul></article>";
+        $t->content = $list;
         echo $t->render('main.php');
     }
     public function login() {
