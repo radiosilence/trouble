@@ -13,6 +13,7 @@
  * In order of precedence
  */
 $routes = array(
+    '^put/([a-zA-Z_]+)$' => 'Put:method=$1;__csrf__=on',
     '^game/([0-9]{1,9})/?(.*)$' => 'Game:method=$2;game_id=$1',
     '^games/starting-soon(.*)$' => 'Game:method=starting_soon',
     '^games(.*)$' => 'Game:method=ending_soon',
@@ -20,9 +21,10 @@ $routes = array(
     '^agent/([^/]+)/edit$' => 'Agent:method=edit;alias=$1',
     '^agent/([^/]+)$' => 'Agent:method=agent;alias=$1',
     '^agent/validate/([a-zA-Z_]+)$' => 'Agent:method=async_validate;field=$1',
-    '^put/([a-zA-Z_]+)$' => 'Put:method=$1;__csrf__=on',
     '^news/([0-9]+)(.*)' => 'News:method=display_article;article_id=$1',
     '^news(.*)$' => 'News',
+    '^highscores/?$' => 'Highscores',
+    '^forums/?$' => 'Forums',
     '^login/?$' => 'Index:method=login',
     '^logout/?$' => 'Index:method=logout',
     '^$' => 'Index'
