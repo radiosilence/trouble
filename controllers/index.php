@@ -32,7 +32,7 @@ class Index extends \Controllers\StandardPage {
         foreach($agents as $agent) {
             $list .= "<li>{$agent->alias}</li>";
         }
-        $list .= "<ul></article>";
+        $list .= "</ul></article>";
         $t->content = $list;
         echo $t->render('main.php');
     }

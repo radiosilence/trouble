@@ -29,7 +29,7 @@
   <fieldset id="1">
     <h1>Welcome</h1>
     <p class="intro">Welcome to trouble, the online system for organising assassins worldwide. So, agent. What would you like to be known as?</p>
-    <p><label for="alias">Alias<br/>
+    <p><label for="alias">Alias</label><br/>
     <input type="text" name="alias" id="alias" value="<?=$agent->alias?>"  placeholder="Ex: hunter2"/></p>
   </fieldset>
   <?php endif;?>
@@ -39,11 +39,11 @@
       <p class="intro">It is mandatory to supply your contact details. These must be filled out accurately and honestly, or your contract could suffer...termination.</p>
       <p class="intro">These details (other than full name) <em>cannot</em> be bought on the blackmarket. Your privacy is our highest concern. They may be accessible however for the purposes of organisation.</p>
     <?php endif;?>
-    <p><label for="fullname">Full Name<br/>
+    <p><label for="fullname">Full Name</label><br/>
     <input type="text" name="fullname" id="fullname" value="<?=$agent->fullname?>" placeholder="Ex: Jane Doe"/></p>
-    <p><label for="email">E-Mail Address<br/>
+    <p><label for="email">E-Mail Address</label><br/>
     <input type="text" name="email" id="email" value="<?=$agent->email?>" placeholder="Ex: janedoe@gmail.com"/></p>
-    <p><label for="phone">Telephone Number<br/>
+    <p><label for="phone">Telephone Number</label><br/>
     <input type="text" name="phone" id="phone" value="<?=$agent->phone?>" placeholder="Ex: +(44)1234 567890"/></p>
     <p><label for="address">Address</label><br/>
     <textarea name="address" id="address" placeholder="Ex. 123 Blah drive, Reading, RG2 1ZF"><?=$agent->address?></textarea></p>
@@ -56,17 +56,17 @@
       <p>This information will stay internal to our system and will under no circumstance be sold to third parties or advertisers.</p>
     <?php endif;?>
     <p>
-    <label for="imagefile">Photograph<br/>
-      <img src="img/agent/<?=$agent->imagefile?>" id="imagefile_img" style="display:<?=($agent->imagefile ? 'block' : 'none')?>"/>
+    <label>Photograph</label><br/>
+      <img src="img/agent/<?=$agent->imagefile?>" id="imagefile_img" style="display:<?=($agent->imagefile ? 'block' : 'none')?>"/></p>
     <div id="imagefile-uploader">    
       <noscript>      
         <p>Please enable JavaScript to use file uploader.</p>
       </noscript>         
     </div>
-    <input type="hidden" name="imagefile" id="imagefile" value="<?=$agent->imagefile?>"/></p>
-    <p><label for="course">Academic Course/Year<br/>
+    <input type="hidden" name="imagefile" id="imagefile" value="<?=$agent->imagefile?>"/>
+    <p><label for="course">Academic Course/Year</label><br/>
     <input type="text" name="course" id="course" value="<?=$agent->course?>" placeholder="Ex: 3rd year/Computer Science (BSc)"/></p>
-    <p><label for="clubs">Clubs/Societies<br/>
+    <p><label for="clubs">Clubs/Societies</label><br/>
     <input type="text" name="clubs" id="clubs" value="<?=$agent->clubs?>" placeholder="Ex: Rock, Rowing, Indie"/></p>
     <p><label for="timetable">Timetable (Detailed, may take some time)</label><br/>
     <textarea name="timetable" id="timetable" placeholder="Ex: Mon: 1200-1300 SSE G12, 1400-1600 Palmer 108; Tues: 0900-1000 Urban Studies LLT; Wed: 1000-1600 Starbucks, Riverside"><?=$agent->timetable?></textarea></p>
@@ -75,9 +75,9 @@
     <?php if($new): ?>
       <p>Lastly, we'll need a password and captcha confirmation for your account.</p>
     <?php endif; ?>
-    <p><label for="password">Password<br/>
+    <p><label for="password">Password</label><br/>
     <input type="password" name="password" id="password"/></p>
-    <p><label for="password_confirm">Password (Confirm)<br/>
+    <p><label for="password_confirm">Password (Confirm)</label><br/>
     <input type="password" name="password_confirm" id="password_confirm"/></p>
     <?php if($new):?>
      Captcha goes here.
