@@ -12,17 +12,14 @@
 namespace Controllers;
 
 import('controllers.standard_page');
-import('trouble.weapon');
-import('trouble.killboard');
-import('trouble.agent');
-import('core.types');
 import('core.validation');
 
 class Agent extends \Controllers\AgentPage {
     public function index() {
-        $this->_init_agent($this->args['alias']);
+        $this->_init_agent($this->_args['alias']);
         $t = $this->_template;
-        $t->agent = $this->agent;
+        $t->agent = $this->_agent;
+        $t->title = $this->_agent['alias'];
         $t->content = $t->render('agent.php');
         echo $t->render('main.php');
     }
@@ -38,16 +35,19 @@ class Agent extends \Controllers\AgentPage {
         $mapper = \Trouble\Agent::mapper()
             ->attach_storage($storage);
         $t->errors = array();
-        if($this->args['alias']) {
+        if($this->_session['auth']) {
+            $t->title = "Edit Yourself";
+            $agent = $this->_user;
+        } else if($this->_args['alias']) {
             $t->title = "Edit Agent";
-            $agent = $mapper
-                ->find_by('alias', $this->args['alias']);
+            $this->_init_agent($this->_args['alias']);
+            $agent = $this->_agent;
         } else {
             $t->title = "Agent Application";
             $t->new = True;
             $agent = new \Trouble\Agent();
         }
-
+        
         if (isset($_POST['submitted'])) {
             if(!$t->new) {
                 $validator->set_id($agent->id);

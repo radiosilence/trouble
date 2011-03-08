@@ -64,9 +64,7 @@ abstract class StandardPage extends \Core\Controller {
 
 
     protected function _init_session() {
-        $this->_session = \Core\Session\Handler::container(array(
-                'pdo' => $this->_backend
-            ))
+        $this->_session = \Core\Session\Handler::container()
             ->get_mc_session();
     }
 }
@@ -75,8 +73,8 @@ abstract class GamePage extends StandardPage {
     protected $_game;
     
     public function __construct($args) {
-        import('trouble.game');
         parent::__construct($args);
+        import('trouble.game');
         $this->_init_game();
         $this->_template->add('_jsapps', 'games');
     }
@@ -93,13 +91,16 @@ abstract class GamePage extends StandardPage {
 }
 
 abstract class AgentPage extends StandardPage {
-    protected $agent;
+    protected $_agent;
 
     protected function _init_agent($alias) {
         $this->agent_storage = \Core\Storage::container()
             ->get_storage('Agent');
-        $this->agent = \Trouble\Agent::mapper()
+        $agents = \Trouble\Agent::mapper()
             ->attach_storage($this->agent_storage)
-            ->find_by('alias', $alias);
+            ->get_list(array(
+                'filter' => new \Core\Filter('alias', $alias)
+            ));
+        $this->_agent = $agents[0];
     }
 }

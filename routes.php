@@ -19,7 +19,7 @@ $routes = array(
     '^games(.*)$' => 'Game:method=ending_soon',
     '^agent/create' => 'Agent:method=edit',
     '^agent/([^/]+)/edit$' => 'Agent:method=edit;alias=$1',
-    '^agent/([^/]+)$' => 'Agent:method=agent;alias=$1',
+    '^agent/([^/]+)$' => 'Agent:method=index;alias=$1',
     '^agent/validate/([a-zA-Z_]+)$' => 'Agent:method=async_validate;field=$1',
     '^news/([0-9]+)(.*)' => 'News:method=display_article;article_id=$1',
     '^news' => 'News',
@@ -27,5 +27,5 @@ $routes = array(
     '^forums' => 'Forums',
     '^login' => 'Index:method=login',
     '^logout' => 'Index:method=logout',
-    '^$' => 'Index:__cache__=on'
+    '^$' => 'Index'
 );
