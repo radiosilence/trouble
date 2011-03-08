@@ -21,3 +21,12 @@ table.kills th {
 table.kills .date {
     width: 120px;
 }
+
+table.kills tr:last-child td, table.kills tr:last-child th {
+    border-bottom: 0px;
+}
+
+table.kills td {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

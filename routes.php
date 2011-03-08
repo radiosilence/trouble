@@ -22,10 +22,10 @@ $routes = array(
     '^agent/([^/]+)$' => 'Agent:method=agent;alias=$1',
     '^agent/validate/([a-zA-Z_]+)$' => 'Agent:method=async_validate;field=$1',
     '^news/([0-9]+)(.*)' => 'News:method=display_article;article_id=$1',
-    '^news(.*)$' => 'News',
-    '^highscores/?$' => 'Highscores',
-    '^forums/?$' => 'Forums',
-    '^login/?$' => 'Index:method=login',
-    '^logout/?$' => 'Index:method=logout',
-    '^$' => 'Index'
+    '^news' => 'News',
+    '^highscores' => 'Highscores',
+    '^forums' => 'Forums',
+    '^login' => 'Index:method=login',
+    '^logout' => 'Index:method=logout',
+    '^$' => 'Index:__cache__=on'
 );

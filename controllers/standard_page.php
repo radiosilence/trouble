@@ -29,7 +29,6 @@ abstract class StandardPage extends \Core\Controller {
 
     public function __construct($args=False) {
         parent::__construct($args);
-        $this->_init_backend();
         $this->_init_session();
         $this->_init_template();
 
@@ -69,11 +68,6 @@ abstract class StandardPage extends \Core\Controller {
                 'pdo' => $this->_backend
             ))
             ->get_mc_session();
-    }
-    protected function _init_backend() {
-        $this->_backend = \Core\Backend::container()
-            ->get_backend();
- 
     }
 }
 
