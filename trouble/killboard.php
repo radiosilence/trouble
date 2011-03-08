@@ -30,7 +30,6 @@ class Killboard extends \Core\Contained {
             $game->load_kills(True);
 
         });
-        var_dump($this);
         return $this;
     }
 }
