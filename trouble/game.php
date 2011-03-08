@@ -45,7 +45,9 @@ class GameMapper extends \Core\Mapper {
         if(!$order) {
             $order = $_default_order;
         }
-        $parameters['joins'][] = new \Core\Join("victor", "Agent", new \Core\Li('alias'));
+        $parameters['joins'][] = new \Core\Join("victor", "Player", False,
+            new \Core\Join("agent", "Agent", array('alias')
+        ));
         $results = $this->_storage->fetch($parameters);
         $games = new \Core\Li();
         foreach($results as $result) {
@@ -58,7 +60,7 @@ class GameMapper extends \Core\Mapper {
     public function create_object($data) {
         $data['victor'] = Agent::mapper()->create_object(array(
             'id' => $data['victor'],
-            'alias' => $data['victor_alias']
+            'alias' => $data['victor_agent_alias']
         ));
         unset($data['victor_alias']);
         $game = Game::create($data);
