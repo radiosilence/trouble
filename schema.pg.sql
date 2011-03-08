@@ -63,12 +63,14 @@ create table stats
     name varchar
 );
 
-create table agents_games
+create table players
 (
     id serial primary key,
     agent integer references agents(id),
+    target integer,
     game integer references games(id),
-    target integer references agents(id)
+    status integer,
+    credits integer
 );
 
 create table agents_stats
