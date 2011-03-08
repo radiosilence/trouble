@@ -6,7 +6,8 @@ import('controllers.standard_page');
 class Put extends \Controllers\StandardPage {
     public function __construct($args) {
         parent::__construct($args);
-        if($this->_session->get_tok() != $_POST['tok']) {
+        $tok = ($_POST['tok'] ? $_POST['tok'] : $_GET['tok']);
+        if($this->_session->get_tok() != $tok) {
             die(json_encode(array('401' => "Not Authorized")));
         }
     }
