@@ -28,9 +28,29 @@ class Put extends \Controllers\StandardPage {
     }
 
     public function join_game() {
-        parent::__construct();
+        import('trouble.game');
         $uid = $this->_user['id'];
-        echo json_encode(array('status'=>"JOINING USER $uid TO GAME {$_POST[id]}"));
+        $game = \Trouble\Game::container()
+            ->get_by_id($_POST['id'])
+            ->add_agent($uid);
+        
+        try {
+            $game->add_agent($uid);
+            echo json_encode(array(
+                'status'=> "OK",
+                'message' => "Successfully joined game."
+            ));
+        } catch(\Trouble\GameAlreadyHasAgentError $e) {
+            echo json_encode(array(
+                'status'=> "Fail",
+                'message' => "You are already in this game."
+            ));
+        } catch(\Trouble\GameNotJoinableError $e) {
+            echo json_encode(array(
+                'status'=> "Fail",
+                'message' => "Game not joinable."
+            ));
+        }
     }
 }
 

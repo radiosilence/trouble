@@ -49,16 +49,19 @@ class Agent extends \Controllers\AgentPage {
         }
         
         if (isset($_POST['submitted'])) {
+            $validator = \Core\Validator::validator('\Trouble\Agent');
             if(!$t->new) {
                 $validator->set_id($agent->id);
                 $_POST['alias'] = $agent->alias;
             }
             try {
+                $agent->overwrite($_POST);
+                
                 $validator->validate($_POST, \Trouble\Agent::validation());
-                $agent->update($_POST);
-                // Authentication here. If currently logged in
+                // Authorization here. If currently logged in
                 // user can update agent of alias x
-                $mapper
+                \Core\Storage::container()
+                    ->get_storage('Agent')
                     ->save($agent);
             
             } catch(\Core\ValidationError $e) {
@@ -72,7 +75,7 @@ class Agent extends \Controllers\AgentPage {
         $t->content = $t->render('forms/agent.php');
         echo $t->render('main.php');
     }
-
+/*
     public function async_validate() {
         $validator = \Core\Validator::validator()
             ->attach_mapper('agent', \Trouble\Agent::mapper()
@@ -88,5 +91,5 @@ class Agent extends \Controllers\AgentPage {
             $errors = $e->get_errors();
         }
         echo json_encode($errors);
-    }
+    }*/
 }

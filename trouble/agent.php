@@ -12,8 +12,14 @@
 namespace Trouble;
 
 import('core.mapping');
+import('core.storage');
 
 class Agent extends \Core\Mapped {
+    protected $_fields = array("fullname", "alias",
+        "email", "phone", "address", "course",
+        "societies", "clubs", "timetable", "imagefile",
+        "password");
+
     public static function validation() {
        return array(
             'fullname' => 'default',
@@ -41,4 +47,9 @@ class AgentMapper extends \Core\Mapper {
     }
 }
 
+class AgentContainer extends \Core\MappedContainer {
+    public function get_by_alias($alias) {
+        return $this->get_by_field('alias', $alias);
+    }
+}
 ?>

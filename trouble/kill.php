@@ -14,6 +14,7 @@ namespace Trouble;
 import('trouble.game');
 import('trouble.agent');
 import('trouble.weapon');
+import('core.types');
 
 class Kill extends \Core\Mapped {
 
@@ -49,11 +50,10 @@ class KillMapper extends \Core\Mapper {
             ),
             "filter" => new \Core\Filter("game", $game['id'])
         ));
-        $kills = new \Core\Li();
         $kills = \Core\Li::create();
         foreach($results as $result) {
             $kills->append($this->create_object($result));
-        }  
+        }
         return $kills;
     }
     

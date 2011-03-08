@@ -79,14 +79,8 @@ abstract class GamePage extends StandardPage {
         $this->_template->add('_jsapps', 'games');
     }
     private function _init_game() {
-        $this->game_storage = \Core\Storage::container()
-            ->get_storage('Game');
-        $games = \Trouble\Game::mapper()
-            ->attach_storage($this->game_storage)
-            ->get_list(array(
-                'filter' => new \Core\Filter('id', $this->_args['game_id'])
-            ));
-        $this->_game = $games[0];
+        $this->_game = \Trouble\Game::container()
+            ->get_by_id($this->_args['game_id']);
     }
 }
 
@@ -94,13 +88,7 @@ abstract class AgentPage extends StandardPage {
     protected $_agent;
 
     protected function _init_agent($alias) {
-        $this->agent_storage = \Core\Storage::container()
-            ->get_storage('Agent');
-        $agents = \Trouble\Agent::mapper()
-            ->attach_storage($this->agent_storage)
-            ->get_list(array(
-                'filter' => new \Core\Filter('alias', $alias)
-            ));
-        $this->_agent = $agents[0];
+        $this->_agent = \Trouble\Agent::container()
+            ->get_by_alias($alias);
     }
 }

@@ -16,7 +16,7 @@
         });           
     });     
 </script>
-<form id="agent"<?=($new ? ' class="wizard"' : null)?> method="POST" action="agent/<?=($new ? 'create' : $agent->alias . '/edit' )?>">
+<form id="agent"<?=($new ? ' class="wizard"' : null)?> method="POST">
   <input type="hidden" name="submitted" value="1"/>
   <?php if(!$new): ?>
     <input type="hidden" name="id" value="<?=$agent->id?>"/>

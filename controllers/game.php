@@ -48,14 +48,21 @@ class Game extends \Controllers\GamePage {
         $t = $this->_template;
         $time = new \DateTime("now");
         $t->games = \Trouble\Game::mapper()
-            ->attach_storage($this->game_storage)
+            ->attach_storage(\Core\Storage::container()
+                ->get_storage('Game'))
             ->get_list(array(
-                "order" => new \Core\Order('end_date', 'asc'),
-                "filter" => new \Core\Filter("end_date", $time->format('c'), '>')
+                "order" => new \Core\Order('end_date', 'asc')//,
+//                "filter" => new \Core\Filter("end_date", $time->format('c'), '>')
             ));
         $t->content = $t->render('games_list.php');
         $t->title = "Games Ending Soon";
         echo $t->render('main.php');
+    }
+
+    public function players() {
+        $game = \Trouble\Game::container()
+            ->get_by_id($this->_args['game_id'])
+            ->get_players();
     }
 
     public function starting_soon() {
@@ -77,9 +84,5 @@ class Game extends \Controllers\GamePage {
         $t->content = $t->render('games_list.php');
         $t->title = "Games Starting Soon";
         echo $t->render('main.php');
-    }
-
-    public function join() {
-        echo "blargh";
     }
 }

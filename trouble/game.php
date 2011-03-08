@@ -16,6 +16,7 @@ import('core.containment');
 
 import('trouble.kill');
 import('trouble.agent');
+import('trouble.player');
 
 class Game extends \Core\Mapped {
     public $kills;
@@ -28,15 +29,32 @@ class Game extends \Core\Mapped {
     public function load_kills($args=False) {
         $this->kills = $this->_mappers['Kill']
                 ->find_by_game($this, $args);
+        return $this;
     }
 
     public function get_players() {
-        $x = $this->_mappers['Agent']
-            ->get_list(array(
-                'in' => new \Core\In('Games', $this->id)
-            ));
+        $this->players = Player::mapper()
+                ->attach_storage(\Core\Storage::container()
+                ->get_storage('Player'))
+            ->find_by_game($this);
+            
+        return $this;
+    }
+    public function add_agent($id) {
+        if(!$this->joinable) {
+            throw new GameNotJoinableError();
+        }
+        $this->get_players();
+        if($this->players->contains($id)) {
+            throw new GameAlreadyHasAgentError();
+        }
+        
+        return $this;
     }
 }
+
+class GameNotJoinableError extends \Core\StandardError {}
+class GameAlreadyHasAgentError extends \Core\StandardError {}
 
 class GameMapper extends \Core\Mapper {
     private $_default_order = array("start_date", "desc");
@@ -56,7 +74,6 @@ class GameMapper extends \Core\Mapper {
         return $games;
     }
 
-
     public function create_object($data) {
         $data['victor'] = Agent::mapper()->create_object(array(
             'id' => $data['victor'],
@@ -75,12 +92,16 @@ class GameMapper extends \Core\Mapper {
                     ->get_storage('Agent')
                 )
             );
-
+        foreach(array('start_date', 'end_date', 'signup_date') as $f) {
+            $game[$f] = new \DateTime($game[$f]);
+        }
+        $game['joinable'] = $game['state'] < 1;
+        $game['active'] = $game['state'] == 1; 
         //$game->get_players();
         return $game;
     }
 }
 
-class GameContainer extends \Core\Container {
+class GameContainer extends \Core\MappedContainer {
 }
 ?>
