@@ -31,7 +31,7 @@ class Index extends \Controllers\StandardPage {
             ));
         $list = "<article><p>Current Agents:</p><ul>";
         foreach($agents as $agent) {
-            $list .= "<li>{$agent->alias}</li>";
+            $list .= "<li><a href=\"agent/{$agent->alias}/edit\">{$agent->alias}</a></li>";
         }
         $list .= "</ul></article>";
         $t->content = $list;

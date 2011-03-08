@@ -35,13 +35,13 @@ class Agent extends \Controllers\AgentPage {
         $mapper = \Trouble\Agent::mapper()
             ->attach_storage($storage);
         $t->errors = array();
-        if($this->_session['auth']) {
-            $t->title = "Edit Yourself";
-            $agent = $this->_user;
-        } else if($this->_args['alias']) {
+        if($this->_args['alias']) {
             $t->title = "Edit Agent";
             $this->_init_agent($this->_args['alias']);
             $agent = $this->_agent;
+        } else if($this->_session['auth']) {
+            $t->title = "Edit Yourself";
+            $agent = $this->_user;
         } else {
             $t->title = "Agent Application";
             $t->new = True;

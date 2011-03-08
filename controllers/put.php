@@ -3,12 +3,14 @@
 namespace Controllers;
 
 import('controllers.standard_page');
+import('core.exceptions');
+
 class Put extends \Controllers\StandardPage {
     public function __construct($args) {
         parent::__construct($args);
         $tok = ($_POST['tok'] ? $_POST['tok'] : $_GET['tok']);
         if($this->_session->get_tok() != $tok) {
-            die(json_encode(array('401' => "Not Authorized")));
+            throw new \Core\HTTPError(401, $this->_args['method']);
         }
     }
     public function index() {}
