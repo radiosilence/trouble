@@ -36,7 +36,7 @@ class Put extends \Controllers\StandardPage {
                 ->add_agent($uid);        
             echo json_encode(array(
                 'status'=> "Success",
-                'message' => "Successfully joined game."
+                'message' => "Successfully joined game." . "\n" . $game->msg
             ));
         } catch(\Core\AuthNotLoggedInError $e) {
             echo json_encode(array(

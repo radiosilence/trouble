@@ -35,7 +35,7 @@ class Game extends \Core\Mapped {
     public function get_players() {
         $this->players = Player::mapper()
                 ->attach_storage(\Core\Storage::container()
-                ->get_storage('Player'))
+                    ->get_storage('Player'))
             ->find_by_game($this);
             
         return $this;
@@ -44,17 +44,55 @@ class Game extends \Core\Mapped {
         if(!$this->joinable) {
             throw new GameNotJoinableError();
         }
+    
+        $this->_storage = \Core\Storage::container()
+            ->get_storage('Player');
+
         $this->get_players();
-        if($this->players->contains($id)) {
+        if($this->players->contains($id, 'agent', 'id')) {
             throw new GameAlreadyHasAgentError();
         }
-        
+
+        $player = $this->_create_player($id);
+        try {
+            $this->_insert_player_into_cycle($player);
+        } catch(GameError $e) {
+            $this->_storage->delete($player);        
+        }
         return $this;
     }
-}
 
-class GameNotJoinableError extends \Core\StandardError {}
-class GameAlreadyHasAgentError extends \Core\StandardError {}
+    protected function _create_player($agent_id) {
+        $player = Player::create(array(
+            'agent' => $agent_id,
+            'game' => $this->id,
+            'status' => 1,
+            'credits' => 0,
+            'target' => -1
+        ));
+        
+        $this->_storage->save($player);
+        return $player;
+    }
+
+    protected function _insert_player_into_cycle($player) {
+        $s = $this->_storage;
+
+        if(count($this->players) < 1) {
+            $player->target = $player->id;
+        } else {
+            $place = mt_rand(0, count($this->players)-1);
+            $old = $this->players[$place];
+            $player->target = $old->target;
+            $old->target = $player->id;
+            $s->save($old);
+        }
+        $s->save($player);
+    }
+}
+class GameError extends \Core\StandardError {}
+class GameNotJoinableError extends GameError {}
+class GameAlreadyHasAgentError extends GameError {}
 
 class GameMapper extends \Core\Mapper {
     private $_default_order = array("start_date", "desc");

@@ -19,7 +19,7 @@ import('trouble.agent');
 import('trouble.weapon');
 
 class Player extends \Core\Mapped {
-
+    protected $_fields = array('agent', 'game', 'target', 'status', 'credits');
 }
 
 class PlayerMapper extends \Core\Mapper {
@@ -44,9 +44,10 @@ class PlayerMapper extends \Core\Mapper {
         	$this->_index[$result['id']] = $i++;
         }
  		$this->_cycle = \Core\Li::create();
- 		$this->i = 0;
- 		$this->_get_cycle($this->_players[0]);
- 		$this->_populate_cycle();
+ 		if(count($this->_players) > 0) {
+            $this->_get_cycle($this->_players[0]);
+     		$this->_populate_cycle();
+        }
        	return $this->_cycle;
 	}
 	protected function _populate_cycle() {
@@ -56,7 +57,6 @@ class PlayerMapper extends \Core\Mapper {
 	}
 
 	protected function _get_cycle($player) {
-		if($this->i > 10) die();
 		if($this->_cycle->contains($player['id'])) {
 			return False;
 		} else {
