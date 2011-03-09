@@ -58,6 +58,11 @@ class Agent extends \Controllers\AgentPage {
                 $agent->overwrite($_POST);
                 
                 $validator->validate($_POST, \Trouble\Agent::validation());
+                try {
+                    \Core\Auth::hash($agent, 'password');
+                } catch(\Core\AuthEmptyPasswordError $e) {
+                    $agent->remove('password');
+                }
                 // Authorization here. If currently logged in
                 // user can update agent of alias x
                 \Core\Storage::container()

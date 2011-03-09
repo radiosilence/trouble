@@ -17,6 +17,7 @@ import('core.controller');
 import('core.template');
 import('core.backend');
 import('core.storage');
+import('core.auth');
 import('core.security.antixsrf');
 import('trouble.agent');
 
@@ -26,26 +27,33 @@ abstract class StandardPage extends \Core\Controller {
     protected $_template;
     protected $_antixsrf;
     protected $_user;
+    protected $_auth;
 
     public function __construct($args=False) {
         parent::__construct($args);
         $this->_init_session();
         $this->_init_template();
-
-        if(isset($this->_session['auth'])) {
+        $this->_init_auth();
+        try {
             $this->_t_user_box();
-        } else {
+        } catch(\Core\AuthNotLoggedInError $e){
             $this->_t_login_box();
         }
     }
 
+    protected function _init_auth() {
+        $this->_auth = \Core\Auth::container()
+            ->get_auth('Agent', $this->_session, array(
+                'user_field' => 'alias'
+            ));
+    }
     protected function _t_user_box() {
         $t = $this->_template;
         $this->_user = \Trouble\Agent::mapper()
             ->attach_storage(\Core\Storage::container()
                 ->get_storage('Agent')
             )
-            ->create_object($this->_session['auth']['data']);
+            ->create_object($this->_auth->user_data());
         $t['user'] = $this->_user;
         $t['_user_box'] = $t->render('user_box.php');
     }
@@ -66,6 +74,14 @@ abstract class StandardPage extends \Core\Controller {
     protected function _init_session() {
         $this->_session = \Core\Session\Handler::container()
             ->get_mc_session();
+    }
+
+    protected function _current_user() {
+        if(isset($this->_session['auth'])) {
+            return $this->_session['auth']['id'];
+        } else {
+            
+        }
     }
 }
 

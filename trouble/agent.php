@@ -23,7 +23,7 @@ class Agent extends \Core\Mapped {
     public static function validation() {
        return array(
             'fullname' => 'default',
-            'alias' => array (
+            'alias' => array(
                 array(
                     'type' => 'unique',
                     'mapper' => 'agent'
@@ -36,6 +36,12 @@ class Agent extends \Core\Mapped {
                     'mapper' => 'agent'
                 ),
                 'email'
+            ),
+            'password' => array(
+                array(
+                    'type' => 'password',
+                    '2ndfield' => 'password_confirm'
+                )
             )
         );
     }
@@ -44,6 +50,9 @@ class Agent extends \Core\Mapped {
 class AgentMapper extends \Core\Mapper {
     public function create_object($data) {
         return Agent::create($data);
+    }
+    public function save($data) {
+        die("WOO");
     }
 }
 

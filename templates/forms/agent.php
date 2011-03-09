@@ -79,9 +79,9 @@
       <p>Lastly, we'll need a password and captcha confirmation for your account.</p>
     <?php endif; ?>
     <p><label for="password">Password</label><br/>
-    <input type="password" name="password" id="password"/></p>
+    <input type="password" name="password" id="password" placeholder="<?=($new ? 'Ex: hunter2' : 'No change')?>"/></p>
     <p><label for="password_confirm">Password (Confirm)</label><br/>
-    <input type="password" name="password_confirm" id="password_confirm"/></p>
+    <input type="password" name="password_confirm" id="password_confirm" placeholder="<?=($new ? 'Ex: hunter2' : 'No change')?>"/></p>
     <?php if($new):?>
      Captcha goes here.
     <?php endif;?>

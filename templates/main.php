@@ -8,8 +8,10 @@
     <link rel="stylesheet" href="css_lib/grid.css" type="text/css"/>
     <link rel="stylesheet" href="css_lib/fileuploader.css" type="text/css">
     <link rel="stylesheet" href="css_lib/subverse.css" type="text/css"/>
+    <link rel="stylesheet" href="css_lib/jquery-ui/subverse/subverse-theme.css" type="text/css"/>
     <link rel="stylesheet" href="css/main.css" type="text/css"/>
     <script src="js_lib/jquery.js" type="text/javascript"></script>
+    <script src="js_lib/jquery-ui.js" type="text/javascript"></script>
     <script src="js_lib/jquery.cookie.js" type="text/javascript"></script>
 <?php if(is_array($_jsapps)): foreach($_jsapps as $js) :?>
     <script src="js/<?=$js?>.js" type="text/javascript"></script>
@@ -38,5 +40,6 @@
     <?=$_user_box?>
     </section>
   </div>
+  <div id="dialog" title=""></div>
   </body>
 </html>
