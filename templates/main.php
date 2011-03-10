@@ -13,6 +13,7 @@
     <script src="js_lib/jquery.js" type="text/javascript"></script>
     <script src="js_lib/jquery-ui.js" type="text/javascript"></script>
     <script src="js_lib/jquery.cookie.js" type="text/javascript"></script>
+    <script src="js/common.js" type="text/javascript"></script>
 <?php if(is_array($_jsapps)): foreach($_jsapps as $js) :?>
     <script src="js/<?=$js?>.js" type="text/javascript"></script>
 <?php endforeach; endif; ?>

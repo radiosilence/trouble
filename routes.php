@@ -13,7 +13,7 @@
  * In order of precedence
  */
 $routes = array(
-    '^put/([a-zA-Z_]+)$' => 'Put:method=$1;__csrf__=on',
+    '^put/([a-zA-Z_]+)$' => 'Put:method=$1',
     '^game/([0-9]{1,9})/?(.*)$' => 'Game:method=$2;game_id=$1',
     '^games/starting-soon(.*)$' => 'Game:method=starting_soon',
     '^games(.*)$' => 'Game:method=ending_soon',
@@ -26,7 +26,7 @@ $routes = array(
     '^news' => 'News',
     '^highscores' => 'Highscores',
     '^forums' => 'Forums',
-    '^login' => 'Index:method=login',
+    '^login' => 'Put:method=login',
     '^logout' => 'Index:method=logout',
     '^$' => 'Index'
 );

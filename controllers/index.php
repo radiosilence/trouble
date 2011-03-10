@@ -38,39 +38,9 @@ class Index extends \Controllers\StandardPage {
         $t->title = "Assassins Game Management";
         echo $t->render('main.php');
     }
-    public function login() {
-        if(!\Core\Utils\Env::using_ssl()) {
-            //throw new \Core\Error("This page must use SSL!");
-        }
-        $auth = \Core\Auth::container()
-            ->get_auth('Agent', $this->_session, array(
-                'user_field' => 'alias'
-            ));
-        if(!isset($_POST['username']) || !isset($_POST['password'])) {
-            header("Location: /");
-        }
-        try {
-            $auth->attempt($_POST['username'], $_POST['password']);        
-            header("Location: {$_POST['uri']}");
-        } catch(\Core\InvalidUserError $e) {
-            $this->_login_fail();
-        } catch(\Core\IncorrectPasswordError $e) {
-            $this->_login_fail();
-        }
-    }
-
-    protected function _login_fail() {
-        $this->_template->msg_login = "Invalid user/password.";
-        $this->_t_login_box();
-        $this->index();
-    }
 
     public function logout() {
-        $auth = \Core\Auth::container()
-            ->get_auth('Agent', $this->_session, array(
-                'user_field' => 'alias'
-            ));
-        $auth->logout();
+        $this->_auth->logout();
         header("Location: {$_POST['uri']}");
     }
 }

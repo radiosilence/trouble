@@ -27,6 +27,27 @@ class Put extends \Controllers\StandardPage {
         echo htmlspecialchars(json_encode($result), ENT_NOQUOTES);
     }
 
+    public function login() {
+        if(!\Core\Utils\Env::using_ssl()) {
+            //throw new \Core\Error("This page must use SSL!");
+        }
+        
+        if(!isset($_POST['username']) || !isset($_POST['password'])) {
+            $this->_return_message("Fail", 
+                "Please enter alias and password.");
+        }
+        try {
+            $this->_auth->attempt($_POST['username'], $_POST['password']);        
+            $this->_return_message("Success", "Logged in.");
+        } catch(\Core\InvalidUserError $e) {
+            $this->_return_message("Fail",
+                "Invalid alias.");
+        } catch(\Core\IncorrectPasswordError $e) {
+            $this->_return_message("Fail",
+                "Invalid password.");
+        }
+    }
+
     public function join_game() {
         import('trouble.game');
         try {
@@ -34,26 +55,25 @@ class Put extends \Controllers\StandardPage {
             $game = \Trouble\Game::container()
                 ->get_by_id($_POST['id'])
                 ->add_agent($uid);        
-            echo json_encode(array(
-                'status'=> "Success",
-                'message' => "Successfully joined game." . "\n" . $game->msg
-            ));
+            $this->_return_message("Success",
+                "Successfully joined game.");
         } catch(\Core\AuthNotLoggedInError $e) {
-            echo json_encode(array(
-                'status'=> "Error",
-                'message' => "Not logged in."
-            ));
+            $this->_return_message("Error",
+                "Not logged in.");
         } catch(\Trouble\GameAlreadyHasAgentError $e) {
-            echo json_encode(array(
-                'status'=> "Error",
-                'message' => "You are already in this game."
-            ));
+            $this->_return_message("Error",
+                "You are already in this game.");
         } catch(\Trouble\GameNotJoinableError $e) {
-            echo json_encode(array(
-                'status'=> "Error",
-                'message' => "Game not joinable."
-            ));
+            $this->_return_message("Error",
+                "Game is not joinable.");
         }
+    }
+
+    protected function _return_message($status, $message) {
+        echo json_encode(array(
+            'status'=> $status,
+            'message' => $message
+        ));
     }
 
 }
