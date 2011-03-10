@@ -1,18 +1,27 @@
 <?php
 
 $cfg['general'] = array(
-    'backend' => '{BACKEND}' // Ex. PDO
+    'backend' => 'PDO'
 );
 
 $cfg['database'] = array(
-    'driver' => '{DB_DRIVER}', // Ex. pgsql
-    'host' => '{DB_HOST}',
-    'database' => '{DB_NAME}',
-    'user' => '{DB_DRIVER}',
-    'password' => '{DB_PASSWORD}',
+    'driver' => 'pgsql',
+    'host' => 'localhost',
+    'port' => 5432,
+    'database' => 'DB_NAME',
+    'user' => 'DB_USER',
+    'password' => 'DB_PASSWORD',
+    'persistent' => True
 );
 
 $cfg['crypto'] = array(
-    'keyphrase' => "{KEYPHRASE}",
-    'base_salt' => "{SALT}"
+    'keyphrase' => "RANDOM_PHRASE_HERE",
+    'base_salt' => "DIFFERENT RANDOM PHRASE",
+);
+
+$cfg['memcached'] = array(
+    array(
+        'host' => 'localhost',
+        'port' => '11211'
+    )
 );
