@@ -19,8 +19,42 @@ import('trouble.killboard');
 import('trouble.kill');
 import('trouble.game');
 import('trouble.agent');
+
+class UserNotJoinedError extends \Core\StandardError {}
 class Game extends \Controllers\GamePage {
-    public function index() {}
+    public function index() {
+        $t = $this->_template;
+        $g = $this->_game;
+        $t->game = $g;
+        try {
+            if(!$g->is_joined($this->_auth->user_id())){
+                throw new UserNotJoinedError();
+            }
+            $this->_show_game_dashboard();
+        } catch(\Core\AuthNotLoggedInError $e) {
+            $this->_show_game_info();
+        } catch(UserNotJoinedError $e) {
+            $this->_show_game_info();
+        }
+
+    }
+
+    protected function _show_game_dashboard() {
+        $t = $this->_template;
+        $g = $this->_game;
+        $t->title = $g->name . ': Dashboard';
+        $t->content = $t->render('game_dashboard.php');
+        
+        echo $t->render('main.php');
+    }
+
+    protected function _show_game_info() {
+        $t = $this->_template;
+        $g = $this->_game;
+        $t->title = $g->name;
+        $t->content = $t->render('game_info.php');
+        echo $t->render('main.php');
+    }
 
     public function killboard() {
         $t = $this->_template;
@@ -64,7 +98,9 @@ class Game extends \Controllers\GamePage {
             ->get_list($params);
         $t->content = $t->render('games_list.php');
         $t->title = "Games Ending Soon";
+        
         echo $t->render('main.php');
+
     }
 
     public function players() {

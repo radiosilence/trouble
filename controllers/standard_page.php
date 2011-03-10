@@ -35,8 +35,10 @@ abstract class StandardPage extends \Core\Controller {
         $this->_init_template();
         $this->_init_auth();
         try {
+            $this->_template->logged_in = True;
             $this->_t_user_box();
         } catch(\Core\AuthNotLoggedInError $e){
+            $this->_template->logged_in = False;
             $this->_t_login_box();
         }
     }

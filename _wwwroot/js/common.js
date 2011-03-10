@@ -1,4 +1,15 @@
 function dialogResponse(url, d, success, fail) {
+    // Dialog     
+    $('#dialog').dialog({
+      autoOpen: false,
+      modal: true,
+      width: 600,
+      buttons: {
+        "Ok": function() { 
+          $(this).dialog("close"); 
+        }
+      }
+    });
     d['tok'] = $.cookie('tok');
     status = $.post(url, d, function(data) {
         $('#dialog').text(data.message);
@@ -17,19 +28,27 @@ function dialogResponse(url, d, success, fail) {
     return false;
 }
 
-$(function(){
-
-  // Dialog     
-    $('#dialog').dialog({
-      autoOpen: false,
-      modal: true,
-      width: 600,
-      buttons: {
-        "Ok": function() { 
-          $(this).dialog("close"); 
+function dialogConfirm(title, text, callback, callbackData) {
+    $('#dialog').text(text);    
+    $("#dialog").dialog({
+        resizable: false,
+        height:140,
+        width: 600,
+        modal: true,
+        title: title,
+        buttons: {
+            Ok: function() {
+                callback(callbackData);
+            },
+            Cancel: function() {
+                $(this).dialog("close");
+          }
         }
-      }
     });
+    $('#dialog').dialog('open');
+}
+
+$(function(){
 });
 
 $(function(){

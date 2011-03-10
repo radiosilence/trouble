@@ -41,11 +41,18 @@ class Game extends \Core\Mapped {
         return $this;
     }
 
-    public function is_joinable() {
-        
+    protected function _check_players_loaded() {
+        if(!$this->players) {
+            $this->get_players();
+        }
     }
     
-    public function add_agent($id) {
+    public function is_joined($agent_id) {
+        $this->_check_players_loaded();
+        return $this->players->contains($agent_id, 'agent', 'id');
+    }
+
+    public function add_agent($agent_id) {
         if(!$this->joinable) {
             throw new GameNotJoinableError();
         }
@@ -53,12 +60,11 @@ class Game extends \Core\Mapped {
         $this->_storage = \Core\Storage::container()
             ->get_storage('Player');
 
-        $this->get_players();
-        if($this->players->contains($id, 'agent', 'id')) {
+        if($this->is_joined($agent_id)) {
             throw new GameAlreadyHasAgentError();
         }
 
-        $player = $this->_create_player($id);
+        $player = $this->_create_player($agent_id);
         try {
             $this->_insert_player_into_cycle($player);
         } catch(GameError $e) {
