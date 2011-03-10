@@ -3,7 +3,7 @@
 
   <article>
     <h3>Ending <?=$game->end_date->format("Ymd.Hi")?></h3>
-    <h1><?=$game->name?>
+    <h1><a href="game/<?=$game->id?>"><?=$game->name?></a> <em>(<?=$game->num_players?> players)</em>
     <?php if($game->joined):?>&nbsp;<button class="leave_game" game_id="<?=$game->id?>">Leave</button>
     <?php elseif($game->joinable && !$game->joined && $logged_in):?>&nbsp;<button class="join_game" game_id="<?=$game->id?>">Join</button><?php endif; ?></h1>
     <h2><?=$game->location?></h2>

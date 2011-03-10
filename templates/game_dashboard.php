@@ -4,5 +4,6 @@
 <?php else: ?>
 <h1>Current Target</h1>
 <p><a class="target" href="agent/<?=$target["alias"]?>"><?=$target["alias"]?></a></p>
+<p><button id="register_kill">Register Kill</a></p>
 <?php endif;?>
 </article>

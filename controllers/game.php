@@ -80,20 +80,24 @@ class Game extends \Controllers\GamePage {
         echo $t->render('main.php');
     }
 
+    protected function _standard_query_params($user) {
+        $params = array(
+            'binds' => array(
+                    ':currentid' => $user
+            ),
+            'fields' => array(
+                    '(SELECT COUNT(id) FROM players WHERE players.game = games.id) as num_players',
+                    'games.id in(SELECT game FROM players WHERE agent = :currentid) as joined'
+            )
+        );
+        return $params;
+    }
     public function ending_soon() {
         $t = $this->_template;
         $time = new \DateTime("now");
-        $params = array(
-                "order" => new \Core\Order('end_date', 'asc')
-//                "filter" => new \Core\Filter("end_date", $time->format('c'), '>')
-        );
         try {
-            $params["binds"] = array(
-                    ':currentid' => $this->_auth->user_id()
-            );
-            $params["fields"] = array(
-                    'games.id in(Select game from players where agent = :currentid) as joined'
-            );
+            $params = $this->_standard_query_params($this->_auth->user_id());
+            $params['order'] = new \Core\Order('end_date', 'asc');
         } catch(\Core\AuthNotLoggedInError $e) {}
         $t->games = \Trouble\Game::mapper()
             ->attach_storage(\Core\Storage::container()
@@ -114,25 +118,24 @@ class Game extends \Controllers\GamePage {
 
     public function user_games($user) {
         $t = $this->_template;
-        $params = array(
-                "order" => new \Core\Order('end_date', 'asc')
-        );
         try {
-            $params["binds"] = array(
-                    ':currentid' => $this->_auth->user_id()
-            );
-            $params["fields"] = array(
-                    'games.id in(Select game from players where agent = :currentid) as joined'
-            );
+            $params = $this->_standard_query_params($user);
+            $params['order'] = new \Core\Order('end_date', 'asc');
             $params["filter"] = \Core\Filter::create_complex('games.id in(Select game from players where agent = :currentid)');
             $t->games = \Trouble\Game::mapper()
                 ->attach_storage(\Core\Storage::container()
                     ->get_storage('Game'))
                 ->get_list($params);
-        } catch(\Core\AuthNotLoggedInError $e) {}
+            if($user = $this->_auth->user_id()) {
+                $t->title = "Your Games";
+            } else {
+                $t->title = "Games for user.";
+            }
+        } catch(\Core\AuthNotLoggedInError $e) {
+            $t->title = "Games for user.";
+        }
     
         $t->content = $t->render('games_list.php');
-        $t->title = "PLACEHOLDER";
         echo $t->render('main.php');
     }
 
