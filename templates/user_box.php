@@ -4,5 +4,5 @@
 <p><ul>
  <li><a href="edit-profile">Edit Profile</a></li>
 </ul></p>
-<p><button class="submit">Log Out</button></p>
+<p><button>Log Out</button></p>
 </form>
