@@ -53,6 +53,8 @@ class Game extends \Core\Mapped {
     }
 
     public function add_agent($agent_id) {
+        $this->_check_players_loaded();
+
         if(!$this->joinable) {
             throw new GameNotJoinableError();
         }
@@ -100,10 +102,44 @@ class Game extends \Core\Mapped {
         }
         $s->save($player);
     }
+
+    public function remove_agent($agent_id) {
+        $this->_check_players_loaded();
+    
+        $this->_storage = \Core\Storage::container()
+            ->get_storage('Player');
+        $players = Player::mapper()
+            ->attach_storage($this->_storage)
+            ->get_list(array(
+                'filters' => array(
+                    new \Core\Filter('game', $this->id),
+                    new \Core\Filter('agent', $agent_id)
+                )
+            ));
+        if(count($players) == 0) {
+            throw new GameAgentNotInGameError();
+        }
+        $player = $players[0];
+        $this->_remove_player_from_cycle($player);
+        $this->_delete_player($player);
+    }
+
+    protected function _remove_player_from_cycle($player) {
+        $hunter = $this->players->contains($player->id, 'target');
+        $hunter->target = $player->target;
+        $player->target = -1;
+        $this->_storage->save($hunter);
+        $this->_storage->save($player);
+    }
+
+    protected function _delete_player($player) {
+        $this->_storage->delete($player);
+    }
 }
 class GameError extends \Core\StandardError {}
 class GameNotJoinableError extends GameError {}
 class GameAlreadyHasAgentError extends GameError {}
+class GameAgentNotInGameError extends GameError {}
 
 class GameMapper extends \Core\Mapper {
     private $_default_order = array("start_date", "desc");

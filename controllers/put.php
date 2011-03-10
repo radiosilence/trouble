@@ -69,6 +69,25 @@ class Put extends \Controllers\StandardPage {
         }
     }
 
+    public function leave_game() {
+        import('trouble.game');
+        try {
+            $uid = $this->_auth->user_id();
+            $game = \Trouble\Game::container()
+                ->get_by_id($_POST['id'])
+                ->remove_agent($uid);   
+                 
+            $this->_return_message("Success",
+                "Successfully left game.");
+        } catch(\Core\AuthNotLoggedInError $e) {
+            $this->_return_message("Error",
+                "Not logged in.");
+        } catch(\Trouble\GameAgentNotInGameError $e) {
+            $this->_return_message("Error",
+                "You are not in this game.");
+        } 
+    }
+
     protected function _return_message($status, $message) {
         echo json_encode(array(
             'status'=> $status,

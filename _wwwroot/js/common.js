@@ -19,7 +19,7 @@ function dialogResponse(url, d, success, fail) {
             if(success != undefined) {
                 success(data.message);
             }
-        } else {
+        } else if(data.status == 'Fail') {
             if(fail != undefined) {
                 fail(data.message);            
             }

@@ -1,10 +1,18 @@
 $(function(){
     $('button.join_game').click(function(){
-        return dialogResponse('/put/join_game', {
+        data = {
             'id': $(this).attr('game_id')
-        }, function(){
-            location.reload();
-        });
+        };
+        dialogConfirm('Join Game',
+            'Are you sure you wish to join this game?',
+            function(d) {
+                dialogResponse('/put/join_game', d, function(){
+                    location.reload();
+                });
+            },
+            data
+        );
+        return false;
     });
 
     $('button.leave_game').click(function(){
@@ -14,11 +22,12 @@ $(function(){
         dialogConfirm('Leave Game',
             'Are you sure you wish to leave this game?',
             function(d){
-              console.log($(this).attr('game_id'));
-                dialogResponse('/put/join_game', d, function(){
+                dialogResponse('/put/leave_game', d, function(){
                     location.reload();
                 });
-            }, data);
+            },
+            data
+        );
         return false;
-    })
+    });
 });
