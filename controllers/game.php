@@ -73,6 +73,38 @@ class Game extends \Controllers\GamePage {
             ->get_players();
     }
 
+    public function user_games($user) {
+        $t = $this->_template;
+        $params = array(
+                "order" => new \Core\Order('end_date', 'asc')
+        );
+        try {
+            $params["binds"] = array(
+                    ':currentid' => $this->_auth->user_id()
+            );
+            $params["fields"] = array(
+                    'games.id in(Select game from players where agent = :currentid) as joined'
+            );
+            $params["filter"] = \Core\Filter::create_complex('games.id in(Select game from players where agent = :currentid)');
+            $t->games = \Trouble\Game::mapper()
+                ->attach_storage(\Core\Storage::container()
+                    ->get_storage('Game'))
+                ->get_list($params);
+        } catch(\Core\AuthNotLoggedInError $e) {}
+    
+        $t->content = $t->render('games_list.php');
+        $t->title = "PLACEHOLDER";
+        echo $t->render('main.php');
+    }
+
+    public function your_games() {
+        try {
+            $this->user_games($this->_auth->user_id());
+        } catch(\Core\AuthNotLoggedInError $e) {
+            header("Location: /");
+        }
+    }
+
     public function starting_soon() {
         $t = $this->_template;
         $t->games = \Trouble\Game::mapper()
@@ -85,10 +117,6 @@ class Game extends \Controllers\GamePage {
                 )
             ));
 
-        $t->games->map(function($game) {
-            $game->load_kills();
-        });
-        
         $t->content = $t->render('games_list.php');
         $t->title = "Games Starting Soon";
         echo $t->render('main.php');

@@ -3,6 +3,7 @@
 <input type="hidden" name="uri" value="<?=$__uri__?>"/>
 <p><ul>
  <li><a href="edit-profile">Edit Profile</a></li>
+ <li><a href="your-games">Your Games</a></li>
 </ul></p>
 <p><button>Log Out</button></p>
 </form>
