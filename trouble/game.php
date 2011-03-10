@@ -47,6 +47,13 @@ class Game extends \Core\Mapped {
         }
     }
     
+    public function get_current_target($agent_id) {
+        $this->_check_players_loaded();
+        $target_id = $this->players->contains($agent_id, 'agent','id')
+                ->target;
+        return $this->players->contains($target_id, 'id')
+                ->agent;
+    }
     public function is_joined($agent_id) {
         $this->_check_players_loaded();
         return $this->players->contains($agent_id, 'agent', 'id');
@@ -103,6 +110,15 @@ class Game extends \Core\Mapped {
         $s->save($player);
     }
 
+    public function kill_agent() {
+        $hunter = _remove_player_from_cycle($player);
+        $hunter = Agent::container()
+            ->get_by_id($hunter->agent);
+        // increase $hunter kill count by 1
+    }
+
+    public function resurrect_agent($hunter) {
+    }
     public function remove_agent($agent_id) {
         $this->_check_players_loaded();
     
@@ -130,6 +146,7 @@ class Game extends \Core\Mapped {
         $player->target = -1;
         $this->_storage->save($hunter);
         $this->_storage->save($player);
+        return $hunter;
     }
 
     protected function _delete_player($player) {

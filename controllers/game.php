@@ -43,8 +43,11 @@ class Game extends \Controllers\GamePage {
         $t = $this->_template;
         $g = $this->_game;
         $t->title = $g->name . ': Dashboard';
+        $t->target = $g->get_current_target($this->_auth->user_id());
+        if($t->target->id == $this->_auth->user_id()) {
+            $t->self_target = True;
+        }
         $t->content = $t->render('game_dashboard.php');
-        
         echo $t->render('main.php');
     }
 

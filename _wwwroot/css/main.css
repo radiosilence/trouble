@@ -30,3 +30,8 @@ table.kills td {
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+a.target {
+    font-size: 14pt;
+    font-weight: bold;
+}
