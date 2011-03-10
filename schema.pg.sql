@@ -136,3 +136,11 @@ create table articles
     author integer references agents(id),
     custom_url varchar
 );
+
+create table stats (
+      id serial primary key,
+      game integer references games(id),
+      agent integer references agents(id),
+      type varchar,
+      value integer
+);
