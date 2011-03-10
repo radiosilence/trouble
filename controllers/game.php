@@ -19,7 +19,6 @@ import('trouble.killboard');
 import('trouble.kill');
 import('trouble.game');
 import('trouble.agent');
-
 class Game extends \Controllers\GamePage {
     public function index() {}
 
@@ -47,13 +46,22 @@ class Game extends \Controllers\GamePage {
     public function ending_soon() {
         $t = $this->_template;
         $time = new \DateTime("now");
+        $params = array(
+                "order" => new \Core\Order('end_date', 'asc')
+//                "filter" => new \Core\Filter("end_date", $time->format('c'), '>')
+        );
+        try {
+            $params["binds"] = array(
+                    ':currentid' => $this->_auth->user_id()
+            );
+            $params["fields"] = array(
+                    'games.id in(Select game from players where agent = :currentid) as joined'
+            );
+        } catch(\Core\AuthNotLoggedInError $e) {}
         $t->games = \Trouble\Game::mapper()
             ->attach_storage(\Core\Storage::container()
                 ->get_storage('Game'))
-            ->get_list(array(
-                "order" => new \Core\Order('end_date', 'asc')//,
-//                "filter" => new \Core\Filter("end_date", $time->format('c'), '>')
-            ));
+            ->get_list($params);
         $t->content = $t->render('games_list.php');
         $t->title = "Games Ending Soon";
         echo $t->render('main.php');

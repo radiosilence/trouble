@@ -40,6 +40,11 @@ class Game extends \Core\Mapped {
             
         return $this;
     }
+
+    public function is_joinable() {
+        
+    }
+    
     public function add_agent($id) {
         if(!$this->joinable) {
             throw new GameNotJoinableError();
