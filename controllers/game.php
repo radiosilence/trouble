@@ -87,7 +87,7 @@ class Game extends \Controllers\GamePage {
             ),
             'fields' => array(
                     '(SELECT COUNT(id) FROM players WHERE players.game = games.id) as num_players',
-                    'games.id in(SELECT game FROM players WHERE agent = :currentid) as joined'
+                    'games.id in(SELECT game FROM players WHERE agent = :currentid AND players.status >= 0) as joined'
             )
         );
         return $params;

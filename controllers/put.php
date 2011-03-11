@@ -60,6 +60,9 @@ class Put extends \Controllers\StandardPage {
         } catch(\Core\AuthNotLoggedInError $e) {
             $this->_return_message("Error",
                 "Not logged in.");
+        } catch(\Trouble\GameCannotRejoinError $e) {
+            $this->_return_message("Error",
+                "You cannot rejoin a game in this state.");
         } catch(\Trouble\GameAlreadyHasAgentError $e) {
             $this->_return_message("Error",
                 "You are already in this game.");

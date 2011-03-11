@@ -32,11 +32,13 @@ class PlayerMapper extends \Core\Mapper {
             "joins" => array(
                 new \Core\Join("agent", "Agent", array('id', 'alias'))
             ),
-            "filter" => new \Core\Filter("game", $game['id']),
+            "filters" => array(
+	            new \Core\Filter("game", $game['id']),
+	            new \Core\Filter("target", 0, ">")
+	        ),
             "order" => new \Core\Order("id")
         ));
         $this->_players = \Core\Li::create();
-
         $this->_index = \Core\Dict::create();
         $i = 0;
         foreach($results as $result) {
@@ -48,7 +50,7 @@ class PlayerMapper extends \Core\Mapper {
             $this->_get_cycle($this->_players[0]);
      		$this->_populate_cycle();
         }
-       	return $this->_cycle;
+       	return  array($this->_cycle, $this->_players);
 	}
 	protected function _populate_cycle() {
 		foreach($this->_cycle as $k => $v) {
@@ -61,6 +63,7 @@ class PlayerMapper extends \Core\Mapper {
 			return False;
 		} else {
 			$this->_cycle->append($player['id']);
+
 			$this->_get_cycle($this->_players[$this->_index[$player['target']]]);
 		}  
 	}
