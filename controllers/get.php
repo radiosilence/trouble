@@ -16,17 +16,20 @@ class Get extends \Controllers\StandardPage {
     public function index() {}
     public function weapon_list() {
     	import('trouble.weapon');
-    	$results = \Trouble\Weapon::mapper()
-	        ->attach_storage(\Core\Storage::container()
-	            ->get_storage('Weapon'))
-	        ->get_list(array(
+        $results = \Core\Storage::container()
+            ->get_storage('Weapon')
+            ->fetch(array(
                 'order' => new \Core\Order('name')
             ));
+
+    	$weapons = \Trouble\Weapon::mapper()
+	        ->get_list($results);
+
         $json = array();
-        foreach($results as $result) {
+        foreach($weapons as $weapon) {
             $json[] = array(
-                'id' => $result['id'],
-                'name' => $result['name']
+                'id' => $weapon['id'],
+                'name' => $weapon['name']
             );   
         }
     	echo json_encode($json);

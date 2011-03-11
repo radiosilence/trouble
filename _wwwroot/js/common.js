@@ -52,11 +52,16 @@ $(function(){
 });
 
 $(function(){
-   $('#button_login').click(function(){
-        return dialogResponse('/login',{
+   $('button#login').click(function(){
+        return dialogResponse('/login', {
           'username': $('#login_username').val(),
           'password': $('#login_password').val() 
         }, function(){
+            location.reload();
+        });
+   });
+   $('button#logout').click(function(){
+        return dialogResponse('/logout', {'x':'x'}, function(){
             location.reload();
         });
    });

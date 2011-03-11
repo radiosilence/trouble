@@ -48,6 +48,11 @@ class Put extends \Controllers\StandardPage {
         }
     }
 
+    public function logout() {
+        $this->_auth->logout();
+        $this->_return_message("Success", "Logged out.");
+    }
+
     public function join_game() {
         import('trouble.game');
         try {

@@ -29,6 +29,6 @@ $routes = array(
     '^highscores' => 'Highscores',
     '^forums' => 'Forums',
     '^login' => 'Put:method=login',
-    '^logout' => 'Index:method=logout',
-    '^$' => 'Index'
+    '^logout' => 'Put:method=logout',
+    '^$' => 'News'
 );
