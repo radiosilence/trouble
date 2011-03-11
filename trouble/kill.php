@@ -17,7 +17,6 @@ import('trouble.weapon');
 import('core.types');
 
 class Kill extends \Core\Mapped {
-
 	/**
 	 * Registers kill of $assassin's target.
 	 * Sets target as dead, makes a killboard stub.
@@ -38,25 +37,6 @@ class Kill extends \Core\Mapped {
 }
 
 class KillMapper extends \Core\Mapper {
-
-    public function find_by_game(\Trouble\Game $game, $limit=20) {
-        $results = $this->_storage->fetch(array(
-            "joins" => array(
-                new \Core\Join("weapon", "Weapon", array('id', 'name')),
-                new \Core\Join("assassin", "Player", False,
-                    new \Core\Join("agent", "Agent", array('alias'))),
-                new \Core\Join("target", "Player", False,
-                    new \Core\Join("agent", "Agent", array('alias')))
-            ),
-            "filter" => new \Core\Filter("game", $game['id'])
-        ));
-        $kills = \Core\Li::create();
-        foreach($results as $result) {
-            $kills->append($this->create_object($result));
-        }
-        return $kills;
-    }
-    
     public function create_object($data) {
         $data = \Core\Dict::create($data);
         $assassin = Agent::mapper()->create_object(array(
@@ -82,4 +62,41 @@ class KillMapper extends \Core\Mapper {
     }
 }
 
+class KillContainer extends \Core\MappedContainer {
+    public static function get_by_victim(Player $victim, Game $game) {
+        $items = \Core\Storage::container()
+                ->get_storage('Kill')
+                ->fetch(array(
+                    "joins" => KillContainer::_standard_joins(),
+                    'filters' => array(
+                        new \Core\Filter('game', $game['id']),
+                        new \Core\Filter('target', $victim['id'])
+                    )
+                ));
+        return Kill::mapper()
+            ->create_object($items[0]);        
+    }
+
+    public function find_by_game(\Trouble\Game $game, $limit=20) {
+        $items = \Core\Storage::container()
+                ->get_storage('Kill')
+                ->fetch(array(
+                    "joins" => KillContainer::_standard_joins(),
+                    "filter" => new \Core\Filter("game", $game['id'])
+                ));
+        $kills = Kill::mapper()
+            ->get_list($items);
+        return $kills;
+    }
+
+    protected static function _standard_joins() {
+        return array(
+            new \Core\Join("weapon", "Weapon", array('id', 'name')),
+            new \Core\Join("assassin", "Player", False,
+                new \Core\Join("agent", "Agent", array('alias'))),
+            new \Core\Join("target", "Player", False,
+                new \Core\Join("agent", "Agent", array('alias')))
+        );
+    }
+}
 ?>

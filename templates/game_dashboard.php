@@ -1,5 +1,12 @@
 <article>
-<?php if($self_target):?>
+<?php if($player->status == 0): ?>
+<p>You are dead.</p>
+<p>Killed by: <a href="agent/<?=$kill->assassin->alias?>"><?=$kill->assassin->alias?></a> at <strong><?=$kill->when_happened->format('Ymd.Hi')?></strong> with <strong><?=$kill->weapon->name?></strong></p>
+<p>
+<button id="dispute_kill">Dispute Kill</button>
+</p>
+
+<?php elseif($self_target):?>
 <p>You are your own target. This means either that you have won (yay!) or you are currently the only player in the game.</p>
 <?php else: ?>
 <h1>Current Target</h1>

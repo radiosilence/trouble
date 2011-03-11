@@ -27,15 +27,12 @@ class Game extends \Core\Mapped {
     }
 
     public function load_kills($args=False) {
-        $this->kills = $this->_mappers['Kill']
-                ->find_by_game($this, $args);
+        $this->kills = KillContainer::find_by_game($this, $args);
         return $this;
     }
 
     public function get_players() {
-        $p = Player::mapper()
-                ->attach_storage(\Core\Storage::container()
-                    ->get_storage('Player'))
+        $p = Player::container()
             ->find_by_game($this);
         $this->players = $p[0];
         $this->all_players = $p[1];
@@ -48,20 +45,24 @@ class Game extends \Core\Mapped {
         }
     }
     
-    public function get_current_target($agent_id) {
+    public function get_current_target($player) {
         $this->_check_players_loaded();
-        $target_id = $this->players->contains($agent_id, 'agent','id')
-                ->target;
-        return $this->players->contains($target_id, 'id')
+        return $this->players->contains($player->target, 'id')
                 ->agent;
     }
-    public function is_joined($agent_id) {
+
+    public function get_killed_by($player) {
+        return Kill::container()
+            ->get_by_victim($player, $this);
+    }
+
+    public function is_alive($player) {
         $this->_check_players_loaded();
-        return $this->players->contains($agent_id, 'agent', 'id');
+        return $player->status;
         
     }
 
-    public function _was_ever_in_game($agent_id) {
+    public function is_joined($agent_id) {
         $this->_check_players_loaded();
         return $this->all_players->contains($agent_id, 'agent', 'id');
     }
@@ -76,11 +77,11 @@ class Game extends \Core\Mapped {
         $this->_storage = \Core\Storage::container()
             ->get_storage('Player');
 
-        if($this->is_joined($agent_id)) {
+        if($this->is_active($agent_id)) {
             throw new GameAlreadyHasAgentError();
         }
         
-        if($this->_was_ever_in_game($agent_id)) {
+        if($this->is_joined($agent_id)) {
             throw new GameCannotRejoinError();
         }
 
@@ -137,28 +138,31 @@ class Game extends \Core\Mapped {
     public function resurrect_agent($hunter) {
     }
 
-    protected function _get_player($agent_id) {
-        $players = Player::mapper()
-            ->attach_storage($this->_storage)
-            ->get_list(array(
+    public function get_player($agent_id) {
+        return Player::container()
+            ->get_by_field('agent', $agent_id);
+        $items = \Core\Storage::container()
+            ->get_storage('Player')
+            ->fetch(array(
                 'filters' => array(
                     new \Core\Filter('game', $this->id),
                     new \Core\Filter('agent', $agent_id)
                 )
             ));
-        if(count($players) == 0) {
-            throw new GameAgentNotInGameError();
-        }
-        return $players[0];
+        $player = Player::mapper()
+            ->create_object($items[0]);
+        return $player;
     }
     public function remove_agent($agent_id) {
         $this->_check_players_loaded();
-    
         $this->_storage = \Core\Storage::container()
             ->get_storage('Player');
         $player = $this->_get_player($agent_id);
+        if($player->status > 0) {
+            $this->_remove_player_from_cycle($player);
+        } 
         $player->status = -1;
-        $this->_remove_player_from_cycle($player);
+        $this->_storage->save($player);
         if($this->state <= 0) {
             $this->_delete_player($player);
         }
@@ -213,7 +217,9 @@ class GameMapper extends \Core\Mapper {
         $game = Game::create($data);
         $game->attach_mapper('Kill',
             Kill::mapper()
-                ->attach_storage($this->_storage)
+                ->attach_storage(\Core\Storage::container()
+                    ->get_storage('Kill')
+                )
         );
         $game->attach_mapper('Agent',
             Agent::mapper()

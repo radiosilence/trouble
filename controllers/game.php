@@ -40,12 +40,20 @@ class Game extends \Controllers\GamePage {
     }
 
     protected function _show_game_dashboard() {
+        $uid = $this->_auth->user_id();
         $t = $this->_template;
         $g = $this->_game;
         $t->title = $g->name . ': Dashboard';
-        $t->target = $g->get_current_target($this->_auth->user_id());
-        if($t->target->id == $this->_auth->user_id()) {
-            $t->self_target = True;
+        $p = \Trouble\Player::container()
+            ->get_by_agent_game($g->id, $uid);
+        $t->player = $p;
+        if($p->status > 0) {
+            $t->target = $g->get_current_target($p);
+            if($t->target->id == $uid) {
+                $t->self_target = True;
+            }            
+        } else {
+            $t->kill = $g->get_killed_by($p);
         }
         $t->content = $t->render('game_dashboard.php');
         echo $t->render('main.php');
