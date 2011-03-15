@@ -45,13 +45,13 @@ class Game extends \Core\Mapped {
         }
     }
     
-    public function get_current_target($player) {
+    public function get_current_target(Player $player) {
         $this->_check_players_loaded();
         return $this->players->contains($player->target, 'id')
                 ->agent;
     }
 
-    public function get_killed_by($player) {
+    public function get_killed_by(Player $player) {
         return Kill::container()
             ->get_by_victim($player, $this);
     }
@@ -77,7 +77,7 @@ class Game extends \Core\Mapped {
         $this->_storage = \Core\Storage::container()
             ->get_storage('Player');
 
-        if($this->is_active($agent_id)) {
+        if($this->is_alive($agent_id)) {
             throw new GameAlreadyHasAgentError();
         }
         
@@ -107,7 +107,7 @@ class Game extends \Core\Mapped {
         return $player;
     }
 
-    protected function _insert_player_into_cycle($player) {
+    protected function _insert_player_into_cycle(Player $player) {
         $s = $this->_storage;
 
         if(count($this->players) < 1) {
@@ -122,12 +122,28 @@ class Game extends \Core\Mapped {
         $s->save($player);
     }
 
-    public function kill_agent($agent_id) {
+    /**
+     * Kill the target of $agent_id.
+     * @param $agent_id The Agent ID of the <b>hunter</b>.
+     */
+    public function kill_agent_target($agent_id, array $kill_data) {
         $this->_check_players_loaded();
         $this->_storage = \Core\Storage::container()
             ->get_storage('Player');
 
-        $player = $this->_get_player($agent_id);
+        $player = $this->get_player($agent_id);
+        $target = $this->_get_player_from_cycle($player->target);
+        $this->_kill_player($target);
+        $kill_data['target'] = $target['id'];
+        $kill_data['assassin'] = $player['id'];
+        $kill_data['game'] = $this->id;
+        $kill = Kill::create($kill_data);
+        \Core\Storage::container()
+            ->get_storage('Kill')
+            ->save($kill);
+    }
+
+    protected function _kill_player(Player $player) {
         $player->status = 0;
         $hunter = $this->_remove_player_from_cycle($player);
         //$hunter_agent = Agent::container()
@@ -135,12 +151,13 @@ class Game extends \Core\Mapped {
         // increase $hunter_agent kill count by 1
     }
 
-    public function resurrect_agent($hunter) {
+    public function resurrect_agent(Player $hunter) {
     }
 
+    /**
+     * Get a \Trouble\Player by the agent ID.
+     */
     public function get_player($agent_id) {
-        return Player::container()
-            ->get_by_field('agent', $agent_id);
         $items = \Core\Storage::container()
             ->get_storage('Player')
             ->fetch(array(
@@ -149,26 +166,39 @@ class Game extends \Core\Mapped {
                     new \Core\Filter('agent', $agent_id)
                 )
             ));
+        if(count($items) < 1) {
+            throw new GameAgentNotInGameError();
+        }
         $player = Player::mapper()
             ->create_object($items[0]);
         return $player;
+    }
+
+    /**
+     * Get a \Trouble\Player from the cycle, by player ID.
+     */
+    protected function _get_player_from_cycle($player_id) {
+        return $this->all_players->contains($player_id, 'id');
     }
     public function remove_agent($agent_id) {
         $this->_check_players_loaded();
         $this->_storage = \Core\Storage::container()
             ->get_storage('Player');
-        $player = $this->_get_player($agent_id);
+        $player = $this->get_player($agent_id);
         if($player->status > 0) {
             $this->_remove_player_from_cycle($player);
         } 
-        $player->status = -1;
-        $this->_storage->save($player);
         if($this->state <= 0) {
             $this->_delete_player($player);
+        } else {
+            $player->status = -1;
         }
+        $this->_storage->save($player);
     }
-
-    protected function _remove_player_from_cycle($player) {
+    /**
+     * Removes a player from the cycle and saves affected players in the storage.
+     */
+    protected function _remove_player_from_cycle(Player $player) {
         if($player->target < 1) {
             return False;
         }
@@ -180,7 +210,7 @@ class Game extends \Core\Mapped {
         return $hunter;
     }
 
-    protected function _delete_player($player) {
+    protected function _delete_player(Player $player) {
         $this->_storage->delete($player);
     }
 }

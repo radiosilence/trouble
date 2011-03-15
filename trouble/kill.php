@@ -17,6 +17,8 @@ import('trouble.weapon');
 import('core.types');
 
 class Kill extends \Core\Mapped {
+    protected $_fields = array('weapon', 'description', 'assassin',
+        'target', 'when_happened', 'game');
 	/**
 	 * Registers kill of $assassin's target.
 	 * Sets target as dead, makes a killboard stub.

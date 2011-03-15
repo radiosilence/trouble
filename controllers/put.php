@@ -54,17 +54,48 @@ class Put extends \Controllers\StandardPage {
     }
 
     public function join_game() {
-        import('trouble.game');
-        try {
-            $uid = $this->_auth->user_id();
+        $this->_game_action(function($uid) {
             $game = \Trouble\Game::container()
                 ->get_by_id($_POST['id'])
                 ->add_agent($uid);        
-            $this->_return_message("Success",
-                "Successfully joined game.");
+        }, 'Joined game.');
+    }
+
+    public function leave_game() {
+        $this->_game_action(function($uid) {
+            $game = \Trouble\Game::container()
+                ->get_by_id($_POST['id'])
+                ->remove_agent($uid);
+        }, 'Left game.');
+    }
+
+    public function register_kill() {
+        $this->_game_action(function($uid) {
+            $_POST['when_happened'] = new \DateTime($_POST['when_happened_date'] . $_POST['when_happened_time']);
+            $game = \Trouble\Game::container()
+                ->get_by_id($_POST['game_id'])
+                ->kill_agent_target($uid, $_POST);
+        }, 'Kill registered.');     
+    }
+
+    protected function _game_action($callback, $success=False) {
+        import('trouble.game');
+        try {
+            $uid = $this->_auth->user_id();
+            $callback($uid);
+            if($success) {
+                $this->_return_message("Success",
+                    $success);
+            } else {
+                $this->_return_message("Success",
+                    "Success.");
+            }
         } catch(\Core\AuthNotLoggedInError $e) {
             $this->_return_message("Error",
                 "Not logged in.");
+        } catch(\Trouble\GameAgentNotInGameError $e) {
+            $this->_return_message("Error",
+                "You are not in this game.");
         } catch(\Trouble\GameCannotRejoinError $e) {
             $this->_return_message("Error",
                 "You cannot rejoin a game in this state.");
@@ -75,25 +106,6 @@ class Put extends \Controllers\StandardPage {
             $this->_return_message("Error",
                 "Game is not joinable.");
         }
-    }
-
-    public function leave_game() {
-        import('trouble.game');
-        try {
-            $uid = $this->_auth->user_id();
-            $game = \Trouble\Game::container()
-                ->get_by_id($_POST['id'])
-                ->remove_agent($uid);   
-                 
-            $this->_return_message("Success",
-                "Successfully left game.");
-        } catch(\Core\AuthNotLoggedInError $e) {
-            $this->_return_message("Error",
-                "Not logged in.");
-        } catch(\Trouble\GameAgentNotInGameError $e) {
-            $this->_return_message("Error",
-                "You are not in this game.");
-        } 
     }
 
     protected function _return_message($status, $message) {

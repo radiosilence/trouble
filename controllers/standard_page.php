@@ -104,7 +104,10 @@ abstract class GamePage extends StandardPage {
 
 abstract class AgentPage extends StandardPage {
     protected $_agent;
-
+    public function __construct($args) {
+        parent::__construct($args);
+        import('trouble.agent');
+    }
     protected function _init_agent($alias) {
         $this->_agent = \Trouble\Agent::container()
             ->get_by_alias($alias);

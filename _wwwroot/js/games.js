@@ -30,17 +30,28 @@ $(function(){
         );
         return false;
     });
-    $("#date").datepicker({
+    $(".datepick").datepicker({
         dateFormat: 'yy-mm-dd'
     });
+    $('.timepick').timepicker();
     $("#dialog-form").dialog({
         autoOpen: false,
         height: 500,
-        width: 600,
+        width: 450,
         modal: true,
         buttons: {
             "Register Kill": function() {
-                alert("boop beep");
+                d = {
+                    'game_id': $('#register_kill').attr('game_id'),
+                    'when_happened_time': $('#when_happened_time').val(),
+                    'when_happened_date': $('#when_happened_date').val(),
+                    'weapon': $('#weapon').val(),
+                    'description': $('#description').val()
+                };
+                console.log(d);
+                    dialogResponse('/put/register_kill', d, function(){
+//                    location.reload();
+                });
             },
             Cancel: function() {
                 $(this).dialog( "close" );
@@ -63,11 +74,15 @@ $(function(){
         }
     });
     $("#register_kill").click(function() {
-        $("#date").datepicker('disable');
         $("#dialog-form").dialog("open");
-
-        $("#date").datepicker('hide');
-        $("#date").datepicker('enable');
     });
-
+    $("select").change(function () {
+        var str = "";
+        if($(this).val() != 0) {
+            $(this).removeClass('default');
+        } else {
+            $(this).addClass('default');
+        }
+        console.log();
+    });
 });

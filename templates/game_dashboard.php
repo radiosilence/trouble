@@ -11,23 +11,21 @@
 <?php else: ?>
 <h1>Current Target</h1>
 <p><a class="target" href="agent/<?=$target["alias"]?>"><?=$target["alias"]?></a></p>
-<p><button id="register_kill">Register Kill</a></p>
+<p><button id="register_kill" game_id="<?=$game->id?>">Register Kill</a></p>
 <?php endif;?>
 </article>
 
 <div id="dialog-form" title="Register Kill">
 	<form>
 	<fieldset>
-		<p><label for="time">Time</label><br/>
-		<input type="text" name="when_happened[1]" id="time" class="time" placeholder="Ex. 21:35"/>&nbsp;&nbsp;24-hour format. Give closest estimate.</p>
-		<p><label for="date">Date</label><br/>
-		<input type="text" name="when_happened[0]" id="date" placeholder="Ex. 2011-03-10"/></p>
 		<p><label for="weapon">Weapon</label><br/>
-		<select name="weapon" id="weapon">
-			<option value="0">Select weapon used...</option>
+		<select name="weapon" class="default" id="weapon">
+			<option value="0" class="dropdown_default">Select weapon used...</option>
 		</select></p>
+		<p><label for="time">Time/Date</label><br/>
+		<input type="text" name="when_happened_time" id="when_happened_time" class="timepick" placeholder="Ex. 21:35"/>&nbsp;<input type="text" name="when_happened_date" id="when_happened_date" class="datepick" placeholder="Ex. 2011-03-10"/></p>
 		<p><label for="description">Tell the Story...</label><br/>
-		<textarea name="description" id="description" placeholder="Ex. I spotted my target and shot her in the face"></textarea></p>
-	</fieldset>
+		<textarea name="description" id="description" style="height: 120px;" placeholder="Ex. I spotted my target and shot her in the face"></textarea></p>
 	</form>
+	</fieldset>
 </div>

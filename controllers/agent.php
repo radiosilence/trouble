@@ -29,7 +29,8 @@ class Agent extends \Controllers\AgentPage {
      */
     public function edit() {
         $t = $this->_template;
-        
+        $t->add('_jsapps', 'agent_form');
+
         $storage = \Core\Storage::container()
             ->get_storage('Agent');
         $mapper = \Trouble\Agent::mapper()
