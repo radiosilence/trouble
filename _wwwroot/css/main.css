@@ -35,3 +35,14 @@ a.target {
     font-size: 14pt;
     font-weight: bold;
 }
+
+span.pkn {
+    font-size: 28pt;
+    font-weight: bold;
+}
+
+input#pkn {
+    font-size: 14pt;
+    font-weight: bold;
+    width: 70px;
+}

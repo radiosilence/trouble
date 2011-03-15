@@ -30,13 +30,15 @@ class Game extends \Controllers\GamePage {
             if(!$g->is_joined($this->_auth->user_id())){
                 throw new UserNotJoinedError();
             }
-            $this->_show_game_dashboard();
+            $t->dashboard = $this->_show_game_dashboard();
         } catch(\Core\AuthNotLoggedInError $e) {
-            $this->_show_game_info();
+            $t->information = $this->_show_game_info();
         } catch(UserNotJoinedError $e) {
-            $this->_show_game_info();
+            $t->information = $this->_show_game_info();
         }
-
+        $t->killboard = $this->_show_game_killboard();
+        $t->content = $t->render('game.php');
+        echo $t->render('main.php');
     }
 
     protected function _show_game_dashboard() {
@@ -55,19 +57,17 @@ class Game extends \Controllers\GamePage {
         } else {
             $t->kill = $g->get_killed_by($p);
         }
-        $t->content = $t->render('game_dashboard.php');
-        echo $t->render('main.php');
+        return $t->render('game_dashboard.php');
     }
 
     protected function _show_game_info() {
         $t = $this->_template;
         $g = $this->_game;
         $t->title = $g->name;
-        $t->content = $t->render('game_info.php');
-        echo $t->render('main.php');
+        return $t->render('game_info.php');
     }
 
-    public function killboard() {
+    public function _show_game_killboard() {
         $t = $this->_template;
         $g = $this->_game;
         $kill_storage = \Core\Storage::container()
@@ -83,9 +83,7 @@ class Game extends \Controllers\GamePage {
                 ->get_game_killboard($g)
                 ->load_data();
 
-        $t->content = $t->render('killboard.php');
-        $t->title = $t->game->name . ': Killboard';
-        echo $t->render('main.php');
+        return $t->render('killboard.php');
     }
 
     protected function _standard_query_params($user) {

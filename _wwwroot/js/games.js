@@ -1,3 +1,8 @@
+$(function() {
+    $("#tabs").tabs({
+      cookie: {}
+    });
+});
 $(function(){
     $('button.join_game').click(function(){
         data = {
@@ -43,6 +48,7 @@ $(function(){
             "Register Kill": function() {
                 d = {
                     'game_id': $('#register_kill').attr('game_id'),
+                    'pkn': $('#pkn').val(),
                     'when_happened_time': $('#when_happened_time').val(),
                     'when_happened_date': $('#when_happened_date').val(),
                     'weapon': $('#weapon').val(),
