@@ -33,7 +33,8 @@ class PlayerMapper extends \Core\Mapper {
 	        'id' => $data['id'],
 	        'agent' => $agent,
 	        'target' => $data['target'],
-	        'credits' => $data['credits'],
+            'credits' => $data['credits'],
+            'pkn' => $data['pkn'],
 	        'status' => $data['status']
 	    ));
 	}

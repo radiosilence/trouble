@@ -93,6 +93,9 @@ class Put extends \Controllers\StandardPage {
                     ->get_by_id($_POST['game_id'])
                     ->kill_agent_target($uid, $_POST);
             }, 'Kill registered.');
+        } catch(\Trouble\GameIncorrectPKNError $e) {
+            $this->_return_message("Error",
+                "Incorrect PKN. If believed to be correct, please contact game administrator.");
         } catch(\Trouble\KillTooEarlyError $e) {
             $this->_return_message("Error",
                 "Kill date too early for game.");

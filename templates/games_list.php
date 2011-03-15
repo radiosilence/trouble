@@ -10,8 +10,8 @@
     <p><?=($game->joined ? 'You have joined this game.' : null) ?></p>
     <p><?=$game->description?></p>
     <ul>
-    <li><a href="game/<?=$game->id?>"><?=($game->joined ? 'Dashboard' : 'Information')?></a></li>
-    <li><a href="game/<?=$game->id?>/killboard">Killboard</a></li>
+    <li><a href="game/<?=$game->id?>#<?=($game->joined ? 'dashboard' : 'information')?>"><?=($game->joined ? 'Dashboard' : 'Information')?></a></li>
+    <li><a href="game/<?=$game->id?>#killboard">Killboard</a></li>
 
     </ul>
   </article>

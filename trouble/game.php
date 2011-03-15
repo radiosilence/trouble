@@ -139,21 +139,24 @@ class Game extends \Core\Mapped {
             ->get_storage('Player');
 
         $player = $this->get_player($agent_id);
+        $target = $this->_get_player_from_cycle($player->target);
         $kill_data['target'] = $target['id'];
         $kill_data['assassin'] = $player['id'];
         $kill_data['game'] = $this->id;
         $kill = Kill::create($kill_data);
         $kill->check_valid_date($this->start_date, $this->end_date);
 
-        $target = $this->_get_player_from_cycle($player->target);
-        $this->_kill_player($target);
+        $this->_kill_player($target, $kill_data['pkn']);
 
         \Core\Storage::container()
             ->get_storage('Kill')
             ->save($kill);
     }
 
-    protected function _kill_player(Player $player) {
+    protected function _kill_player(Player $player, $pkn) {
+        if($player->pkn != $pkn) {
+            throw new GameIncorrectPKNError();
+        }
         $player->status = 0;
         $hunter = $this->_remove_player_from_cycle($player);
         //$hunter_agent = Agent::container()
@@ -231,6 +234,7 @@ class GameAgentNotInGameError extends GameError {}
 class GameCannotRejoinError extends GameError {}
 class GameNotStartedError extends GameError {}
 class GameEndedError extends GameError {}
+class GameIncorrectPKNError extends GameError {}
 
 class GameMapper extends \Core\Mapper {
     private $_default_order = array("start_date", "desc");
