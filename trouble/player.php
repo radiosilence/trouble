@@ -19,7 +19,7 @@ import('trouble.agent');
 import('trouble.weapon');
 
 class Player extends \Core\Mapped {
-    protected $_fields = array('agent', 'game', 'target', 'status', 'credits');
+    protected $_fields = array('agent', 'game', 'target', 'status', 'credits', 'pkn');
 }
 
 class PlayerMapper extends \Core\Mapper {
@@ -75,7 +75,7 @@ class PlayerContainer extends \Core\MappedContainer {
  		$this->_cycle = \Core\Li::create();
  		if(count($this->_alive_players) > 0) {
             $this->_get_cycle($this->_alive_players[0]);
-     		$this->_populate_cycle();
+     		//$this->_populate_cycle();
         }
        	return array($this->_cycle, $this->_players);
 	}
@@ -86,12 +86,11 @@ class PlayerContainer extends \Core\MappedContainer {
 	}
 
 	protected function _get_cycle($player) {
-		if($this->_cycle->contains($player['id'])) {
+		if($this->_cycle->contains($player['id'], 'id')) {
 			return False;
 		} else {
-			$this->_cycle->append($player['id']);
-
-			$this->_get_cycle($this->_players[$this->_index[$player['target']]]);
+			$this->_cycle->append($player);
+			$this->_get_cycle($this->_alive_players[$this->_index[$player['target']]]);
 		}  
 	}
 

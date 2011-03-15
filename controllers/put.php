@@ -70,16 +70,48 @@ class Put extends \Controllers\StandardPage {
     }
 
     public function register_kill() {
-        $this->_game_action(function($uid) {
-            $_POST['when_happened'] = new \DateTime($_POST['when_happened_date'] . $_POST['when_happened_time']);
-            $game = \Trouble\Game::container()
-                ->get_by_id($_POST['game_id'])
-                ->kill_agent_target($uid, $_POST);
-        }, 'Kill registered.');     
+        import('trouble.kill');
+        import('core.validation');
+        try {
+            $validator = \Core\Validator::validator('\Trouble\Kill');
+            $validator->validate($_POST, \Trouble\Kill::validation());
+
+            $this->_game_action(function($uid) {
+                $now = new \DateTime();
+                if(empty($_POST['when_happened_date'])) {
+                    $date = $now->format('Y-m-d');
+                } else {
+                    $date = $_POST['when_happened_date'];
+                }
+                if(empty($_POST['when_happened_time'])) {
+                    $time = $now->format('H:i');
+                } else {
+                    $time = $_POST['when_happened_time'];
+                }
+                $_POST['when_happened'] = new \DateTime($date . $time);
+                $game = \Trouble\Game::container()
+                    ->get_by_id($_POST['game_id'])
+                    ->kill_agent_target($uid, $_POST);
+            }, 'Kill registered.');
+        } catch(\Trouble\KillTooEarlyError $e) {
+            $this->_return_message("Error",
+                "Kill date too early for game.");
+        } catch(\Trouble\KillTooLateError $e) {
+            $this->_return_message("Error",
+                "Kill date too late for game.");
+        } catch(\Trouble\KillInFutureError $e) {
+            $this->_return_message("Error",
+                "Kill date in future. We don't allow time travellers.");
+        } catch(\Core\ValidationError $e) {
+            $errors = $e->get_errors();
+            $this->_return_message("Error",
+                $errors[0]);
+        }
     }
 
     protected function _game_action($callback, $success=False) {
         import('trouble.game');
+
         try {
             $uid = $this->_auth->user_id();
             $callback($uid);
@@ -105,6 +137,12 @@ class Put extends \Controllers\StandardPage {
         } catch(\Trouble\GameNotJoinableError $e) {
             $this->_return_message("Error",
                 "Game is not joinable.");
+        } catch(\Trouble\GameNotStartedError $e) {
+            $this->_return_message("Error",
+                "Game has not started.");
+        } catch(\Trouble\GameEndedError $e) {
+            $this->_return_message("Error",
+                "Game has already ended.");
         }
     }
 

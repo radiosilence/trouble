@@ -19,24 +19,37 @@ import('core.types');
 class Kill extends \Core\Mapped {
     protected $_fields = array('weapon', 'description', 'assassin',
         'target', 'when_happened', 'game');
-	/**
-	 * Registers kill of $assassin's target.
-	 * Sets target as dead, makes a killboard stub.
-	 */
-	public function register_kill($target) {
-		# 1. Initialise target
-		# 2. Set target dead
-		# 3. Initialise assassin
-		# 4. Increase kill count
-		# 5. Assign new target
-		# 6. E-mail killer new target?
-	}
 
-    public function undo_kill($target) {
-        # 1. Find last kill of target
-        # 2. Reverse dat.
+    public static function validation() {
+       return array(
+            'description' => 'default',
+            'weapon' => array(
+                array(
+                    'type' => 'foreign',
+                    'class' => '\Trouble\Weapon'
+                ),
+                'default'
+            )
+        );
+    }
+
+    public function check_valid_date($start, $end) {
+        $now = new \DateTime();
+        if($start->diff($this->when_happened)->invert) {
+            throw new KillTooEarlyError();
+        }
+        if($this->when_happened->diff($end)->invert) {
+            throw new KillTooLateError();
+        }
+        if($this->when_happened->diff($now)->invert) {
+            throw new KillInFutureError();
+        }
     }
 }
+
+class KillTooEarlyError extends \Core\StandardError {}
+class KillTooLateError extends \Core\StandardError {}
+class KillInFutureError extends \Core\StandardError {}
 
 class KillMapper extends \Core\Mapper {
     public function create_object($data) {
@@ -59,6 +72,7 @@ class KillMapper extends \Core\Mapper {
             'assassin' => $assassin,
             'target' => $target,
             'weapon' => $weapon,
+            'game' => $game,
             'when_happened' => new \DateTime($data->when_happened)
         ));
     }

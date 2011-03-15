@@ -100,7 +100,8 @@ class Game extends \Core\Mapped {
             'game' => $this->id,
             'status' => 1,
             'credits' => 0,
-            'target' => -1
+            'target' => -1,
+            'pkn' => str_pad(mt_rand(0,9999), 4, "0")
         ));
         
         $this->_storage->save($player);
@@ -128,16 +129,25 @@ class Game extends \Core\Mapped {
      */
     public function kill_agent_target($agent_id, array $kill_data) {
         $this->_check_players_loaded();
+        if($this->state == 0) {
+            throw new GameNotStartedError();
+        }
+        if($this->state == 2) {
+            throw new GameEndedError();
+        }
         $this->_storage = \Core\Storage::container()
             ->get_storage('Player');
 
         $player = $this->get_player($agent_id);
-        $target = $this->_get_player_from_cycle($player->target);
-        $this->_kill_player($target);
         $kill_data['target'] = $target['id'];
         $kill_data['assassin'] = $player['id'];
         $kill_data['game'] = $this->id;
         $kill = Kill::create($kill_data);
+        $kill->check_valid_date($this->start_date, $this->end_date);
+
+        $target = $this->_get_player_from_cycle($player->target);
+        $this->_kill_player($target);
+
         \Core\Storage::container()
             ->get_storage('Kill')
             ->save($kill);
@@ -175,7 +185,7 @@ class Game extends \Core\Mapped {
     }
 
     /**
-     * Get a \Trouble\Player from the cycle, by player ID.
+     * Get a \Trouble\Player from the cycle, by player ID. Alive or dead.
      */
     protected function _get_player_from_cycle($player_id) {
         return $this->all_players->contains($player_id, 'id');
@@ -219,6 +229,8 @@ class GameNotJoinableError extends GameError {}
 class GameAlreadyHasAgentError extends GameError {}
 class GameAgentNotInGameError extends GameError {}
 class GameCannotRejoinError extends GameError {}
+class GameNotStartedError extends GameError {}
+class GameEndedError extends GameError {}
 
 class GameMapper extends \Core\Mapper {
     private $_default_order = array("start_date", "desc");

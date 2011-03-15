@@ -1,5 +1,7 @@
 $(function() {
-    $("#tabs").tabs();
+    $("#tabs").tabs({
+      cookie: {}
+    });
     $("#accordion").accordion({
         autoHeight: false,
         navigation: true

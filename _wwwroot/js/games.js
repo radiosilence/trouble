@@ -50,7 +50,7 @@ $(function(){
                 };
                 console.log(d);
                     dialogResponse('/put/register_kill', d, function(){
-//                    location.reload();
+                        location.reload();
                 });
             },
             Cancel: function() {

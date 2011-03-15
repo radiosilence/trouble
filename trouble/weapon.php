@@ -22,3 +22,4 @@ class WeaponMapper extends \Core\Mapper {
         return Weapon::create($data);
     }
 }
+class WeaponContainer extends \Core\MappedContainer {}
