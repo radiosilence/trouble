@@ -21,10 +21,9 @@ import('trouble.player');
 class Game extends \Core\Mapped {
     public $kills;
     public $players;
-
-    public function __construct($array=False) {
-        parent::__construct($array);
-    }
+    protected $_fields = array("name", "start_date", "end_date", "location",
+        "victor", "location", "description", "invite_only",
+        "entry_fee", "creator");
 
     public function load_kills($args=False) {
         $this->kills = KillContainer::find_by_game($this, $args);
@@ -226,6 +225,15 @@ class Game extends \Core\Mapped {
     protected function _delete_player(Player $player) {
         $this->_storage->delete($player);
     }
+
+    public static function validation() {
+       return array(
+            'name' => array(
+                'type' => 'default',
+                'title' => 'Game Name'
+            )
+        );
+    }
 }
 class GameError extends \Core\StandardError {}
 class GameNotJoinableError extends GameError {}
@@ -255,12 +263,16 @@ class GameMapper extends \Core\Mapper {
     }
 
     public function create_object($data) {
-        $data['victor'] = Agent::mapper()->create_object(array(
-            'id' => $data['victor'],
-            'alias' => $data['victor_agent_alias']
-        ));
-        unset($data['victor_alias']);
-        $game = Game::create($data);
+        if(empty($data['victor'])) {
+            $data['victor'] = 0;
+        } else {
+            $data['victor'] = Agent::mapper()->create_object(array(
+                'id' => $data['victor'],
+                'alias' => $data['victor_agent_alias']
+            ));
+            unset($data['victor_alias']);
+        }
+        $game = Game::create($data, True);
         $game->attach_mapper('Kill',
             Kill::mapper()
                 ->attach_storage(\Core\Storage::container()
@@ -274,12 +286,27 @@ class GameMapper extends \Core\Mapper {
                     ->get_storage('Agent')
                 )
             );
-        foreach(array('start_date', 'end_date', 'signup_date') as $f) {
+        foreach(array('start_date', 'end_date') as $f) {
             $game[$f] = new \DateTime($game[$f]);
         }
-        $game['joinable'] = $game['state'] < 1;
-        $game['active'] = $game['state'] == 1; 
-        //$game->get_players();
+        $game->invite_only = (int)$data['invite_only'];
+
+        $now = new \DateTime();
+        
+        if($game->start_date > $now) {
+            $game['joinable'] = True;
+            $game['active'] = False;
+            $game['state'] = 0;
+        }
+        else if($game->start_date < $now && $game->end_date > $now) {
+            $game['joinable'] = False;
+            $game['active'] = True;
+            $game['state'] = 1;
+        } else {
+            $game['joinable'] = False;
+            $game['active'] = False;
+            $game['state'] = 2;
+        }
         return $game;
     }
 }

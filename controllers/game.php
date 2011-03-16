@@ -30,18 +30,19 @@ class Game extends \Controllers\GamePage {
             if(!$g->is_joined($this->_auth->user_id())){
                 throw new UserNotJoinedError();
             }
-            $t->dashboard = $this->_show_game_dashboard();
+            $t->dashboard = $this->_game_dashboard();
         } catch(\Core\AuthNotLoggedInError $e) {
-            $t->information = $this->_show_game_info();
+            $t->information = $this->_game_info();
         } catch(UserNotJoinedError $e) {
-            $t->information = $this->_show_game_info();
+            $t->information = $this->_game_info();
         }
-        $t->killboard = $this->_show_game_killboard();
+        $t->killboard = $this->_game_killboard();
+        $t->title = $g->name;
         $t->content = $t->render('game.php');
         echo $t->render('main.php');
     }
 
-    protected function _show_game_dashboard() {
+    protected function _game_dashboard() {
         $uid = $this->_auth->user_id();
         $t = $this->_template;
         $g = $this->_game;
@@ -60,14 +61,14 @@ class Game extends \Controllers\GamePage {
         return $t->render('game_dashboard.php');
     }
 
-    protected function _show_game_info() {
+    protected function _game_info() {
         $t = $this->_template;
         $g = $this->_game;
         $t->title = $g->name;
         return $t->render('game_info.php');
     }
 
-    public function _show_game_killboard() {
+    public function _game_killboard() {
         $t = $this->_template;
         $g = $this->_game;
         $kill_storage = \Core\Storage::container()
@@ -86,6 +87,10 @@ class Game extends \Controllers\GamePage {
         return $t->render('killboard.php');
     }
 
+    public function _game_rules() {
+        
+    }
+
     protected function _standard_query_params($user) {
         $params = array(
             'binds' => array(
@@ -98,11 +103,13 @@ class Game extends \Controllers\GamePage {
         );
         return $params;
     }
+
     public function ending_soon() {
         $t = $this->_template;
-        $time = new \DateTime("now");
+        $now = new \DateTime();
         try {
             $params = $this->_standard_query_params($this->_auth->user_id());
+            $params['filter'] = new \Core\Filter('end_date', $now->format('Y-m-d'), '>');
             $params['order'] = new \Core\Order('end_date', 'asc');
         } catch(\Core\AuthNotLoggedInError $e) {}
         $t->games = \Trouble\Game::mapper()
@@ -167,6 +174,32 @@ class Game extends \Controllers\GamePage {
 
         $t->content = $t->render('games_list.php');
         $t->title = "Games Starting Soon";
+        echo $t->render('main.php');
+    }
+
+    public function edit() {
+        $t = $this->_template;
+        $t->add('_jsapps', 'game_form');
+
+        $storage = \Core\Storage::container()
+            ->get_storage('Game');
+        $mapper = \Trouble\Game::mapper()
+            ->attach_storage($storage);
+        $t->errors = array();
+        if($this->_args['game_id']) {
+            $t->title = "Edit Game";
+            $game = \Trouble\Game::container()
+                ->get_by_id($this->_args['game_id']);
+            $game->start_date = $game->start_date->format('Y-m-d');
+            $game->end_date = $game->end_date->format('Y-m-d');
+        } else {
+            $t->title = "Game Creation";
+            $t->new = True;
+            $game = \Trouble\Game::create($_POST, True);
+        }
+
+        $t->game = $game;
+        $t->content = $t->render('forms/game.php');
         echo $t->render('main.php');
     }
 }

@@ -1,10 +1,21 @@
 $(function() {
-    $("#tabs").tabs({
-      cookie: {}
+    $("div.tabs").tabs({
+        cookie: {}
     });
-    $("#accordion").accordion({
+    $("div.accordion").accordion({
         autoHeight: false,
         navigation: true
+    });
+
+    $('#submit_agent_form').click(function(data) {
+        var d = {};
+        $.each($('#agent_form').serializeArray(), function(i, field) {
+            d[field.name] = field.value;
+        });
+        dialogResponse('/put/save_agent', d, function(){
+            location.reload();
+        });
+        return false;
     });
 });
 $(function(){   

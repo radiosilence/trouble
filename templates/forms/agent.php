@@ -1,16 +1,7 @@
-<form id="agent"<?=($new ? ' class="wizard"' : null)?> method="POST">
-<input type="hidden" name="submitted" value="1"/>
-  <?php if(count($errors) > 0):?>
-    <ul class="error">
-    <?php foreach($errors as $error): ?>
-      <li><?=$error?></li>
-    <?php endforeach; ?>
-    </ul>
-  <?php endif;?>
-  <div id="<?=($new ? 'accordion' : 'tabs')?>">
+<form id="agent_form" method="POST">
+  <div class="<?=($new ? 'accordion' : 'tabs')?>">
     <?php if(!$new): ?>
-      <input type="hidden" name="id" value="<?=$agent->id?>"/>
-
+    <input type="hidden" name="id" value="<?=$agent->id?>"/>
     <ul>
       <li><a href="#fieldset-contact">Contact Details</a></li>
       <li><a href="#fieldset-personal">Personal Data</a></li>
@@ -81,5 +72,5 @@
       <?php endif;?>
     </div>
   </div>
-  <p class="submit"><button class="submit"><?=($new ? 'Process Application' : 'Save')?></button></p>
+  <p class="submit"><button class="submit" id="submit_agent_form"><?=($new ? 'Process Application' : 'Save')?></button></p>
 </form>

@@ -1,5 +1,6 @@
 <?php $killboard->games->map(function($game){ ?>
   <article class="killboard">
+  <h1>Killboard</h1>
   <table class="kills">
     <thead>
       <th class="date">Date</th>

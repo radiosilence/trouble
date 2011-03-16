@@ -12,7 +12,11 @@ function dialogResponse(url, d, success, fail) {
     });
     d['tok'] = $.cookie('tok');
     status = $.post(url, d, function(data) {
-        $('#dialog').text(data.message);
+        message = '<p>'+data.message+'</p>';
+        $.each(data['errors'], function(k, error) {
+            message += '<div class="ui-state-error ui-corner-all response_error" ><span class="ui-icon ui-icon-alert"></span>'+error+'</div>';
+        });
+        $('#dialog').html(message);
         $('#dialog').dialog('option', 'title', data.status);
         $('#dialog').dialog('open');
         if(data.status == 'Success') {
@@ -32,7 +36,7 @@ function dialogConfirm(title, text, callback, callbackData) {
     $('#dialog').text(text);    
     $("#dialog").dialog({
         resizable: false,
-        height:140,
+        height: 140,
         width: 600,
         modal: true,
         title: title,

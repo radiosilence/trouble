@@ -46,3 +46,35 @@ input#pkn {
     font-weight: bold;
     width: 70px;
 }
+
+#userbox ul li {
+    padding-bottom: 0.5em;
+}
+
+#userbox button {
+    font-size: 12pt;
+    border-radius: 8px;
+    margin: 0px;
+}
+
+#userbox input {
+    margin: 0px;
+    width: 200px !important;
+}
+
+#userbox h1 {
+    font-size: 14pt;
+}
+
+form#agent_form input[type=text], form#agent_form textarea {
+    width: 620px;
+}
+
+
+form#agent textarea {
+    height: 8em;
+}
+
+input[type=password], input.password {
+    width: 200px !important;
+}

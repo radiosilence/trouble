@@ -43,9 +43,7 @@ create table games
     description text,
     state integer,
     invite_only integer,
-    entry_fee integer,
-    local_currency integer,
-    temp_aliases integer
+    entry_fee integer
 );
 
 
@@ -70,6 +68,7 @@ create table players
     target integer,
     game integer references games(id),
     status integer,
+    pkn varchar(4),
     credits integer
 );
 

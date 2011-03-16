@@ -1,5 +1,5 @@
 $(function() {
-    $("#tabs").tabs({
+    $("div.tabs").tabs({
       cookie: {}
     });
 });

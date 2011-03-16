@@ -48,6 +48,91 @@ class Put extends \Controllers\StandardPage {
         }
     }
 
+    /**
+     * TODO: restrict agent to logged in user or admin
+     */
+    public function save_agent() {
+        import('core.validation');
+        import('trouble.agent');
+
+        $validator = \Core\Validator::validator('\Trouble\Agent');
+        $editing = $_POST['id'] > 0 ? True : False;
+        
+        if($editing) {
+            $agent = \Trouble\Agent::container()
+                ->get_by_id($_POST['id']);
+            $validator->set_id($agent->id);
+            $_POST['alias'] = $agent->alias;
+            $agent->overwrite($_POST, True);
+        } else {
+            $agent = \Trouble\Agent::create($_POST, True);
+        }
+        try {
+            $validator->validate($_POST, \Trouble\Agent::validation());
+            try {
+                \Core\Auth::hash($agent, 'password');
+            } catch(\Core\AuthEmptyPasswordError $e) {
+                $agent->remove('password');
+            }
+            // Authorization here. If currently logged in
+            // user can update agent of alias x
+            \Core\Storage::container()
+                ->get_storage('Agent')
+                ->save($agent);
+
+            if($editing) {
+                $this->_auth->user_data($agent);
+                $this->_return_message("Success", "Saved.");            
+            } else {
+                $this->_return_message("Success", "Created agent. You may now log in.");
+            }
+        
+        } catch(\Core\ValidationError $e) {
+            $this->_return_message("Fail",
+                "Validation error(s):",
+                $e->get_errors());
+        }
+    }
+
+    public function save_game() {
+        import('core.validation');
+        import('trouble.game');
+        $validator = \Core\Validator::validator('\Trouble\Gane');
+        $editing = $_POST['id'] > 0 ? True : False;
+        if($editing) {
+            $game = \Trouble\Game::container()
+                ->get_by_id($_POST['id']);
+            $validator->set_id($game->id);
+            $game->overwrite($_POST, True);
+        } else {
+            $game = \Trouble\Game::mapper()
+                ->create_object($_POST);
+            $game->creator = $this->_auth->user_id();
+        }
+        try {
+            try {
+                \Core\Auth::hash($game, 'password');
+            } catch(\Core\AuthEmptyPasswordError $e) {
+                $game->remove('password');
+            }
+
+            \Core\Storage::container()
+                ->get_storage('Game')
+                ->save($game);
+            
+            if($editing) {
+                $this->_return_message("Success", "Saved.");            
+            } else {
+                $this->_return_message("Success", "Created game.");
+            }
+
+        } catch(\Core\ValidationError $e) {
+            $this->_return_message("Fail",
+                "Validation error(s):",
+                $e->get_errors());
+        }
+    }
+
     public function logout() {
         $this->_auth->logout();
         $this->_return_message("Success", "Logged out.");
@@ -106,9 +191,9 @@ class Put extends \Controllers\StandardPage {
             $this->_return_message("Error",
                 "Kill date in future. We don't allow time travellers.");
         } catch(\Core\ValidationError $e) {
-            $errors = $e->get_errors();
             $this->_return_message("Error",
-                $errors[0]);
+                "Validation error(s):",
+                $e->get_errors());
         }
     }
 
@@ -149,10 +234,11 @@ class Put extends \Controllers\StandardPage {
         }
     }
 
-    protected function _return_message($status, $message) {
+    protected function _return_message($status, $message, $errors=array()) {
         echo json_encode(array(
             'status'=> $status,
-            'message' => $message
+            'message' => $message,
+            'errors' => $errors
         ));
     }
 

@@ -15,7 +15,9 @@
 $routes = array(
     '^put/([a-zA-Z_]+)$' => 'Put:method=$1',
     '^get/([a-zA-Z_]+)$' => 'Get:method=$1',
-    '^game/([0-9]{1,9})/??$' => 'Game:game_id=$1',
+    '^create-game' => 'Game:method=edit',
+    '^game/([0-9]{1,9})/?edit$' => 'Game:game_id=$1;method=edit',
+    '^game/([0-9]{1,9})/?$' => 'Game:game_id=$1',
     '^games/starting-soon(.*)$' => 'Game:method=starting_soon',
     '^games(.*)$' => 'Game:method=ending_soon',
     '^your-games' => 'Game:method=your_games',
