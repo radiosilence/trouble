@@ -23,7 +23,7 @@ class Game extends \Core\Mapped {
     public $players;
     protected $_fields = array("name", "start_date", "end_date", "location",
         "victor", "location", "description", "invite_only",
-        "entry_fee", "creator");
+        "entry_fee", "creator", 'password');
 
     public function load_kills($args=False) {
         $this->kills = KillContainer::find_by_game($this, $args);
@@ -292,7 +292,7 @@ class GameMapper extends \Core\Mapper {
         $game->invite_only = (int)$data['invite_only'];
 
         $now = new \DateTime();
-        
+
         if($game->start_date > $now) {
             $game['joinable'] = True;
             $game['active'] = False;

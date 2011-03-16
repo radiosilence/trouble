@@ -42,7 +42,8 @@ create table games
     victor integer,
     description text,
     invite_only integer,
-    entry_fee varchar
+    entry_fee varchar,
+    password varchar
 );
 
 

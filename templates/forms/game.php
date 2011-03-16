@@ -54,7 +54,7 @@
       <p id="p_entry_fee"><label for="entry_fee">Entry Fee</label><br/>
       <strong>&pound; </strong><input type="text" name="entry_fee" id="entry_fee" class="price" value="<?=$game->entry_fee?>" placeholder="Ex: 2.50"/>&nbsp;&nbsp;<em>For informational value only &ndash; payments handled outside games.</em></p>
       <p id="p_password"><label for="password">Password</label><br/>
-      <input class="password" name="password" id="password" value="<?=$game->password?>" placeholder="Ex: hunter2"/></p>
+      <input class="password" name="password" id="password" placeholder="<?=($new ? 'Ex: hunter2' : 'No change')?>"/></p>
     </div>
     <?php if($new):?><h3><a href="#">Description</a></h3><?php endif;?>
     <div class="fieldset" id="fieldset-description">
