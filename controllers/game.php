@@ -192,7 +192,7 @@ class Game extends \Controllers\GamePage {
                 ->get_by_id($this->_args['game_id']);
             $game->start_date = $game->start_date->format('Y-m-d');
             $game->end_date = $game->end_date->format('Y-m-d');
-            $t->administration = $this->_administration();
+            $t->administration = $this->_administration($game);
         } else {
             $t->title = "Game Creation";
             $t->new = True;
@@ -204,7 +204,10 @@ class Game extends \Controllers\GamePage {
         echo $t->render('main.php');
     }
 
-    protected function _administration() {
-        return "adminz";
+    protected function _administration($game) {
+        $t = $this->_template;
+        $game->get_players();
+        $t->all_players = $game->all_players;
+        return $t->render('game_admin.php');
     }
 }

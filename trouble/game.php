@@ -46,8 +46,8 @@ class Game extends \Core\Mapped {
     
     public function get_current_target(Player $player) {
         $this->_check_players_loaded();
-        return $this->players->contains($player->target, 'id')
-                ->agent;
+        $res = $this->players->filter($player->target, 'id');
+        return $res[0]->agent;
     }
 
     public function get_killed_by(Player $player) {
@@ -63,7 +63,8 @@ class Game extends \Core\Mapped {
 
     public function is_joined($agent_id) {
         $this->_check_players_loaded();
-        return $this->all_players->contains($agent_id, 'agent', 'id');
+        $res = $this->all_players->filter($agent_id, 'agent', 'id');
+        return $res[0];
     }
 
     public function add_agent($agent_id) {
@@ -190,8 +191,10 @@ class Game extends \Core\Mapped {
      * Get a \Trouble\Player from the cycle, by player ID. Alive or dead.
      */
     protected function _get_player_from_cycle($player_id) {
-        return $this->all_players->contains($player_id, 'id');
+        $res = $this->all_players->filter($player_id, 'id');
+        return $res[0];
     }
+
     public function remove_agent($agent_id) {
         $this->_check_players_loaded();
         $this->_storage = \Core\Storage::container()
@@ -214,7 +217,8 @@ class Game extends \Core\Mapped {
         if($player->target < 1) {
             return False;
         }
-        $hunter = $this->players->contains($player->id, 'target');
+        $hunter = $this->players->filter($player->id, 'target');
+        $hunter = $hunter[0];
         $hunter->target = $player->target;
         $player->target = -1;
         $this->_storage->save($hunter);

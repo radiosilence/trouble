@@ -87,7 +87,7 @@ class PlayerContainer extends \Core\MappedContainer {
 	}
 
 	protected function _get_cycle($player) {
-		if($this->_cycle->contains($player['id'], 'id')) {
+		if($this->_cycle->filter($player['id'], 'id')) {
 			return False;
 		} else {
 			$this->_cycle->append($player);
