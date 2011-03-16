@@ -216,6 +216,9 @@ class Put extends \Controllers\StandardPage {
         import('trouble.game');
 
         try {
+            if(!$agent_id) {
+                $agent_id = $this->_auth->user_id();
+            }
             $callback($agent_id);
             if($success) {
                 $this->_return_message("Success",
