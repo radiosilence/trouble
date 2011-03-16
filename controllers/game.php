@@ -135,28 +135,20 @@ class Game extends \Controllers\GamePage {
     }
 
     protected function _user_games($user) {
-        $t = new \Core\Template;
-        try {
-            $params = $this->_standard_query_params($user);
-            $params['order'] = new \Core\Order('end_date', 'asc');
-            $params["filter"] = \Core\Filter::create_complex('games.id in(Select game from players where agent = :currentid)');
-            $t->games = \Trouble\Game::mapper()
-                ->attach_storage(\Core\Storage::container()
-                    ->get_storage('Game'))
-                ->get_list($params);
-            if($user = $this->_auth->user_id()) {
-                $t->title = "Your Games";
-            } else {
-                $t->title = "Games for user.";
-            }
-        } catch(\Core\AuthNotLoggedInError $e) {
-            $t->title = "Games for user.";
-        }
+        $t = $this->_template;
+        $params = $this->_standard_query_params($user);
+        $params['order'] = new \Core\Order('end_date', 'asc');
+        $params["filter"] = \Core\Filter::create_complex('games.id in(Select game from players where agent = :currentid)');
+        $t->games = \Trouble\Game::mapper()
+            ->attach_storage(\Core\Storage::container()
+                ->get_storage('Game'))
+            ->get_list($params);
+        $t->title = "Your Games";
         return $t->render('games_list.php');
     }
 
     protected function _administrated_games() {
-        $t = new \Core\Template;
+        $t = $this->_template;
         $ids = $this->_auth->get_administrated_ids('game');
         $params = $this->_standard_query_params($this->_auth->user_id());
         $params['filter'] = new \Core\Filter('id', $ids, 'in');
@@ -165,7 +157,7 @@ class Game extends \Controllers\GamePage {
             ->attach_storage(\Core\Storage::container()
                 ->get_storage('Game'))
             ->get_list($params);
-            
+
         return $t->render('games_list.php');
         
     }
@@ -176,6 +168,7 @@ class Game extends \Controllers\GamePage {
             $t->joined = $this->_user_games($this->_auth->user_id());
             $t->administrated = $this->_administrated_games();
             $t->content = $t->render('games_list_tab.php');
+            $t->title = "Your Games";
             echo $t->render('main.php');
         } catch(\Core\AuthNotLoggedInError $e) {
             header("Location: /");

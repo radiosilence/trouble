@@ -9,16 +9,32 @@ nav li#create_game {
 body.loggedin nav li#create_game {
     display: block;
 }
-header h1 a {
-    display: block;
+span#bg {
+/*    display: block;
     width: 175px;
     height: 45px;
     background-image: url('/img/header.png');
     text-indent: -9999px;
-    margin-left: -5px;
+    margin-left: -5px;*/
+    font-size: 102pt;
+    font-weight: bold;
+    font-family: MutluOrnamental;
+    color: #181818;
+    text-shadow: 0 0 2em #444444;
+    margin-left: -500px;
+    position: absolute;
+    left: 50%;
+    top: 20px;
+    z-index: -999;
 }
-
-
+body header h1 a {
+    font-size: 48pt;
+    font-family: MutluOrnamental;
+    z-index: 999;
+}
+nav ul li a, h1 {
+    font-size: 14pt;
+}
 table.kills th {
     width: 200px;
     font-weight: bold;
@@ -70,7 +86,7 @@ input#pkn {
 }
 
 #userbox h1 {
-    font-size: 14pt;
+    font-size: 18pt;
 }
 
 #content form input[type=text], #content form textarea {

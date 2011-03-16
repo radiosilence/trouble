@@ -6,7 +6,9 @@
 
     <link rel="stylesheet" href="css_lib/reset.css" type="text/css"/>
     <link rel="stylesheet" href="css_lib/grid.css" type="text/css"/>
-    <link rel="stylesheet" href="css_lib/fileuploader.css" type="text/css">
+    <link rel="stylesheet" href="css_lib/fileuploader.css" type="text/css"/>
+    <link rel="stylesheet" href="css_lib/font/ptsans.css" type="text/css"/>
+    <link rel="stylesheet" href="css_lib/font/mutlu.css" type="text/css"/>
     <link rel="stylesheet" href="css_lib/subverse.css" type="text/css"/>
     <link rel="stylesheet" href="css_lib/jquery-ui/jquery-ui-timepicker.css" type="text/css"/>
     <link rel="stylesheet" href="css_lib/jquery-ui/subverse/subverse-theme.css" type="text/css"/>
@@ -25,6 +27,7 @@
   <body class="<?=($user ? 'loggedin' : null)?>">
   <div class="container_12">
     <header class="grid_12">
+    <span id="bg">Trouble</span>
       <h1><a href="http://<?=HOST?><?=BASE_HREF?>/">Trouble</a></h1>
     </header>
     <nav class="grid_12">
