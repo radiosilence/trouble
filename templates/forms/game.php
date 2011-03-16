@@ -14,6 +14,7 @@
     <div class="fieldset" id="administration">
         <h1>Administration</h1>
         <p>Here is where you can kick players, view the current order, and see the status of your game.</p>
+        <?=$administration?>
     </div>
     <?php endif; ?>
     <?php if($new):?><h3><a href="#">Basic Information</a></h3><?php endif;?>

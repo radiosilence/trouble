@@ -41,9 +41,8 @@ create table games
     location text,
     victor integer,
     description text,
-    state integer,
     invite_only integer,
-    entry_fee integer
+    entry_fee varchar
 );
 
 
