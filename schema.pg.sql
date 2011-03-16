@@ -46,6 +46,13 @@ create table games
     password varchar
 );
 
+create table admins
+(
+    id serial primary key,
+    agent integer references agents(id),
+    entity integer,
+    type varchar
+);
 
 create table credits
 (

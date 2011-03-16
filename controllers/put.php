@@ -58,16 +58,19 @@ class Put extends \Controllers\StandardPage {
         $validator = \Core\Validator::validator('\Trouble\Agent');
         $editing = $_POST['id'] > 0 ? True : False;
         
-        if($editing) {
-            $agent = \Trouble\Agent::container()
-                ->get_by_id($_POST['id']);
-            $validator->set_id($agent->id);
-            $_POST['alias'] = $agent->alias;
-            $agent->overwrite($_POST, True);
-        } else {
-            $agent = \Trouble\Agent::create($_POST, True);
-        }
         try {
+            if($editing) {
+                if($_POST['id'] != $this->_auth->user_id()) {
+                    $this->_auth->check_admin('agent', $_POST['id']);
+                }
+                $agent = \Trouble\Agent::container()
+                    ->get_by_id($_POST['id']);
+                $validator->set_id($agent->id);
+                $_POST['alias'] = $agent->alias;
+                $agent->overwrite($_POST, True);
+            } else {
+                $agent = \Trouble\Agent::create($_POST, True);
+            }
             $validator->validate($_POST, \Trouble\Agent::validation());
             try {
                 \Core\Auth::hash($agent, 'password');
@@ -91,25 +94,33 @@ class Put extends \Controllers\StandardPage {
             $this->_return_message("Fail",
                 "Validation error(s):",
                 $e->get_errors());
-        }
+        } catch(\Core\AuthNotLoggedInError $e) {
+            $this->_not_logged_in();
+        } catch(\Core\AuthDeniedError $e) {
+            $this->_access_denied();
+        } 
     }
+
 
     public function save_game() {
         import('core.validation');
         import('trouble.game');
+
         $validator = \Core\Validator::validator('\Trouble\Gane');
         $editing = $_POST['id'] > 0 ? True : False;
-        if($editing) {
-            $game = \Trouble\Game::container()
-                ->get_by_id($_POST['id']);
-            $validator->set_id($game->id);
-            $game->overwrite($_POST, True);
-        } else {
-            $game = \Trouble\Game::mapper()
-                ->create_object($_POST);
-            $game->creator = $this->_auth->user_id();
-        }
+            
         try {
+            if($editing) {
+                $this->_auth->check_admin('game', $_POST['id']);
+                $game = \Trouble\Game::container()
+                    ->get_by_id($_POST['id']);
+                $validator->set_id($game->id);
+                $game->overwrite($_POST, True);
+            } else {
+                $game = \Trouble\Game::mapper()
+                    ->create_object($_POST);
+                $game->creator = $this->_auth->user_id();
+            }
             try {
                 \Core\Auth::hash($game, 'password');
             } catch(\Core\AuthEmptyPasswordError $e) {
@@ -130,7 +141,11 @@ class Put extends \Controllers\StandardPage {
             $this->_return_message("Fail",
                 "Validation error(s):",
                 $e->get_errors());
-        }
+        } catch(\Core\AuthNotLoggedInError $e) {
+            $this->_not_logged_in();
+        } catch(\Core\AuthDeniedError $e) {
+            $this->_access_denied();
+        } 
     }
 
     public function logout() {
@@ -139,18 +154,18 @@ class Put extends \Controllers\StandardPage {
     }
 
     public function join_game() {
-        $this->_game_action(function($uid) {
+        $this->_game_action(function($agent_id) {
             $game = \Trouble\Game::container()
                 ->get_by_id($_POST['id'])
-                ->add_agent($uid);        
+                ->add_agent($agent_id);        
         }, 'Joined game.');
     }
 
     public function leave_game() {
-        $this->_game_action(function($uid) {
+        $this->_game_action(function($agent_id) {
             $game = \Trouble\Game::container()
                 ->get_by_id($_POST['id'])
-                ->remove_agent($uid);
+                ->remove_agent($agent_id);
         }, 'Left game.');
     }
 
@@ -161,7 +176,7 @@ class Put extends \Controllers\StandardPage {
             $validator = \Core\Validator::validator('\Trouble\Kill');
             $validator->validate($_POST, \Trouble\Kill::validation());
 
-            $this->_game_action(function($uid) {
+            $this->_game_action(function($agent_id) {
                 $now = new \DateTime();
                 if(empty($_POST['when_happened_date'])) {
                     $date = $now->format('Y-m-d');
@@ -176,7 +191,7 @@ class Put extends \Controllers\StandardPage {
                 $_POST['when_happened'] = new \DateTime($date . $time);
                 $game = \Trouble\Game::container()
                     ->get_by_id($_POST['game_id'])
-                    ->kill_agent_target($uid, $_POST);
+                    ->kill_agent_target($agent_id, $_POST);
             }, 'Kill registered.');
         } catch(\Trouble\GameIncorrectPKNError $e) {
             $this->_return_message("Error",
@@ -197,12 +212,11 @@ class Put extends \Controllers\StandardPage {
         }
     }
 
-    protected function _game_action($callback, $success=False) {
+    protected function _game_action($callback, $success=False, $agent_id=False) {
         import('trouble.game');
 
         try {
-            $uid = $this->_auth->user_id();
-            $callback($uid);
+            $callback($agent_id);
             if($success) {
                 $this->_return_message("Success",
                     $success);
@@ -211,8 +225,9 @@ class Put extends \Controllers\StandardPage {
                     "Success.");
             }
         } catch(\Core\AuthNotLoggedInError $e) {
-            $this->_return_message("Error",
-                "Not logged in.");
+            $this->_not_logged_in();
+        } catch(\Core\AuthDeniedError $e) {
+            $this->_access_denied();
         } catch(\Trouble\GameAgentNotInGameError $e) {
             $this->_return_message("Error",
                 "You are not in this game.");
@@ -232,6 +247,16 @@ class Put extends \Controllers\StandardPage {
             $this->_return_message("Error",
                 "Game has already ended.");
         }
+    }
+
+    protected function _access_denied() {
+        $this->_return_message("Error",
+                "You are not authorised to do this.");
+    }
+
+    protected function _not_logged_in() {
+        $this->_return_message("Error",
+                "Not logged in.");
     }
 
     protected function _return_message($status, $message, $errors=array()) {

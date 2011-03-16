@@ -36,23 +36,31 @@ class Agent extends \Controllers\AgentPage {
         $mapper = \Trouble\Agent::mapper()
             ->attach_storage($storage);
         $t->errors = array();
-        if($this->_args['alias']) {
-            $t->title = "Edit Agent";
-            $agent = \Trouble\Agent::container()
+        try {
+            if($this->_args['alias']) {
+                $t->title = "Edit Agent";
+                $agent = \Trouble\Agent::container()
                 ->get_by_alias($this->_args['alias']);
-        } else if($this->_session['auth']) {
-            $t->title = "Edit Yourself";
-            $agent = \Trouble\Agent::container()
-                ->get_by_id($this->_auth->user_id());
-        } else {
-            $t->title = "Agent Application";
-            $t->new = True;
-            $agent = \Trouble\Agent::create();
+                $this->_auth->check_admin('agent', $agent->id);
+            } else {
+                try{
+                    $t->title = "Edit Yourself";
+                    $agent = \Trouble\Agent::container()
+                        ->get_by_id($this->_auth->user_id());                
+                } catch(\Core\AuthNotLoggedInError $e) {
+                    $t->title = "Agent Application";
+                    $t->new = True;
+                    $agent = \Trouble\Agent::create();
+                }
+            }
+            $t->agent = $agent;
+            $t->content = $t->render('forms/agent.php');
+            echo $t->render('main.php');
+        } catch(\Core\AuthDeniedError $e) {
+            throw new \Core\HTTPError(401, "Editing Agent");
+        } catch(\Core\AuthNotLoggedInError $e) {
+            throw new \Core\HTTPError(401, "Editing Agent");
         }
-
-        $t->agent = $agent;
-        $t->content = $t->render('forms/agent.php');
-        echo $t->render('main.php');
     }
 /*
     public function async_validate() {
