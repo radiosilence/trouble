@@ -1,9 +1,9 @@
 <form id="game_form" method="POST">
-  <div class="<?=($new ? 'accordion' : 'tabs')?>">
+  <div <?=($new ? 'class="accordion"' : 'id="tabs_game_admin"')?>>
     <?php if(!$new): ?>
       <input type="hidden" name="id" value="<?=$game->id?>"/>
     <ul>
-      <li><a href="#administration">Administration</a></li>
+      <li><a href="#cpanel">Control Panel</a></li>
       <li><a href="#fieldset-info">Basic Information</a></li>
       <li><a href="#fieldset-dates">Dates</a></li>
       <li><a href="#fieldset-options">Options</a></li>
@@ -11,8 +11,8 @@
     </ul>
     <?php endif;?>
     <?php if(!$new): ?>
-    <div class="fieldset" id="administration">
-        <h1>Administration</h1>
+    <div class="fieldset" id="cpanel">
+        <h1>Control Panel</h1>
         <p>Here is where you can kick players, view the current order, and see the status of your game.</p>
         <?=$administration?>
     </div>

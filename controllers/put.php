@@ -131,6 +131,10 @@ class Put extends \Controllers\StandardPage {
                 ->get_storage('Game')
                 ->save($game);
             
+            if(!$editing) {
+                $this->_auth->add_admin('game', $game->id, $game->creator);
+            }
+
             if($editing) {
                 $this->_return_message("Success", "Saved.");            
             } else {

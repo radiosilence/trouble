@@ -39,8 +39,10 @@ $(function() {
         return false;
     });
     
-    $("div.tabs").tabs({
-        cookie: {}
+    $("div#tabs_game_admin").tabs({
+        cookie: {
+            name: 'tabs_game_admin'
+        }
     });
     $("div.accordion").accordion({
         autoHeight: false,

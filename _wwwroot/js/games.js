@@ -1,6 +1,13 @@
 $(function() {
-    $("div.tabs").tabs({
-      cookie: {}
+    $("div#tabs_game").tabs({
+      cookie: {
+          name: 'tabs_games'
+      }
+    });
+    $("div#games_list_tabs").tabs({
+      cookie: {
+          name: 'tabs_games'
+      }
     });
 });
 $(function(){

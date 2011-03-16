@@ -2,6 +2,13 @@ body.loggedin nav li#sign_up {
     display: none;
 }
 
+nav li#create_game {
+    display: none;
+}
+
+body.loggedin nav li#create_game {
+    display: block;
+}
 header h1 a {
     display: block;
     width: 175px;
@@ -66,12 +73,12 @@ input#pkn {
     font-size: 14pt;
 }
 
-form#agent_form input[type=text], form#agent_form textarea {
+#content form input[type=text], #content form textarea {
     width: 620px;
 }
 
 
-form#agent textarea {
+#content form textarea {
     height: 8em;
 }
 

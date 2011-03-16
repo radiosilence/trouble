@@ -27,6 +27,11 @@ class Game extends \Controllers\GamePage {
         $g = $this->_game;
         $t->game = $g;
         try {
+            try {
+                $this->_auth->check_admin('game', $g->id);
+                $t->administration = $this->edit(True);
+                $t->is_admin = True;
+            } catch(\Core\AuthDeniedError $e) {} 
             if(!$g->is_joined($this->_auth->user_id())){
                 throw new UserNotJoinedError();
             }
@@ -129,8 +134,8 @@ class Game extends \Controllers\GamePage {
             ->get_players();
     }
 
-    public function user_games($user) {
-        $t = $this->_template;
+    protected function _user_games($user) {
+        $t = new \Core\Template;
         try {
             $params = $this->_standard_query_params($user);
             $params['order'] = new \Core\Order('end_date', 'asc');
@@ -147,14 +152,31 @@ class Game extends \Controllers\GamePage {
         } catch(\Core\AuthNotLoggedInError $e) {
             $t->title = "Games for user.";
         }
-    
-        $t->content = $t->render('games_list.php');
-        echo $t->render('main.php');
+        return $t->render('games_list.php');
+    }
+
+    protected function _administrated_games() {
+        $t = new \Core\Template;
+        $ids = $this->_auth->get_administrated_ids('game');
+        $params = $this->_standard_query_params($this->_auth->user_id());
+        $params['filter'] = new \Core\Filter('id', $ids, 'in');
+        $params['order'] = new \Core\Order('start_date', 'desc');
+        $t->games = \Trouble\Game::mapper()
+            ->attach_storage(\Core\Storage::container()
+                ->get_storage('Game'))
+            ->get_list($params);
+            
+        return $t->render('games_list.php');
+        
     }
 
     public function your_games() {
+        $t = $this->_template;
         try {
-            $this->user_games($this->_auth->user_id());
+            $t->joined = $this->_user_games($this->_auth->user_id());
+            $t->administrated = $this->_administrated_games();
+            $t->content = $t->render('games_list_tab.php');
+            echo $t->render('main.php');
         } catch(\Core\AuthNotLoggedInError $e) {
             header("Location: /");
         }
@@ -177,7 +199,7 @@ class Game extends \Controllers\GamePage {
         echo $t->render('main.php');
     }
 
-    public function edit() {
+    public function edit($subform=False) {
         $t = $this->_template;
         $t->add('_jsapps', 'game_form');
 
@@ -202,8 +224,15 @@ class Game extends \Controllers\GamePage {
             }
 
             $t->game = $game;
-            $t->content = $t->render('forms/game.php');
-            echo $t->render('main.php');
+
+            $render = $t->render('forms/game.php');
+
+            if($subform) {
+                return $render;    
+            } else {
+                $t->content = $render;
+                echo $t->render('main.php');    
+            }            
         } catch(\Core\AuthDeniedError $e) {
             throw new \Core\HTTPError(401, "Editing Game");
         } catch(\Core\AuthNotLoggedInError $e) {

@@ -20,7 +20,7 @@ $(function() {
 });
 $(function(){   
     var uploader = new qq.FileUploader({
-        element: document.getElementById('imagefile-uploader'),
+        element: $('#imagefile-uploader')[0],
         action: 'put/save_agent_image',
         onComplete: function(id, fileName, responseJSON){
           var fn = responseJSON['filename']+'.'+responseJSON['ext'];

@@ -34,6 +34,7 @@
       <li><a href="highscores">Highscores</a></li>
       <li><a href="forums">Forums</a></li>
       <li id="sign_up"><a href="sign-up">Sign Up</a></li>
+      <li id="create_game"><a href="create-game">Create Game</a></li>
      </ul>
     </nav>
     <section id="content" class="grid_9">

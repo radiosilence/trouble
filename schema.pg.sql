@@ -62,28 +62,15 @@ create table credits
     balance integer
 );
 
-create table stats
-(
-    id serial primary key,
-    name varchar
-);
-
 create table players
 (
     id serial primary key,
     agent integer references agents(id),
     target integer,
-    game integer references games(id),
+    game integer references games(id) on delete cascade,
     status integer,
     pkn varchar(4),
     credits integer
-);
-
-create table agents_stats
-(
-    id serial primary key,
-    stat integer references stats(id),
-    value integer
 );
 
 create table weapons
@@ -98,12 +85,12 @@ create table weapons
 create table kills
 (
     id serial primary key,
-    weapon integer references weapons(id),
+    weapon integer references weapons(id) on delete restrict,
     description text,
     assassin integer references agents(id),
     target integer references agents(id),
     when_happened timestamp with time zone,
-    game integer
+    game integer references games(id)  on delete cascade
 );
 
 CREATE TABLE sessions
@@ -145,8 +132,8 @@ create table articles
 
 create table stats (
       id serial primary key,
-      game integer references games(id),
-      agent integer references agents(id),
+      game integer references games(id) on delete restrict,
+      agent integer references agents(id) on delete cascade,
       type varchar,
       value integer
 );
