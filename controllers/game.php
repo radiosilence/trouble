@@ -26,24 +26,39 @@ class Game extends \Controllers\GamePage {
         $t = $this->_template;
         $g = $this->_game;
         $t->game = $g;
+        $tabs = array();
         try {
             try {
                 $this->_auth->check_admin('game', $g->id);
-                $t->administration = $this->edit(True);
+                $tabs['administration'] = array(
+                    'title' => 'Administration',
+                    'content' => $this->_edit()
+                );
                 $t->is_admin = True;
             } catch(\Core\AuthDeniedError $e) {} 
             if(!$g->is_joined($this->_auth->user_id())){
                 throw new UserNotJoinedError();
             }
-            $t->dashboard = $this->_game_dashboard();
+            $tabs['dashboard'] = array(
+                'title' => 'Dashboard',
+                'content' => $this->_game_dashboard()
+            );
         } catch(\Core\AuthNotLoggedInError $e) {
-            $t->information = $this->_game_info();
         } catch(UserNotJoinedError $e) {
-            $t->information = $this->_game_info();
+            $tabs['information'] = array(
+                'title' => 'Information',
+                'content' => $this->_game_info()
+            );
         }
-        $t->killboard = $this->_game_killboard();
+
+        $tabs['killboard'] = array(
+            'title' => 'Killboard',
+            'content' => $this->_game_killboard()
+        );
         $t->title = $g->name;
-        $t->content = $t->render('game.php');
+        $t->tabs = $tabs;
+        $t->tab_order = array('dashboard', 'information', 'killboard', 'administration');
+        $t->content = $t->render('tabs.php');
         echo $t->render('main.php');
     }
 
@@ -51,7 +66,6 @@ class Game extends \Controllers\GamePage {
         $uid = $this->_auth->user_id();
         $t = $this->_template;
         $g = $this->_game;
-        $t->title = $g->name . ': Dashboard';
         $p = \Trouble\Player::container()
             ->get_by_agent_game($g->id, $uid);
         $t->player = $p;
@@ -192,7 +206,7 @@ class Game extends \Controllers\GamePage {
         echo $t->render('main.php');
     }
 
-    public function edit($subform=False) {
+    protected function _edit() {
         $t = $this->_template;
         $t->add('_jsapps', 'game_form');
 
@@ -204,8 +218,7 @@ class Game extends \Controllers\GamePage {
         try {
             if($this->_args['game_id']) {
                 $t->title = "Edit Game";
-                $game = \Trouble\Game::container()
-                    ->get_by_id($this->_args['game_id']);
+                $game = $this->_game;
                 $this->_auth->check_admin('game', $game->id);
                 $game->start_date = $game->start_date->format('Y-m-d');
                 $game->end_date = $game->end_date->format('Y-m-d');
@@ -220,12 +233,7 @@ class Game extends \Controllers\GamePage {
 
             $render = $t->render('forms/game.php');
 
-            if($subform) {
-                return $render;    
-            } else {
-                $t->content = $render;
-                echo $t->render('main.php');    
-            }            
+            return $render;    
         } catch(\Core\AuthDeniedError $e) {
             throw new \Core\HTTPError(401, "Editing Game");
         } catch(\Core\AuthNotLoggedInError $e) {

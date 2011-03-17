@@ -10,11 +10,7 @@
     <h2><?=$game->location?></h2>
     <p><?php if($game->num_players > 0):?> <em>(<?=$game->num_players?> players)</em><?php endif;?> <?=($game->joined ? 'You have joined this game.' : null) ?></p>
     <p><?=$game->description?></p>
-    <ul>
-    <?php if($game->joined): ?><li><a href="game/<?=$game->id?>#dashboard">Dashboard</a></li><?php endif;?>
-    <li><a href="game/<?=$game->id?>#killboard">Killboard</a></li>
 
-    </ul>
   </article>
 <?php endforeach; ?>
 <?php else: ?>

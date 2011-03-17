@@ -24,11 +24,8 @@ class Kill extends \Core\Mapped {
        return array(
             'description' => 'default',
             'weapon' => array(
-                array(
-                    'type' => 'foreign',
-                    'class' => '\Trouble\Weapon'
-                ),
-                'default'
+                'type' => 'foreign',
+                'class' => '\Trouble\Weapon'
             )
         );
     }

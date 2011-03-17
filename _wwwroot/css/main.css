@@ -16,11 +16,11 @@ span#bg {
     background-image: url('/img/header.png');
     text-indent: -9999px;
     margin-left: -5px;*/
-    font-size: 102pt;
+    font-size: 250pt;
     font-weight: bold;
     font-family: MutluOrnamental;
-    color: #181818;
-    text-shadow: 0 0 2em #444444;
+    color: #101010;
+    text-shadow: 0 0 2em #181818;
     margin-left: -500px;
     position: absolute;
     left: 50%;

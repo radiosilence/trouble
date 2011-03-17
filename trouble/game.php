@@ -21,6 +21,8 @@ import('trouble.player');
 class Game extends \Core\Mapped {
     public $kills;
     public $players;
+    public $all_players;
+
     protected $_fields = array("name", "start_date", "end_date", "location",
         "victor", "location", "description", "invite_only",
         "entry_fee", "creator", 'password');
@@ -30,11 +32,13 @@ class Game extends \Core\Mapped {
         return $this;
     }
 
-    public function get_players() {
-        $p = Player::container()
-            ->find_by_game($this);
-        $this->players = $p[0];
-        $this->all_players = $p[1];
+    public function get_players($force=False) {
+        if(!$this->players || $force) {
+            $p = Player::container()
+                ->find_by_game($this);
+            $this->players = $p[0];
+            $this->all_players = $p[1];            
+        }
         return $this;
     }
 
@@ -64,7 +68,11 @@ class Game extends \Core\Mapped {
     public function is_joined($agent_id) {
         $this->_check_players_loaded();
         $res = $this->all_players->filter($agent_id, 'agent', 'id');
-        return $res[0];
+        if($res) {
+            return True;
+        } else {
+            return False;
+        }
     }
 
     public function add_agent($agent_id) {

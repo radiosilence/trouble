@@ -45,6 +45,8 @@ class Put extends \Controllers\StandardPage {
         } catch(\Core\IncorrectPasswordError $e) {
             $this->_return_message("Fail",
                 "Invalid password.");
+        } catch(\Exception $e) {
+            $this->_unhandled_exception();
         }
     }
 
@@ -98,7 +100,9 @@ class Put extends \Controllers\StandardPage {
             $this->_not_logged_in();
         } catch(\Core\AuthDeniedError $e) {
             $this->_access_denied();
-        } 
+        } catch(\Exception $e) {
+            $this->_unhandled_exception();
+        }
     }
 
 
@@ -149,7 +153,9 @@ class Put extends \Controllers\StandardPage {
             $this->_not_logged_in();
         } catch(\Core\AuthDeniedError $e) {
             $this->_access_denied();
-        } 
+        } catch(\Exception $e) {
+            $this->_unhandled_exception();
+        }
     }
 
     public function logout() {
@@ -158,19 +164,27 @@ class Put extends \Controllers\StandardPage {
     }
 
     public function join_game() {
-        $this->_game_action(function($agent_id) {
+        try {
+            $this->_game_action(function($agent_id) {
             $game = \Trouble\Game::container()
                 ->get_by_id($_POST['id'])
                 ->add_agent($agent_id);        
-        }, 'Joined game.');
+            }, 'Joined game.');
+        } catch(\Exception $e) {
+            $this->_unhandled_exception();
+        }
     }
 
     public function leave_game() {
-        $this->_game_action(function($agent_id) {
-            $game = \Trouble\Game::container()
-                ->get_by_id($_POST['id'])
-                ->remove_agent($agent_id);
-        }, 'Left game.');
+        try {
+            $this->_game_action(function($agent_id) {
+                $game = \Trouble\Game::container()
+                    ->get_by_id($_POST['id'])
+                    ->remove_agent($agent_id);
+            }, 'Left game.');
+        } catch(\Exception $e) {
+            $this->_unhandled_exception();
+        }
     }
 
     public function register_kill() {
@@ -179,7 +193,6 @@ class Put extends \Controllers\StandardPage {
         try {
             $validator = \Core\Validator::validator('\Trouble\Kill');
             $validator->validate($_POST, \Trouble\Kill::validation());
-
             $this->_game_action(function($agent_id) {
                 $now = new \DateTime();
                 if(empty($_POST['when_happened_date'])) {
@@ -213,6 +226,8 @@ class Put extends \Controllers\StandardPage {
             $this->_return_message("Error",
                 "Validation error(s):",
                 $e->get_errors());
+        } catch(\Exception $e) {
+            $this->_unhandled_exception();
         }
     }
 
@@ -254,6 +269,11 @@ class Put extends \Controllers\StandardPage {
             $this->_return_message("Error",
                 "Game has already ended.");
         }
+    }
+
+    protected function _unhandled_exception() {
+        $this->_return_message("Error",
+            "Unhandled exception.");
     }
 
     protected function _access_denied() {

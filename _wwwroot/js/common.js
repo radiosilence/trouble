@@ -53,6 +53,9 @@ function dialogConfirm(title, text, callback, callbackData) {
 }
 
 $(function(){
+    $('div.tabs').tabs({
+        cookie: {}
+    });
 });
 
 $(function(){

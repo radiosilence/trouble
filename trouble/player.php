@@ -54,7 +54,7 @@ class PlayerContainer extends \Core\MappedContainer {
 	            ),
 	            "filters" => array(
 		            new \Core\Filter("game", $game['id']),
-		            new \Core\Filter("status", 0, ">=")
+		            new \Core\Filter("status", "-1", ">")
 		        ),
 	            "order" => new \Core\Order("id")
         	));
@@ -72,11 +72,9 @@ class PlayerContainer extends \Core\MappedContainer {
         for($i = 0; $i < count($this->_alive_players); $i++) {
         	$this->_index[$this->_alive_players[$i]['id']] = $i;
         }
-
  		$this->_cycle = \Core\Li::create();
  		if(count($this->_alive_players) > 0) {
             $this->_get_cycle($this->_alive_players[0]);
-     		//$this->_populate_cycle();
         }
        	return array($this->_cycle, $this->_players);
 	}
@@ -86,7 +84,7 @@ class PlayerContainer extends \Core\MappedContainer {
 		}	
 	}
 
-	protected function _get_cycle($player) {
+	protected function _get_cycle(Player $player) {
 		if($this->_cycle->filter($player['id'], 'id')) {
 			return False;
 		} else {

@@ -55,14 +55,13 @@ $(function(){
             "Register Kill": function() {
                 d = {
                     'game_id': $('#register_kill').attr('game_id'),
-                    'pkn': $('#pkn').val(),
-                    'when_happened_time': $('#when_happened_time').val(),
-                    'when_happened_date': $('#when_happened_date').val(),
-                    'weapon': $('#weapon').val(),
-                    'description': $('#description').val()
+                    'pkn': $('input#pkn').val(),
+                    'when_happened_time': $('input#when_happened_time').val(),
+                    'when_happened_date': $('input#when_happened_date').val(),
+                    'weapon': $('select#weapon').val(),
+                    'description': $('textarea#description').val()
                 };
-                console.log(d);
-                    dialogResponse('/put/register_kill', d, function(){
+                dialogResponse('/put/register_kill', d, function(){
                         location.reload();
                 });
             },

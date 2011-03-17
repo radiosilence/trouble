@@ -9,7 +9,7 @@
 	<article>
 	<p>You are your own target. This means either that you have won (yay!) or you are currently the only player in the game.</p>
 	</article>
-<?php else: ?>
+<?php elseif($player->status == 1): ?>
 	<article>
 	<h1>Player Kill Number</h1>
 	<p>You <strong>must</strong> give this number to someone you believe has fairly killed you, as it is needed to register a kill. Failure to tell a killer your PKN is considered cheating. Your PKN is unique to the game you are in.</p>
@@ -21,6 +21,10 @@
 	<p><a class="target" href="agent/<?=$target["alias"]?>"><?=$target["alias"]?></a>&nbsp;&nbsp;<button id="register_kill" game_id="<?=$game->id?>">Register Kill</button></p>
 	</article>
 	<?php endif;?>
+<?php else: ?>
+	<article>
+	<p>You have left this game and are no longer in the cycle.</p>
+	</article>
 <?php endif;?>
 <article>
 <h1>Balance</h1>
