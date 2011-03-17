@@ -8,3 +8,5 @@ _wwwroot/core_path.php
 _wwwroot/img/agent/*
 .project
 _wwwroot/xhprof*
+*.css
+*.sass-cache*

@@ -37,7 +37,6 @@ Credits: <?=$player->credits?>&nbsp;&nbsp;<button>Buy Credits</button>
 </article>
 <div id="dialog-form" title="Register Kill">
 	<form>
-	<fieldset>
 		<p><label for="pkn">Target PKN</label><br/>
 			<input type="text" name="pkn" id="pkn" placeholder="xxxx"/></p>
 		<p><label for="weapon">Weapon</label><br/>
@@ -49,5 +48,4 @@ Credits: <?=$player->credits?>&nbsp;&nbsp;<button>Buy Credits</button>
 		<p><label for="description">Tell the Story...</label><br/>
 		<textarea name="description" id="description" placeholder="Ex. I spotted my target and shot her in the face"></textarea></p>
 	</form>
-	</fieldset>
 </div>
