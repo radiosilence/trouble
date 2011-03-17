@@ -10,12 +10,6 @@ body.loggedin nav li#create_game {
     display: block;
 }
 span#bg {
-/*    display: block;
-    width: 175px;
-    height: 45px;
-    background-image: url('/img/header.png');
-    text-indent: -9999px;
-    margin-left: -5px;*/
     font-size: 250pt;
     font-weight: bold;
     font-family: MutluOrnamental;
@@ -31,6 +25,9 @@ body header h1 a {
     font-size: 48pt;
     font-family: MutluOrnamental;
     z-index: 999;
+}
+body header {
+    margin-bottom: 0px;
 }
 nav ul li a, h1 {
     font-size: 14pt;

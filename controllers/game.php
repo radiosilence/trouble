@@ -36,6 +36,7 @@ class Game extends \Controllers\GamePage {
                 );
                 $t->is_admin = True;
             } catch(\Core\AuthDeniedError $e) {} 
+
             if(!$g->is_joined($this->_auth->user_id())){
                 throw new UserNotJoinedError();
             }
@@ -43,6 +44,7 @@ class Game extends \Controllers\GamePage {
                 'title' => 'Dashboard',
                 'content' => $this->_game_dashboard()
             );
+
         } catch(\Core\AuthNotLoggedInError $e) {
         } catch(UserNotJoinedError $e) {
             $tabs['information'] = array(
@@ -82,8 +84,6 @@ class Game extends \Controllers\GamePage {
 
     protected function _game_info() {
         $t = $this->_template;
-        $g = $this->_game;
-        $t->title = $g->name;
         return $t->render('game_info.php');
     }
 
@@ -98,7 +98,6 @@ class Game extends \Controllers\GamePage {
             throw new \Core\Error("No game.");
         }
         $g->attach_mapper('Kill', $kill_mapper);
-        $t->game = $g;
         $t->killboard = \Trouble\Killboard::container()
                 ->get_game_killboard($g)
                 ->load_data();
@@ -110,27 +109,18 @@ class Game extends \Controllers\GamePage {
         
     }
 
-    protected function _standard_query_params($user) {
-        $params = array(
-            'binds' => array(
-                    ':currentid' => $user
-            ),
-            'fields' => array(
-                    '(SELECT COUNT(id) FROM players WHERE players.game = games.id) as num_players',
-                    'games.id in(SELECT game FROM players WHERE agent = :currentid AND players.status >= 0) as joined'
-            )
-        );
-        return $params;
-    }
-
     public function ending_soon() {
         $t = $this->_template;
         $now = new \DateTime();
+
         try {
-            $params = $this->_standard_query_params($this->_auth->user_id());
-            $params['filter'] = new \Core\Filter('end_date', $now->format('Y-m-d'), '>');
-            $params['order'] = new \Core\Order('end_date', 'asc');
-        } catch(\Core\AuthNotLoggedInError $e) {}
+            $params = \Trouble\GameContainer::params($this->_auth->user_id());
+        } catch(\Core\AuthNotLoggedInError $e) {
+            $params = \Trouble\GameContainer::params();
+        }
+        $params['filters'][] = new \Core\Filter('end_date', $now->format('Y-m-d'), '>');
+        $params['order'] = new \Core\Order('end_date', 'asc');
+        
         $t->games = \Trouble\Game::mapper()
             ->attach_storage(\Core\Storage::container()
                 ->get_storage('Game'))
@@ -150,9 +140,9 @@ class Game extends \Controllers\GamePage {
 
     protected function _user_games($user) {
         $t = $this->_template;
-        $params = $this->_standard_query_params($user);
+        $params = \Trouble\GameContainer::params($user);
         $params['order'] = new \Core\Order('end_date', 'asc');
-        $params["filter"] = \Core\Filter::create_complex('games.id in(Select game from players where agent = :currentid)');
+        $params["filters"][] = \Core\Filter::create_complex('games.id in(Select game from players where agent = :currentid)');
         $t->games = \Trouble\Game::mapper()
             ->attach_storage(\Core\Storage::container()
                 ->get_storage('Game'))
@@ -164,8 +154,8 @@ class Game extends \Controllers\GamePage {
     protected function _administrated_games() {
         $t = $this->_template;
         $ids = $this->_auth->get_administrated_ids('game');
-        $params = $this->_standard_query_params($this->_auth->user_id());
-        $params['filter'] = new \Core\Filter('id', $ids, 'in');
+        $params = \Trouble\GameContainer::params($this->_auth->user_id());
+        $params['filters'][] = new \Core\Filter('id', $ids, 'in');
         $params['order'] = new \Core\Order('start_date', 'desc');
         $t->games = \Trouble\Game::mapper()
             ->attach_storage(\Core\Storage::container()
@@ -178,11 +168,19 @@ class Game extends \Controllers\GamePage {
 
     public function your_games() {
         $t = $this->_template;
+        $tabs = array();
         try {
-            $t->joined = $this->_user_games($this->_auth->user_id());
-            $t->administrated = $this->_administrated_games();
-            $t->content = $t->render('games_list_tab.php');
+            $tabs['joined'] = array(
+                'title' => 'Joined',
+                'content' => $this->_user_games($this->_auth->user_id())
+            );
+            $tabs['administrated'] = array(
+                'title' => 'Administrated',
+                'content' => $this->_administrated_games()
+            );
             $t->title = "Your Games";
+            $t->tabs = $tabs;
+            $t->content = $t->render('tabs.php');
             echo $t->render('main.php');
         } catch(\Core\AuthNotLoggedInError $e) {
             header("Location: /");
@@ -206,6 +204,12 @@ class Game extends \Controllers\GamePage {
         echo $t->render('main.php');
     }
 
+    public function edit() {
+        $t = $this->_template;
+        $t->content = $this->_edit();
+        echo $t->render('main.php');   
+    }
+
     protected function _edit() {
         $t = $this->_template;
         $t->add('_jsapps', 'game_form');
@@ -214,14 +218,13 @@ class Game extends \Controllers\GamePage {
             ->get_storage('Game');
         $mapper = \Trouble\Game::mapper()
             ->attach_storage($storage);
-        $t->errors = array();
         try {
             if($this->_args['game_id']) {
                 $t->title = "Edit Game";
                 $game = $this->_game;
                 $this->_auth->check_admin('game', $game->id);
-                $game->start_date = $game->start_date->format('Y-m-d');
-                $game->end_date = $game->end_date->format('Y-m-d');
+                $game->form_start_date = $game->start_date->format('Y-m-d');
+                $game->form_end_date = $game->end_date->format('Y-m-d');
                 $t->administration = $this->_administration($game);
             } else {
                 $t->title = "Game Creation";
@@ -231,9 +234,7 @@ class Game extends \Controllers\GamePage {
 
             $t->game = $game;
 
-            $render = $t->render('forms/game.php');
-
-            return $render;    
+            return $t->render('forms/game.php');
         } catch(\Core\AuthDeniedError $e) {
             throw new \Core\HTTPError(401, "Editing Game");
         } catch(\Core\AuthNotLoggedInError $e) {

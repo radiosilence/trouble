@@ -35,9 +35,9 @@
       <p class="intro">When will the game be starting and ending?</p>
       <?php endif;?>
       <p><label for="start_date">Start Date</label><br/>
-      <input type="text" name="start_date" id="start_date" class="datepick" value="<?=$game->start_date?>"  placeholder="Ex: 2012-02-09"/></p>
+      <input type="text" name="start_date" id="start_date" class="datepick" value="<?=$game->form_start_date?>"  placeholder="Ex: 2012-02-09"/></p>
       <p><label for="end_date">End Date</label><br/>
-      <input type="text" name="end_date" id="end_date" class="datepick" value="<?=$game->end_date?>"  placeholder="Ex: 2012-02-09"/></p>
+      <input type="text" name="end_date" id="end_date" class="datepick" value="<?=$game->form_end_date?>"  placeholder="Ex: 2012-02-09"/></p>
     </div>
     <?php if($new):?><h3><a href="#">Options</a></h3><?php endif;?>
     <div class="fieldset" id="fieldset-options">

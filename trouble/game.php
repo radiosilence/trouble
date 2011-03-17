@@ -301,8 +301,8 @@ class GameMapper extends \Core\Mapper {
         foreach(array('start_date', 'end_date') as $f) {
             $game[$f] = new \DateTime($game[$f]);
         }
-        $game->invite_only = (int)$data['invite_only'];
 
+        $game->invite_only = (int)$data['invite_only'];
         $now = new \DateTime();
 
         if($game->start_date > $now) {
@@ -324,5 +324,37 @@ class GameMapper extends \Core\Mapper {
 }
 
 class GameContainer extends \Core\MappedContainer {
+    public function get_by_id($id, $agent=False) {
+        $params = static::params($agent);
+        $params['filters'][] = new \Core\Filter('id', $id);
+        $games = \Core\Storage::container()
+            ->get_storage('Game')
+            ->fetch($params);
+        if(count($games) == 0) {
+            return False;
+        }
+        return Game::mapper()->create_object($games[0]);
+    }
+
+
+    public static function params($agent=False) {
+        if($agent) {
+            $params = array(
+                'binds' => array(
+                        ':currentid' => $agent
+                ),
+                'fields' => array(
+                        'games.id in(SELECT game FROM players WHERE agent = :currentid AND players.status >= 0) as joined'
+                )
+            );
+            
+        } else {
+            $params = array();
+        }
+        $params['fields'][] = '(SELECT COUNT(id) FROM players WHERE players.game = games.id) as num_players';
+        
+        return $params;
+    }
+
 }
 ?>
