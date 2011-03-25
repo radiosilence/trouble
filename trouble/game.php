@@ -23,7 +23,7 @@ class Game extends \Core\Mapped {
     public $players;
     public $all_players;
 
-    protected $_fields = array("name", "start_date", "end_date", "location",
+    public static $fields = array("name", "start_date", "end_date", "location",
         "victor", "location", "description", "invite_only",
         "entry_fee", "creator", 'password');
 

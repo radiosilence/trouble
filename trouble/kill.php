@@ -17,7 +17,7 @@ import('trouble.weapon');
 import('core.types');
 
 class Kill extends \Core\Mapped {
-    protected $_fields = array('weapon', 'description', 'assassin',
+    public static $fields = array('weapon', 'description', 'assassin',
         'target', 'when_happened', 'game');
 
     public static function validation() {
