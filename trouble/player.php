@@ -19,7 +19,7 @@ import('trouble.agent');
 import('trouble.weapon');
 
 class Player extends \Core\Mapped {
-    protected $_fields = array('agent', 'game', 'target', 'status', 'credits', 'pkn');
+    public static $fields = array('agent', 'game', 'target', 'status', 'credits', 'pkn');
 }
 
 class PlayerMapper extends \Core\Mapper {
