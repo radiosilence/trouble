@@ -24,7 +24,7 @@ class Game extends \Core\Mapped {
     public $all_players;
 
     public static $fields = array("name", "start_date", "end_date", "location",
-        "victor", "location", "description", "invite_only",
+        "victor", "description", "invite_only",
         "entry_fee", "creator", 'password');
 
     public function load_kills($args=False) {

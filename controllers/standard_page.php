@@ -45,7 +45,7 @@ abstract class StandardPage extends \Core\Controller {
 
     protected function _init_auth() {
         $this->_auth = \Core\Auth::container()
-            ->get_auth('Agent', $this->_session, array(
+            ->get_auth('agent', $this->_session, array(
                 'user_field' => 'alias'
             ));
     }
