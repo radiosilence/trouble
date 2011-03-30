@@ -46,7 +46,7 @@ class Put extends \Controllers\StandardPage {
             $this->_return_message("Fail",
                 "Invalid password.");
         } catch(\Exception $e) {
-            $this->_unhandled_exception();
+            $this->_unhandled_exception($e);
         }
     }
 
@@ -101,7 +101,7 @@ class Put extends \Controllers\StandardPage {
         } catch(\Core\AuthDeniedError $e) {
             $this->_access_denied();
         } catch(\Exception $e) {
-            $this->_unhandled_exception();
+            $this->_unhandled_exception($e);
         }
     }
 
@@ -154,7 +154,7 @@ class Put extends \Controllers\StandardPage {
         } catch(\Core\AuthDeniedError $e) {
             $this->_access_denied();
         } catch(\Exception $e) {
-            $this->_unhandled_exception();
+            $this->_unhandled_exception($e);
         }
     }
 
@@ -171,7 +171,7 @@ class Put extends \Controllers\StandardPage {
                 ->add_agent($agent_id);        
             }, 'Joined game.');
         } catch(\Exception $e) {
-            $this->_unhandled_exception();
+            $this->_unhandled_exception($e);
         }
     }
 
@@ -183,7 +183,7 @@ class Put extends \Controllers\StandardPage {
                     ->remove_agent($agent_id);
             }, 'Left game.');
         } catch(\Exception $e) {
-            $this->_unhandled_exception();
+            $this->_unhandled_exception($e);
         }
     }
 
@@ -227,7 +227,7 @@ class Put extends \Controllers\StandardPage {
                 "Validation error(s):",
                 $e->get_errors());
         } catch(\Exception $e) {
-            $this->_unhandled_exception();
+            $this->_unhandled_exception($e);
         }
     }
 
@@ -271,7 +271,8 @@ class Put extends \Controllers\StandardPage {
         }
     }
 
-    protected function _unhandled_exception() {
+    protected function _unhandled_exception($e) {
+        trigger_error($e->getMessage(), E_USER_WARNING);
         $this->_return_message("Error",
             "Unhandled exception.");
     }
