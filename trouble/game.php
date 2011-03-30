@@ -323,6 +323,8 @@ class GameMapper extends \Core\Mapper {
     }
 }
 
+class GameNotFoundError extends \Core\StandardError {}
+
 class GameContainer extends \Core\MappedContainer {
     public function get_by_id($id, $agent=False) {
         $params = static::params($agent);
@@ -331,7 +333,7 @@ class GameContainer extends \Core\MappedContainer {
             ->get_storage('Game')
             ->fetch($params);
         if(count($games) == 0) {
-            return False;
+            throw new GameNotFoundError;
         }
         return Game::mapper()->create_object($games[0]);
     }
