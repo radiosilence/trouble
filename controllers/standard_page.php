@@ -52,9 +52,6 @@ abstract class StandardPage extends \Core\Controller {
     protected function _t_user_box() {
         $t = $this->_template;
         $this->_user = \Trouble\Agent::mapper()
-            ->attach_storage(\Core\Storage::container()
-                ->get_storage('Agent')
-            )
             ->create_object($this->_auth->user_data());
         $t['user'] = $this->_user;
         $t['_user_box'] = $t->render('user_box.php');
