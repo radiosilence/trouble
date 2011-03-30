@@ -75,7 +75,7 @@ abstract class StandardPage extends \Core\Controller {
 
     protected function _init_session() {
         $this->_session = \Core\Session\Handler::container()
-            ->get_mc_session();
+            ->get_hs_session();
     }
 
     protected function _current_user() {
@@ -97,8 +97,16 @@ abstract class GamePage extends StandardPage {
         $this->_template->add('_jsapps', 'games');
     }
     private function _init_game() {
-        $this->_game = \Trouble\Game::container()
-            ->get_by_id($this->_args['game_id']);
+        if(!$this->_args['game_id']) {
+            return False;
+        }
+        try {
+            $this->_game = \Trouble\Game::container()
+                ->get_by_id($this->_args['game_id']);
+        } catch(\Trouble\GameNotFoundError $e) {
+            throw new \Core\HTTPError(404, "Game #{$this->_args[game_id]}");
+        }
+
     }
 }
 
