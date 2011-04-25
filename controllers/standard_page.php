@@ -82,7 +82,8 @@ abstract class StandardPage extends \Core\Controller {
 
 abstract class GamePage extends StandardPage {
     protected $_game;
-    
+    protected $_player;
+
     public function __construct($args) {
         parent::__construct($args);
         import('trouble.game');
@@ -96,10 +97,16 @@ abstract class GamePage extends StandardPage {
         try {
             $this->_game = \Trouble\Game::container()
                 ->get_by_id($this->_args['game_id']);
+            $this->_game->get_players(True);
+            $this->_init_player();
         } catch(\Trouble\GameNotFoundError $e) {
             throw new \Core\HTTPError(404, "Game #{$this->_args[game_id]}");
         }
 
+    }
+    private function _init_player() {
+        $this->_player = $this->_game->all_players
+            ->filter($this->_user['id'], 'agent')->{0};
     }
 }
 

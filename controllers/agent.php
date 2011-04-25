@@ -13,6 +13,7 @@ namespace Controllers;
 
 import('controllers.standard_page');
 import('core.validation');
+import('trouble.intel');
 
 class Agent extends \Controllers\AgentPage {
     public function index() {
@@ -20,28 +21,17 @@ class Agent extends \Controllers\AgentPage {
         $t = $this->_template;
         $t->title = $this->_agent['alias'];
         $tabs = array();
-        $tabs['intel'] = array(
-            'title' => 'Intel',
-            'content' => $this->_intel()
-        );
         try {
             $tabs['edit'] = array(
                 'title' => 'Edit',
                 'content' => $this->_edit_agent()
             );
-        } catch(\Core\AuthError $e) {
-            //unset($t->tabs['edit']);
-        }
+        } catch(\Core\AuthError $e) {}
         $t->tabs = $tabs;
         $t->content = $t->render('tabs.php');
         echo $t->render('main.php');
     }
 
-    protected function _intel() {
-        $t = $this->_template;
-        $t->agent = $this->_agent;
-        return $t->render('intel.php');
-    }
     public function edit() {
         $t = $this->_template;
         $t->content = $this->_edit_agent();

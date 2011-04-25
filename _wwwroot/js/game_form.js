@@ -33,9 +33,7 @@ $(function() {
         $.each($('#game_form').serializeArray(), function(i, field) {
             d[field.name] = field.value;
         });
-        dialogResponse('/put/save_game', d, function(){
-            location.reload();
-        });
+        dialogResponse('/put/save_game', d);
         return false;
     });
     

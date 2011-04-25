@@ -14,7 +14,7 @@ namespace Trouble;
 import('core.mapping');
 
 class Weapon extends \Core\Mapped {
-
+    public static $fields = array('name', 'class', 'ord', 'description', 'link', 'imagefile');
 }
 
 class WeaponMapper extends \Core\Mapper {

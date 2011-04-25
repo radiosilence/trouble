@@ -40,6 +40,7 @@
         <p>In order to have a functioning blackmarket, one must have items to sell. This, agent, means your information - habits, courses, societies, recreation - all of this must be made available. If you are too cowardly to surrender this information, we would suggest playing <a href="http://www.neopets.com/">this</a> instead.</p>
         <p>NOTE: Without this, the game is pointless, and lacking or incorrect information is grounds for termination if joining a game that requires it.</p>
         <p>This information will stay internal to our system and will under no circumstance be sold to third parties or advertisers.</p>
+        <p>This information will be available to game organisers.</p>
       <?php endif;?>
       <p>
       <label>Photograph</label><br/>
@@ -50,10 +51,12 @@
         </noscript>         
       </div>
       <input type="hidden" name="imagefile" id="imagefile" value="<?=$agent->imagefile?>"/>
-      <p><label for="course">Academic Course/Year</label><br/>
+      <p><label for="course">Academic Course/Year (or Job, if not student)</label><br/>
       <input type="text" name="course" id="course" value="<?=$agent->course?>" placeholder="Ex: 3rd year/Computer Science (BSc)"/></p>
-      <p><label for="clubs">Clubs/Societies</label><br/>
-      <input type="text" name="clubs" id="clubs" value="<?=$agent->clubs?>" placeholder="Ex: Rock, Rowing, Indie"/></p>
+      <p><label for="clubs">Societies &amp; Groups</label><br/>
+      <input type="text" name="societies" id="societies" value="<?=$agent->societies?>" placeholder="Ex: Rock, Rowing, Indie"/></p>
+      <p><label for="clubs">Clubs &amp; Pubs</label><br/>
+      <input type="text" name="clubs" id="clubs" value="<?=$agent->clubs?>" placeholder="Ex: The Sun, The Red Lion"/></p>
       <p><label for="timetable">Timetable (Detailed, may take some time)</label><br/>
       <textarea name="timetable" id="timetable" placeholder="Ex: Mon: 1200-1300 SSE G12, 1400-1600 Palmer 108; Tues: 0900-1000 Urban Studies LLT; Wed: 1000-1600 Starbucks, Riverside"><?=$agent->timetable?></textarea></p>
     </div>

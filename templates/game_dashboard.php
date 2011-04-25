@@ -35,7 +35,7 @@ Credits: <?=$player->credits?>&nbsp;&nbsp;<button>Buy Credits</button>
 <p>Note that if the game you are leaving is in progress or ended, you <strong>cannot</strong> rejoin! This is akin to forfeiting.</p>
 <p><button class="leave_game" game_id="<?=$game->id?>">Leave</button></p>
 </article>
-<div id="dialog-form" title="Register Kill">
+<div id="dialog-kill" title="Register Kill">
 	<form>
 		<p><label for="pkn">Target PKN</label><br/>
 			<input type="text" name="pkn" id="pkn" placeholder="xxxx"/></p>

@@ -48,6 +48,63 @@ class Put extends \Controllers\StandardPage {
         }
     }
 
+    public function buy_intel() {
+        import('trouble.intel');
+        import('trouble.player');
+        import('core.validation');
+        $validator = \Core\Validator::validator('\Trouble\OwnedIntel');
+        try{
+            $validator->validate($_POST);
+            $intel = \Trouble\Intel::container()
+                ->get_by_id($_POST['intel']);
+
+            $game = \Trouble\Game::container()
+                ->get_by_id($_POST['game_id'])
+                ->get_players();
+            
+            $subject = \Trouble\Agent::container()
+                ->get_by_id($_POST['subject']);
+
+            $player = $game->all_players->filter($this->_user['id'], 'agent')->{0};
+
+            $existing_intels = \Trouble\OwnedIntel::container()
+                ->get_owned_intel($subject, $player);
+            
+            if($intel->cost > $player->credits) {
+                throw new \Trouble\BuyIntelError('You cannot afford this intel.');
+            }
+
+            if(!$game->all_players->filter($subject['id'], 'agent')) {
+                throw new \Trouble\BuyIntelError('Agent is not in this game.');
+            }
+            
+            if($existing_intels->filter($intel['id'], 'intel', 'id')) {
+                throw new \Trouble\BuyIntelError('You already have that piece of intel.');
+            }
+
+            $owned = \Trouble\OwnedIntel::create(array(
+                'subject' => $subject,
+                'player' => $player,
+                'game' => $game,
+                'intel' => $intel
+            ));
+
+            $owned->save();
+            $player->credits = $player->credits - $intel->cost;
+            $player->save();
+            $this->_return_message("Success",
+                "Intel has been bought.");
+
+        } catch(\Core\ValidationError $e) {
+            echo $this->_return_message("Fail",
+                "Validation error(s):",
+                $e->get_errors());
+        } catch(\Trouble\BuyIntelError $e) {
+            echo $this->_return_message("Fail",
+                $e->getMessage());
+        }
+    }
+
     /**
      * TODO: restrict agent to logged in user or admin
      */

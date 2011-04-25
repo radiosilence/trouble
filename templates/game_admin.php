@@ -5,7 +5,7 @@
   <h2><?=$t?></h2>
   <ul>
     <?php foreach($all_players->filter($s, 'status') as $player): ?>
-    <li><a href="agent/<?=$player->agent->alias?>#edit"><?=$player->agent->alias?></a> (PKN: <strong><?=$player->pkn?></strong>)</li>
+    <li><a href="/game/<?=$game->id?>/intel/<?=$player->agent->alias?>"><?=$player->agent->alias?></a> (PKN: <strong><?=$player->pkn?></strong>)</li>
     <?php endforeach; ?>
   <ul>
   <?php endforeach; ?>

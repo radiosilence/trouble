@@ -46,7 +46,7 @@ $(function(){
         dateFormat: 'yy-mm-dd'
     });
     $('.timepick').timepicker();
-    $("#dialog-form").dialog({
+    $("#dialog-kill").dialog({
         autoOpen: false,
         height: 500,
         width: 450,
@@ -73,21 +73,60 @@ $(function(){
             d = {
                 'tok': $.cookie('tok')
             };
-            $.getJSON('/get/weapon_list', d, function(data){
+            $.get('/get/weapon_list', d, function(data) {
                 var options = '';
+                $('#weapon').html('<option value="0" class="dropdown_default">Select weapon used...</option>');
                 $.each(data, function(k,v) {
                     options += '<option value="'+v['id']+'">'+v['name']+'</option>';
                 });
                 $('#weapon').html($('#weapon').html()+options);
-            });
-        },
-        close: function() {
-            allFields.val("").removeClass( "ui-state-error" );
+            }, "json");
         }
     });
     $("#register_kill").click(function() {
-        $("#dialog-form").dialog("open");
+        $("#dialog-kill").dialog("open");
     });
+
+    $("#dialog-intel").dialog({
+        autoOpen: false,
+        height: 500,
+        width: 450,
+        modal: true,
+        buttons: {
+            "Buy Intel": function() {
+                d = {
+                    'game_id': $('#buy_intel').attr('game_id'),
+                    'intel': $('select#intel').val(),
+                    'subject': $('#buy_intel').attr('subject_id')
+                };
+                console.log(d);
+                dialogResponse('/put/buy_intel', d, function(){
+                        location.reload();
+                });
+            },
+            Cancel: function() {
+                $(this).dialog( "close" );
+            }
+        },
+        open: function() {
+            d = {
+                'tok': $.cookie('tok')
+            };
+            $.get('/get/intel_list', d, function(data) {
+                var options = '';
+                $('#intel').html('<option value="0" class="dropdown_default">Select intel desired...</option>');
+                $.each(data, function(k,v) {
+                    options += '<option value="'+v['id']+'">'+v['name']+'</option>';
+                });
+                $('#intel').html($('#intel').html()+options);
+            }, "json");
+        }
+    });
+
+    $("#buy_intel").click(function() {
+        $('#dialog-intel').dialog("open");
+    })
+
     $("select").change(function () {
         var str = "";
         if($(this).val() != 0) {
@@ -95,6 +134,12 @@ $(function(){
         } else {
             $(this).addClass('default');
         }
-        console.log();
+    });
+    $('#intel').change(function() {
+        $('#inteldescription').fadeOut(function() {
+            $.post('/get/intel_description', {'field': $('#intel').val()}, function(data) {
+                $('#inteldescription').text(data).fadeIn();
+            });            
+        });
     });
 });

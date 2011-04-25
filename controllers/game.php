@@ -19,6 +19,7 @@ import('trouble.killboard');
 import('trouble.kill');
 import('trouble.game');
 import('trouble.agent');
+import('trouble.intel');
 
 class UserNotJoinedError extends \Core\StandardError {}
 class Game extends \Controllers\GamePage {
@@ -87,6 +88,25 @@ class Game extends \Controllers\GamePage {
         return $t->render('game_info.php');
     }
 
+    public function intel() {
+        $t = $this->_template;
+        $t->game = $this->_game;
+        $t->content = $this->_intel();
+        echo $t->render('main.php');
+    }
+
+    protected function _intel() {
+        $t = $this->_template;
+        $a = \Trouble\Agent::container()
+            ->get_by_alias($this->_args['agent_alias']);
+        $t->agent = $a;
+        $t->player = $this->_player;
+        $t->owned_intels = \Trouble\OwnedIntel::container()
+            ->get_owned_intel($a, $this->_player);
+
+        return $t->render('intel.php');
+    }
+    
     public function _game_killboard() {
         $t = $this->_template;
         $g = $this->_game;
