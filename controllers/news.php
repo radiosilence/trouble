@@ -24,7 +24,7 @@ class News extends \Controllers\StandardPage {
             ->attach_storage(\Core\Storage::container()
                 ->get_storage('Article')
             )
-            ->get_latest_articles();
+            ->get_latest_articles(False, 'Agent', 'alias');
 
         $t->content = $t->render('news.php');
         $t->title = 'News';
@@ -34,10 +34,7 @@ class News extends \Controllers\StandardPage {
     public function display_article() {
         $t = $this->_template;
         $t->article = \Plugins\Articles\Article::mapper()
-            ->attach_storage(\Core\Storage::container()
-                ->get_storage('Article')
-            )
-            ->get_article($this->_args['article_id']);
+            ->get_article($this->_args['article_id'], 'Agent');
 
         $t->content = $t->render('news_article.php');
         $t->title = $article->title;

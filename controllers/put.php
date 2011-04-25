@@ -6,12 +6,15 @@ import('controllers.standard_page');
 import('core.exceptions');
 
 class Put extends \Controllers\StandardPage {
+    protected $_async;
+
     public function __construct($args) {
         parent::__construct($args);
-        $tok = ($_POST['tok'] ? $_POST['tok'] : $_GET['tok']);
+        $tok = ($_POST['_tok'] ? $_POST['_tok'] : $_GET['_tok']);
         if($this->_session->get_tok() != $tok) {
             throw new \Core\HTTPError(401, $this->_args['method']);
         }
+        $this->_async = True;
     }
     public function index() {}
     public function save_agent_image() {
@@ -33,20 +36,15 @@ class Put extends \Controllers\StandardPage {
         }
         
         if(!isset($_POST['username']) || !isset($_POST['password'])) {
-            $this->_return_message("Fail", 
+            echo $this->_return_message("Fail", 
                 "Please enter alias and password.");
         }
         try {
-            $this->_auth->attempt($_POST['username'], $_POST['password']);        
-            $this->_return_message("Success", "Logged in.");
-        } catch(\Core\InvalidUserError $e) {
-            $this->_return_message("Fail",
-                "Invalid alias.");
-        } catch(\Core\IncorrectPasswordError $e) {
-            $this->_return_message("Fail",
-                "Invalid password.");
-        } catch(\Exception $e) {
-            $this->_unhandled_exception($e);
+            $this->_auth->attempt($_POST['username'], $_POST['password']);
+            echo $this->_return_message("Success", "Logged in.");
+        } catch(\Core\AuthAttemptError $e) {
+            echo $this->_return_message("Fail",
+                "Invalid alias or password.");
         }
     }
 
@@ -79,21 +77,19 @@ class Put extends \Controllers\StandardPage {
             } catch(\Core\AuthEmptyPasswordError $e) {
                 $agent->remove('password');
             }
-            // Authorization here. If currently logged in
-            // user can update agent of alias x
             \Core\Storage::container()
                 ->get_storage('Agent')
                 ->save($agent);
 
             if($editing) {
                 $this->_auth->user_data($agent);
-                $this->_return_message("Success", "Saved.");            
+                echo $this->_return_message("Success", "Saved.");            
             } else {
-                $this->_return_message("Success", "Created agent. You may now log in.");
+                echo $this->_return_message("Success", "Created agent. You may now log in.");
             }
         
         } catch(\Core\ValidationError $e) {
-            $this->_return_message("Fail",
+            echo $this->_return_message("Fail",
                 "Validation error(s):",
                 $e->get_errors());
         } catch(\Core\AuthNotLoggedInError $e) {
@@ -140,13 +136,13 @@ class Put extends \Controllers\StandardPage {
             }
 
             if($editing) {
-                $this->_return_message("Success", "Saved.");            
+                echo $this->_return_message("Success", "Saved.");            
             } else {
-                $this->_return_message("Success", "Created game.");
+                echo $this->_return_message("Success", "Created game.");
             }
 
         } catch(\Core\ValidationError $e) {
-            $this->_return_message("Fail",
+            echo $this->_return_message("Fail",
                 "Validation error(s):",
                 $e->get_errors());
         } catch(\Core\AuthNotLoggedInError $e) {
@@ -160,7 +156,7 @@ class Put extends \Controllers\StandardPage {
 
     public function logout() {
         $this->_auth->logout();
-        $this->_return_message("Success", "Logged out.");
+        echo $this->_return_message("Success", "Logged out.");
     }
 
     public function join_game() {
@@ -211,19 +207,19 @@ class Put extends \Controllers\StandardPage {
                     ->kill_agent_target($agent_id, $_POST);
             }, 'Kill registered.');
         } catch(\Trouble\GameIncorrectPKNError $e) {
-            $this->_return_message("Error",
+            echo $this->_return_message("Error",
                 "Incorrect PKN. If believed to be correct, please contact game administrator.");
         } catch(\Trouble\KillTooEarlyError $e) {
-            $this->_return_message("Error",
+            echo $this->_return_message("Error",
                 "Kill date too early for game.");
         } catch(\Trouble\KillTooLateError $e) {
-            $this->_return_message("Error",
+            echo $this->_return_message("Error",
                 "Kill date too late for game.");
         } catch(\Trouble\KillInFutureError $e) {
-            $this->_return_message("Error",
+            echo $this->_return_message("Error",
                 "Kill date in future. We don't allow time travellers.");
         } catch(\Core\ValidationError $e) {
-            $this->_return_message("Error",
+            echo $this->_return_message("Error",
                 "Validation error(s):",
                 $e->get_errors());
         } catch(\Exception $e) {
@@ -240,10 +236,10 @@ class Put extends \Controllers\StandardPage {
             }
             $callback($agent_id);
             if($success) {
-                $this->_return_message("Success",
+                echo $this->_return_message("Success",
                     $success);
             } else {
-                $this->_return_message("Success",
+                echo $this->_return_message("Success",
                     "Success.");
             }
         } catch(\Core\AuthNotLoggedInError $e) {
@@ -251,48 +247,34 @@ class Put extends \Controllers\StandardPage {
         } catch(\Core\AuthDeniedError $e) {
             $this->_access_denied();
         } catch(\Trouble\GameAgentNotInGameError $e) {
-            $this->_return_message("Error",
+            echo $this->_return_message("Error",
                 "You are not in this game.");
         } catch(\Trouble\GameCannotRejoinError $e) {
-            $this->_return_message("Error",
+            echo $this->_return_message("Error",
                 "You cannot rejoin a game in this state.");
         } catch(\Trouble\GameAlreadyHasAgentError $e) {
-            $this->_return_message("Error",
+            echo $this->_return_message("Error",
                 "You are already in this game.");
         } catch(\Trouble\GameNotJoinableError $e) {
-            $this->_return_message("Error",
+            echo $this->_return_message("Error",
                 "Game is not joinable.");
         } catch(\Trouble\GameNotStartedError $e) {
-            $this->_return_message("Error",
+            echo $this->_return_message("Error",
                 "Game has not started.");
         } catch(\Trouble\GameEndedError $e) {
-            $this->_return_message("Error",
+            echo $this->_return_message("Error",
                 "Game has already ended.");
         }
     }
-
-    protected function _unhandled_exception($e) {
-        trigger_error($e->getMessage(), E_USER_WARNING);
-        $this->_return_message("Error",
-            "Unhandled exception.");
-    }
-
+    
     protected function _access_denied() {
-        $this->_return_message("Error",
+        echo $this->_return_message("Error",
                 "You are not authorised to do this.");
     }
 
     protected function _not_logged_in() {
-        $this->_return_message("Error",
+        echo $this->_return_message("Error",
                 "Not logged in.");
-    }
-
-    protected function _return_message($status, $message, $errors=array()) {
-        echo json_encode(array(
-            'status'=> $status,
-            'message' => $message,
-            'errors' => $errors
-        ));
     }
 
 }

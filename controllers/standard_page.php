@@ -18,14 +18,12 @@ import('core.template');
 import('core.backend');
 import('core.storage');
 import('core.auth');
-import('core.security.antixsrf');
 import('trouble.agent');
 
 abstract class StandardPage extends \Core\Controller {
     protected $_backend;
     protected $_session;
     protected $_template;
-    protected $_antixsrf;
     protected $_user;
     protected $_auth;
 
@@ -78,8 +76,6 @@ abstract class StandardPage extends \Core\Controller {
     protected function _current_user() {
         if(isset($this->_session['auth'])) {
             return $this->_session['auth']['id'];
-        } else {
-            
         }
     }
 }

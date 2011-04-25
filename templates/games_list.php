@@ -4,7 +4,7 @@
 ?>
 
   <article>
-    <h3>Ending <?=$game->end_date->format("Ymd.Hi")?></h3>
+    <h3>Ending <?=$game->end_date->format("l j<\s\u\p>S</\s\u\p> F 'y")?></h3>
     <h1><a href="game/<?=$game->id?>"><?=$game->name?></a>
     <?php if($game->joinable && !$game->joined && $logged_in):?>&nbsp;<button class="join_game" game_id="<?=$game->id?>">Join</button><?php endif; ?></h1>
     <h2><?=$game->location?></h2>
