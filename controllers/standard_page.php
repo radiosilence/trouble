@@ -58,7 +58,10 @@ abstract class StandardPage extends \Core\Controller {
 
     protected function _t_login_box() {
         $t = $this->_template;
-        $t['_user_box'] = $t->render('login_box.php');
+        $t->user_field = "Alias";
+        $t->login_action = '/login';
+        $t->set_file('login_page.php');
+        $t['_user_box'] = $t->render();
     }
 
     protected function _init_template() {

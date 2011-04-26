@@ -30,7 +30,7 @@ $routes = array(
     '^news' => 'News',
     '^highscores' => 'Highscores',
     '^forums' => 'Forums',
-    '^login' => 'Put:method=login',
-    '^logout' => 'Put:method=logout',
+    '^login' => 'Index:method=login',
+    '^logout' => 'Index:method=logout',
     '^$' => 'News'
 );

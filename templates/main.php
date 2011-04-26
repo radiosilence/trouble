@@ -36,9 +36,11 @@
     <h1><?=$title?></h1>
     <?=$content?>
     </section>
+    <?php if(!$_disable_user_box): ?>
     <section id="userbox" class="grid_3">
     <?=$_user_box?>
     </section>
+    <?php endif;?>
   </div>
   <div id="dialog" title=""></div>
   </body>

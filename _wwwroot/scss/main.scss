@@ -71,7 +71,10 @@ input#pkn {
     width: 620px; }
   textarea {
     width: 620px;
-    height: 8em; } }
+    height: 8em; }
+  .login_field {
+    width: 200px !important; } }
+
 
 input {
   &[type=password], &.password {

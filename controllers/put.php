@@ -43,24 +43,6 @@ class Put extends \Controllers\StandardPage {
         echo htmlspecialchars(json_encode($result), ENT_NOQUOTES);
     }
 
-    public function login() {
-        if(!\Core\Utils\Env::using_ssl()) {
-            //throw new \Core\Error("This page must use SSL!");
-        }
-        
-        if(!isset($_POST['username']) || !isset($_POST['password'])) {
-            echo $this->_return_message("Fail", 
-                "Please enter alias and password.");
-        }
-        try {
-            $this->_auth->attempt($_POST['username'], $_POST['password']);
-            echo $this->_return_message("Success", "Logged in.");
-        } catch(\Core\AuthAttemptError $e) {
-            echo $this->_return_message("Fail",
-                "Invalid alias or password.");
-        }
-    }
-
     public function buy_intel() {
         import('trouble.intel');
         import('trouble.player');
