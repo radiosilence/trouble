@@ -80,6 +80,7 @@ class Game extends \Controllers\GamePage {
         } else {
             $t->kill = $g->get_killed_by($p);
         }
+        $t->_dialog_kill = $t->render('forms/kill.php');
         return $t->render('game_dashboard.php');
     }
 
@@ -102,6 +103,13 @@ class Game extends \Controllers\GamePage {
             ->get_by_alias($this->_args['agent_alias']);
         $t->agent = $a;
         $t->player = $this->_player;
+
+        $targ = $this->_game->all_players
+            ->filter($a->id, 'agent')->{0};
+        if($targ->id == $t->player->target && $t->player->status == 1) {
+            $t->is_target = True;
+            $t->_dialog_kill = $t->render('forms/kill.php');
+        }
         $t->owned_intels = \Trouble\OwnedIntel::container()
             ->get_owned_intel($a, $this->_player);
 

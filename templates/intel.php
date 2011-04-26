@@ -1,6 +1,9 @@
 <img src="/img/avatar/<?=($agent->avatar ? $agent->avatar : 'default.png')?>" class="itempic"/>
 <h1><?=$agent->alias?></h1>
-<h2>Intel in game <a href="game/<?=$game->id?>"><?=$game->name?></a> <button id="buy_intel" game_id="<?=$game->id?>" subject_id="<?=$agent->id?>">Buy Intel</button></h2>
+<h2>Intel in game <a href="game/<?=$game->id?>"><?=$game->name?></a>&nbsp;<button id="buy_intel" game_id="<?=$game->id?>" subject_id="<?=$agent->id?>">Buy Intel</button>
+<?php if($is_target): ?>
+  &nbsp;<button id="register_kill" game_id="<?=$game->id?>">Register Kill</button>
+<?php endif?></h2>
 <?php if(count($owned_intels) > 0): ?>
   <?php foreach($owned_intels as $intel): ?>
   <article>
@@ -27,3 +30,4 @@
     <p id="inteldescription"></p>
   </form>
 </div>
+<?php if($is_target): ?><?=$_dialog_kill?><?php endif;?>

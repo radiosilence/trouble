@@ -18,7 +18,7 @@
 	<?php if($game['active']): ?>
 	<article>
 	<h1>Current Target</h1>
-	<p><a class="target" href="/game/<?=$game->id?>/intel/<?=$target["alias"]?>"><?=$target["alias"]?></a>&nbsp;&nbsp;<button id="register_kill" game_id="<?=$game->id?>">Register Kill</button></p>
+	<p><a class="target" href="/game/<?=$game->id?>/intel/<?=$target["alias"]?>"><?=$target["alias"]?></a>&nbsp;<button id="register_kill" game_id="<?=$game->id?>">Register Kill</button></p>
 	</article>
 	<?php endif;?>
 <?php else: ?>
@@ -35,17 +35,4 @@ Credits: <?=$player->credits?>&nbsp;&nbsp;<button>Buy Credits</button>
 <p>Note that if the game you are leaving is in progress or ended, you <strong>cannot</strong> rejoin! This is akin to forfeiting.</p>
 <p><button class="leave_game" game_id="<?=$game->id?>">Leave</button></p>
 </article>
-<div id="dialog-kill" title="Register Kill">
-	<form>
-		<p><label for="pkn">Target PKN</label><br/>
-			<input type="text" name="pkn" id="pkn" placeholder="xxxx"/></p>
-		<p><label for="weapon">Weapon</label><br/>
-		<select name="weapon" class="default" id="weapon">
-			<option value="0" class="dropdown_default">Select weapon used...</option>
-		</select></p>
-		<p><label for="time">Time/Date</label><br/>
-		<input type="text" name="when_happened_time" id="when_happened_time" class="timepick" placeholder="Ex. 21:35"/>&nbsp;<input type="text" name="when_happened_date" id="when_happened_date" class="datepick" placeholder="Ex. 2011-03-10"/></p>
-		<p><label for="description">Tell the Story...</label><br/>
-		<textarea name="description" id="description" placeholder="Ex. I spotted my target and shot her in the face"></textarea></p>
-	</form>
-</div>
+<?=$_dialog_kill?>
