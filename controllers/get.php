@@ -10,7 +10,7 @@ class Get extends \Controllers\StandardPage {
         parent::__construct($args);
         $tok = ($_POST['tok'] ? $_POST['tok'] : $_GET['tok']);
         if($this->_session->get_tok() != $tok) {
-            //throw new \Core\HTTPError(401, $this->_args['method']);
+            throw new \Core\HTTPError(401, $this->_args['method']);
         }
     }
     public function index() {}

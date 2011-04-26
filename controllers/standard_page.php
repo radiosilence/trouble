@@ -33,6 +33,7 @@ abstract class StandardPage extends \Core\Controller {
         $this->_init_template();
         $this->_init_auth();
         try {
+            $this->_auth->update_user_data();
             $this->_template->logged_in = True;
             $this->_t_user_box();
         } catch(\Core\AuthNotLoggedInError $e){
@@ -71,12 +72,6 @@ abstract class StandardPage extends \Core\Controller {
     protected function _init_session() {
         $this->_session = \Core\Session\Handler::container()
             ->get_hs_session();
-    }
-
-    protected function _current_user() {
-        if(isset($this->_session['auth'])) {
-            return $this->_session['auth']['id'];
-        }
     }
 }
 

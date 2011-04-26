@@ -1,7 +1,7 @@
 <?php if($player->status == 0): ?>
 	<article>
 	<p>You are dead.</p>
-	<p>Killed by: <a href="agent/<?=$kill->assassin->alias?>"><?=$kill->assassin->alias?></a> at <strong><?=$kill->when_happened->format('Ymd.Hi')?></strong> with <strong><?=$kill->weapon->name?></strong>
+	<p>Killed by: <a href="/game/<?=$game->id?>/intel/<?=$kill->assassin->alias?>"><?=$kill->assassin->alias?></a> at <strong><?=$kill->when_happened->format('Ymd.Hi')?></strong> with <strong><?=$kill->weapon->name?></strong>
 	<button id="dispute_kill">Dispute Kill</button>
 	</p>
 	</article>
@@ -18,7 +18,7 @@
 	<?php if($game['active']): ?>
 	<article>
 	<h1>Current Target</h1>
-	<p><a class="target" href="agent/<?=$target["alias"]?>"><?=$target["alias"]?></a>&nbsp;&nbsp;<button id="register_kill" game_id="<?=$game->id?>">Register Kill</button></p>
+	<p><a class="target" href="/game/<?=$game->id?>/intel/<?=$target["alias"]?>"><?=$target["alias"]?></a>&nbsp;&nbsp;<button id="register_kill" game_id="<?=$game->id?>">Register Kill</button></p>
 	</article>
 	<?php endif;?>
 <?php else: ?>

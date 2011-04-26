@@ -174,13 +174,16 @@ class Game extends \Controllers\GamePage {
     protected function _administrated_games() {
         $t = $this->_template;
         $ids = $this->_auth->get_administrated_ids('game');
-        $params = \Trouble\GameContainer::params($this->_auth->user_id());
-        $params['filters'][] = new \Core\Filter('id', $ids, 'in');
-        $params['order'] = new \Core\Order('start_date', 'desc');
-        $t->games = \Trouble\Game::mapper()
-            ->attach_storage(\Core\Storage::container()
-                ->get_storage('Game'))
-            ->get_list($params);
+        $t->games = new \Core\Li();
+        if(count($ids) > 0) {
+            $params = \Trouble\GameContainer::params($this->_auth->user_id());
+            $params['filters'][] = new \Core\Filter('id', $ids, 'in');
+            $params['order'] = new \Core\Order('start_date', 'desc');
+            $t->games->extend(\Trouble\Game::mapper()
+                ->attach_storage(\Core\Storage::container()
+                    ->get_storage('Game'))
+                ->get_list($params));
+        }
 
         return $t->render('games_list.php');
         

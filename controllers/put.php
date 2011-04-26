@@ -19,13 +19,26 @@ class Put extends \Controllers\StandardPage {
     public function index() {}
     public function save_agent_image() {
         import('3rdparty.qquploader');
+        if($_GET['type'] == 'avatar') {
+            $type = 'avatar';
+        } else if($_GET['type'] == 'photo') {
+            $type = 'agent';
+        } else {
+            exit("Bad type");
+        }
+
         // list of valid extensions, ex. array("jpeg", "xml", "bmp")
         $allowedExtensions = array('jpeg', 'png', 'jpg');
         // max file size in bytes
         $sizeLimit = 0.5 * 1024 * 1024;
 
         $uploader = new \qqFileUploader($allowedExtensions, $sizeLimit);
-        $result = $uploader->handleUpload('img/agent/', False, True);
+        $result = $uploader->handleUpload("img/{$type}/", False, True);
+        if($type == 'avatar') {
+            $out = array();
+            $dir = realpath(SITE_PATH .'/_wwwroot/img/avatar/');
+            exec("convert {$dir}/{$result['filename']}.{$result['ext']} -resize 80x80^ -gravity center -extent 80x80 {$dir}/{$result['filename']}.{$result['ext']}", $out);
+        }
         // to pass data through iframe you will need to encode all html tags
         echo htmlspecialchars(json_encode($result), ENT_NOQUOTES);
     }
@@ -126,6 +139,10 @@ class Put extends \Controllers\StandardPage {
                 $_POST['alias'] = $agent->alias;
                 $agent->overwrite($_POST, True);
             } else {
+                if(empty($_POST['password'])) {
+                    throw new \Core\ValidationError(array(
+                        'Password must be set on creation.'));
+                }
                 $agent = \Trouble\Agent::create($_POST, True);
             }
             $validator->validate($_POST, \Trouble\Agent::validation());

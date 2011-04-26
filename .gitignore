@@ -6,6 +6,7 @@ config/*.php
 core/*
 _wwwroot/core_path.php
 _wwwroot/img/agent/*
+_wwwroot/img/avatar/*
 .project
 _wwwroot/xhprof*
 *.css

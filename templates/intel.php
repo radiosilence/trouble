@@ -1,19 +1,20 @@
-<article>
-<h1>Intel</h1>
-<p><button id="buy_intel" game_id="<?=$game->id?>" subject_id="<?=$agent->id?>">Buy Intel</button></p>
+<h1>Intel on <?=$agent->alias?></h1>
+<h2>In game <a href="game/<?=$game->id?>"><?=$game->name?></a> <button id="buy_intel" game_id="<?=$game->id?>" subject_id="<?=$agent->id?>">Buy Intel</button></h2>
 <?php if(count($owned_intels) > 0): ?>
   <?php foreach($owned_intels as $intel): ?>
-    <h2><?=$intel['intel']['name']?></h2>
+  <article>
+    <h1><?=$intel['intel']['name']?></h1>
     <?php if($intel['intel']['field'] == 'imagefile'): ?>
       <p><img src="/img/agent/<?=$intel['data']?>"/></p>
     <?php else: ?>
       <p><?=nl2br($intel['data'])?></p>
     <?php endif;?>
+
+  </article>
   <?php endforeach; ?>
 <?php else: ?>
   <p>You have not bought any intel on this agent.</p>
 <?php endif;?>
-</article>
 <div id="dialog-intel" title="Buy Intel">
   <form>
     <p>Balance: <span class="credits"><?=$player['credits']?></span></p>

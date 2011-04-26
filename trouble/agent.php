@@ -15,7 +15,7 @@ import('core.mapping');
 import('core.storage');
 
 class Agent extends \Core\Mapped {
-    public static $fields = array("fullname", "alias",
+    public static $fields = array("fullname", "alias", "avatar",
         "email", "phone", "address", "course",
         "societies", "clubs", "timetable", "imagefile",
         "password");

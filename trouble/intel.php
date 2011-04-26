@@ -51,15 +51,21 @@ class OwnedIntelContainer extends \Core\MappedContainer {
                 'filters' => array(
                     new \Core\Filter('player', $player['id']),
                     new \Core\Filter('subject', $subject['id'])
-                )
+                    )
             ));
         $intels = \Trouble\Intel::container()
-            ->get();
-        
-        foreach($results as $result) {
-            $intel = $intels->filter($result['intel'], 'id')->{0};
-            $result['intel'] = $intel;
-            $result['data'] = $subject[$intel['field']];
+            ->get(array(
+                'order' => new \Core\Order('ord')
+            ));
+        $data = new \Core\Li();
+        foreach($intels as $intel) {
+            $res = $results->filter($intel['id'], 'intel')->{0};
+            if(!$res) {
+                continue;
+            }
+            $res['intel'] = $intel;
+            $res['data'] = $subject[$intel['field']];
+            $data->extend($res);
         }
-        return $results;
+        return $data;
     }}

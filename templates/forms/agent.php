@@ -43,8 +43,17 @@
         <p>This information will be available to game organisers.</p>
       <?php endif;?>
       <p>
-      <label>Photograph</label><br/>
-        <img src="img/agent/<?=$agent->imagefile?>" id="imagefile_img" style="display:<?=($agent->imagefile ? 'block' : 'none')?>"/></p>
+      <label>Avatar</label> This can be any picture, it will be visible to others and cropped/resized.<br/>
+        <img src="img/avatar/<?=$agent->avatar?>" id="avafile_img" style="display:<?=($agent->avatar ? 'block' : 'none')?>"/></p>
+      <div id="avafile-uploader">    
+        <noscript>      
+          <p>Please enable JavaScript to use file uploader.</p>
+        </noscript>         
+      </div>
+      <input type="hidden" name="avatar" id="avafile" value="<?=$agent->avatar?>"/>
+      <p>
+      <label>Photograph</label> This must be a clear, recognisable, recent picture of you.<br/>
+        <img src="img/agent/<?=$agent->imagefile?>" id="imagefile_img" style="display:<?=($agent->imagefile ? 'block' : 'none')?>" class="photo"/></p>
       <div id="imagefile-uploader">    
         <noscript>      
           <p>Please enable JavaScript to use file uploader.</p>

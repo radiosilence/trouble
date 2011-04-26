@@ -1,3 +1,4 @@
+<img src="/img/avatar/<?=($user->avatar ? $user->avatar : 'default.png')?>" style="float: right;"/>
 <h1><?=$user->alias?></h1>
 <form action="logout" method="post">
 <input type="hidden" name="uri" value="<?=$__uri__?>"/>
