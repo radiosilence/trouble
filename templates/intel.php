@@ -1,5 +1,6 @@
-<h1>Intel on <?=$agent->alias?></h1>
-<h2>In game <a href="game/<?=$game->id?>"><?=$game->name?></a> <button id="buy_intel" game_id="<?=$game->id?>" subject_id="<?=$agent->id?>">Buy Intel</button></h2>
+<img src="/img/avatar/<?=($agent->avatar ? $agent->avatar : 'default.png')?>" class="itempic"/>
+<h1><?=$agent->alias?></h1>
+<h2>Intel in game <a href="game/<?=$game->id?>"><?=$game->name?></a> <button id="buy_intel" game_id="<?=$game->id?>" subject_id="<?=$agent->id?>">Buy Intel</button></h2>
 <?php if(count($owned_intels) > 0): ?>
   <?php foreach($owned_intels as $intel): ?>
   <article>

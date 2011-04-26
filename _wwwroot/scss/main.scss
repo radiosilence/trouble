@@ -76,3 +76,8 @@ input#pkn {
 input {
   &[type=password], &.password {
     width: 200px !important; } }
+    
+img.itempic {
+  float: left;
+  margin-right: 1em;
+  margin-bottom: 1em; }
