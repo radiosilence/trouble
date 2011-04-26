@@ -95,7 +95,7 @@ abstract class GamePage extends StandardPage {
         try {
             $this->_game = \Trouble\Game::container()
                 ->get_by_id($this->_args['game_id']);
-            $this->_game->get_players(True);
+            $this->_game->load_players(True);
             $this->_init_player();
         } catch(\Trouble\GameNotFoundError $e) {
             throw new \Core\HTTPError(404, "Game #{$this->_args[game_id]}");

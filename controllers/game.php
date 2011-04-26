@@ -155,7 +155,7 @@ class Game extends \Controllers\GamePage {
     public function players() {
         $game = \Trouble\Game::container()
             ->get_by_id($this->_args['game_id'])
-            ->get_players();
+            ->load_players();
     }
 
     protected function _user_games($user) {
@@ -267,7 +267,7 @@ class Game extends \Controllers\GamePage {
 
     protected function _administration($game) {
         $t = $this->_template;
-        $game->get_players();
+        $game->load_players();
         $t->all_players = $game->all_players;
         return $t->render('game_admin.php');
     }

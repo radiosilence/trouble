@@ -32,7 +32,7 @@ class Game extends \Core\Mapped {
         return $this;
     }
 
-    public function get_players($force=False) {
+    public function load_players($force=False) {
         if(!$this->players || $force) {
             $p = Player::container()
                 ->find_by_game($this);
@@ -44,7 +44,7 @@ class Game extends \Core\Mapped {
 
     protected function _check_players_loaded() {
         if(!$this->players) {
-            $this->get_players();
+            $this->load_players();
         }
     }
     

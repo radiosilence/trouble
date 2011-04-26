@@ -55,7 +55,7 @@ class Put extends \Controllers\StandardPage {
 
             $game = \Trouble\Game::container()
                 ->get_by_id($_POST['game_id'])
-                ->get_players();
+                ->load_players();
             
             $subject = \Trouble\Agent::container()
                 ->get_by_id($_POST['subject']);
