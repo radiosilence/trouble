@@ -11,8 +11,7 @@ require_once(CORE_PATH . '/core.php');
 import('core.routing');
 
 $router = new \Core\Router();
-$router->route($_GET['route']);
-
+$router->route(URI);
 
 if (extension_loaded('xhprof')) {
     $profiler_namespace = 'core';  // namespace for your application
