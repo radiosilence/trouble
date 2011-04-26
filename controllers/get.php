@@ -8,10 +8,13 @@ import('core.exceptions');
 class Get extends \Controllers\StandardPage {
     public function __construct($args) {
         parent::__construct($args);
+        $this->_throttle();
         $tok = ($_POST['tok'] ? $_POST['tok'] : $_GET['tok']);
+        $this->_async = True;
         if($this->_session->get_tok() != $tok) {
-            //throw new \Core\HTTPError(401, $this->_args['method']);
+            throw new \Core\HTTPError(401, $this->_args['method']);
         }
+
     }
     public function index() {}
 

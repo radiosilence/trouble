@@ -18,6 +18,7 @@ import('core.template');
 import('core.backend');
 import('core.storage');
 import('core.auth');
+import('core.utils.throttle');
 import('trouble.agent');
 
 abstract class StandardPage extends \Core\Controller {
@@ -75,6 +76,29 @@ abstract class StandardPage extends \Core\Controller {
     protected function _init_session() {
         $this->_session = \Core\Session\Handler::container()
             ->get_mc_session();
+    }
+
+    protected function _throttle($args=False) {
+        if(!$args) {
+            $args = array(
+                \Core\Utils\Throttle::Second => 30,
+                \Core\Utils\Throttle::Minute => 5
+            );
+        }
+        try {
+            $tid = $this->_auth->user_id();
+        } catch(\Core\AuthNotLoggedInError $e) {
+            $tid = False;
+        }
+        try {
+            $throttle = new \Core\Utils\Throttle($args, $tid);
+        } catch(\Core\Utils\TooManyReqsError $e) {
+            $this->_template->set_file('message.php');
+            $this->_template->content = $this->_return_message('Fail',
+                'Too many requests. Please wait and try again soon.');
+            $this->_template->render('main.php');
+            throw new \Core\HTTPError(403);
+        }
     }
 }
 

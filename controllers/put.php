@@ -10,6 +10,7 @@ class Put extends \Controllers\StandardPage {
 
     public function __construct($args) {
         parent::__construct($args);
+        $this->_throttle();
         $tok = ($_POST['_tok'] ? $_POST['_tok'] : $_GET['_tok']);
         if($this->_session->get_tok() != $tok) {
             throw new \Core\HTTPError(401, $this->_args['method']);

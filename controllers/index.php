@@ -14,11 +14,11 @@ namespace Controllers;
 import('controllers.standard_page');
 import('core.types');
 import('core.auth');
-import('core.utils.env');
 
 class Index extends \Controllers\StandardPage {
     public function index() {}
     public function login() {
+        $this->_throttle();
         try {
             $this->_auth->user_id();
             header('Location: /');
