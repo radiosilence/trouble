@@ -13,6 +13,7 @@ namespace Trouble;
 
 import('core.mapping');
 import('core.containment');
+import('core.hasher');
 
 import('trouble.kill');
 import('trouble.agent');
@@ -26,6 +27,18 @@ class Game extends \Core\Mapped {
     public static $fields = array("name", "start_date", "end_date", "location",
         "victor", "description", "invite_only",
         "entry_fee", "creator", 'password');
+
+    public function test_entry($data) {
+        if($this->invite_only == 1) {
+            $hasher = \Core\Hasher::create()
+                ->check($data['password'], $this->password);
+        } else if($this->invite_only == 2) {
+            $v = \Trouble\Voucher::container()
+                ->get_valid($data['voucher'], 'join', $this)
+                ->spend();
+        }
+        return $this;
+    }
 
     public function load_kills($args=False) {
         $this->kills = KillContainer::find_by_game($this, $args);

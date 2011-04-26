@@ -81,8 +81,8 @@ abstract class StandardPage extends \Core\Controller {
     protected function _throttle($args=False) {
         if(!$args) {
             $args = array(
-                \Core\Utils\Throttle::Second => 30,
-                \Core\Utils\Throttle::Minute => 5
+                \Core\Utils\Throttle::Second => 10,
+                \Core\Utils\Throttle::Minute => 120
             );
         }
         try {

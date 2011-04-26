@@ -53,6 +53,8 @@ input#pkn {
   font-weight: bold;
   width: 70px; }
 
+input.voucher {
+  font-family: monospace; }
 #userbox {
   ul li {
     padding-bottom: 0.5em; }
@@ -84,3 +86,7 @@ img.itempic {
   float: left;
   margin-right: 1em;
   margin-bottom: 1em; }
+
+img.photo {
+  max-width: 100%;
+}

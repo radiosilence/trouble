@@ -15,17 +15,44 @@ $(function(){
         data = {
             'id': $(this).attr('game_id')
         };
-        dialogConfirm('Join Game',
-            'Are you sure you wish to join this game?',
-            function(d) {
-                dialogResponse('/put/join_game', d, function(){
-                    location.reload();
-                });
-            },
-            data
-        );
+
+        var type = $(this).attr('invite_only');
+
+        $('#join-normal').hide();
+        $('#join-voucher').hide();
+        $('#join-password').hide();
+        $('#dialog-join').attr('game_id', $(this).attr('game_id'));
+        if(type == 0) {
+            $('#join-normal').show();
+        } else if(type == 1) {
+            $('#join-password').show();
+        } else if(type == 2) {
+            $('#join-voucher').show();
+        }
+        $("#dialog-join").dialog("open");
         return false;
     });
+
+    $("#dialog-join").dialog({
+        autoOpen: false,
+        width: 450,
+        modal: true,
+        buttons: {
+            "Join Game": function() {
+                d = {
+                    'voucher': $('input#voucher').val(),
+                    'password': $('input#gamepass').val(),
+                    'game_id': $('#dialog-join').attr('game_id')
+                }
+                dialogResponse('/put/join_game', d, function(){
+                    window.location = '/game/'+$('#dialog-join').attr('game_id');
+                });
+            },
+            Cancel: function() {
+                $(this).dialog("close");
+            }
+        }
+    })
 
     $('button.leave_game').click(function(){
         data = {
@@ -105,7 +132,7 @@ $(function(){
                 });
             },
             Cancel: function() {
-                $(this).dialog( "close" );
+                $(this).dialog("close");
             }
         },
         open: function() {

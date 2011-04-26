@@ -85,6 +85,7 @@ class Game extends \Controllers\GamePage {
 
     protected function _game_info() {
         $t = $this->_template;
+        $t->_join_dialogs = $t->render('forms/join.php');
         return $t->render('game_info.php');
     }
 
@@ -145,9 +146,9 @@ class Game extends \Controllers\GamePage {
             ->attach_storage(\Core\Storage::container()
                 ->get_storage('Game'))
             ->get_list($params);
+        $t->_join_dialogs = $t->render('forms/join.php');
         $t->content = $t->render('games_list.php');
         $t->title = "Games Ending Soon";
-        
         echo $t->render('main.php');
 
     }
@@ -208,23 +209,6 @@ class Game extends \Controllers\GamePage {
         } catch(\Core\AuthNotLoggedInError $e) {
             header("Location: /");
         }
-    }
-
-    public function starting_soon() {
-        $t = $this->_template;
-        $t->games = \Trouble\Game::mapper()
-            ->attach_storage($this->game_storage)
-            ->get_list(array(
-                "order" => new \Core\Order('end_date', 'asc'),
-                "filters" => array(
-                    new \Core\Filter("end_date", $time->format('c'), '>'),
-                    new \Core\Filter("state", 1, "<")
-                )
-            ));
-
-        $t->content = $t->render('games_list.php');
-        $t->title = "Games Starting Soon";
-        echo $t->render('main.php');
     }
 
     public function edit() {

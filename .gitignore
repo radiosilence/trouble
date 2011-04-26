@@ -1,4 +1,6 @@
 *.log
+*.swp
+*~
 *.sublime-project
 config.php
 config/*.php

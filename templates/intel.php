@@ -6,7 +6,7 @@
   <article>
     <h1><?=$intel['intel']['name']?></h1>
     <?php if($intel['intel']['field'] == 'imagefile'): ?>
-      <p><img src="/img/agent/<?=$intel['data']?>"/></p>
+      <p><img src="/img/agent/<?=$intel['data']?>" class="photo"/></p>
     <?php else: ?>
       <p><?=nl2br($intel['data'])?></p>
     <?php endif;?>

@@ -217,17 +217,26 @@ class Put extends \Controllers\StandardPage {
     }
 
     public function join_game() {
+        import('core.hasher');
+        import('trouble.voucher');
         try {
             $this->_game_action(function($agent_id) {
-            $game = \Trouble\Game::container()
-                ->get_by_id($_POST['id'])
-                ->add_agent($agent_id);        
+                $game = \Trouble\Game::container()
+                    ->get_by_id($_POST['game_id'])
+                    ->test_entry($_POST);
+                $game->add_agent($agent_id);                            
             }, 'Joined game.');
-        } catch(\Exception $e) {
-            $this->_unhandled_exception($e);
+        } catch(\Trouble\VoucherError $e) {
+            echo $this->_return_message('Fail',
+                'There was a problem with your voucher.');
+        } catch(\Core\HashMismatch $e) {
+            echo $this->_return_message('Fail',
+                'Incorrect password.');
         }
     }
 
+    protected function _test_can_join($game, $data) {
+    }
     public function leave_game() {
         try {
             $this->_game_action(function($agent_id) {
