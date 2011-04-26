@@ -71,7 +71,7 @@ abstract class StandardPage extends \Core\Controller {
 
     protected function _init_session() {
         $this->_session = \Core\Session\Handler::container()
-            ->get_hs_session();
+            ->get_mc_session();
     }
 }
 
