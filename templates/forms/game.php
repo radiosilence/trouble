@@ -59,6 +59,16 @@
     <?php if($new):?><h3><a href="#">Description</a></h3><?php endif;?>
     <div class="fieldset" id="fieldset-description">
       <h1>Description</h1>
+
+      <p>
+      <label>Image</label><br/>This can be any picture, it will be cropped/resized.<br/>
+        <img src="img/game/<?=$game->imagefile?>" id="gamefile_img" style="display:<?=($game->imagefile ? 'block' : 'none')?>"/></p>
+      <div id="gamefile-uploader">    
+        <noscript>      
+          <p>Please enable JavaScript to use file uploader.</p>
+        </noscript>         
+      </div>
+      <input type="hidden" name="imagefile" id="gamefile" value="<?=$game->imagefile?>"/>
       <p><label for="description" id="description">Description</label><br/>
       <textarea name="description" placeholder="Ex. This game is for students of my university"><?=$game->description?></textarea></p>
     </div>

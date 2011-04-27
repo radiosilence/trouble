@@ -21,7 +21,7 @@ $(function() {
 $(function(){   
     var uploader = new qq.FileUploader({
         element: $('#imagefile-uploader')[0],
-        action: 'put/save_agent_image',
+        action: 'put/save_image',
         onComplete: function(id, fileName, responseJSON){
           var fn = responseJSON['filename']+'.'+responseJSON['ext'];
           $('#imagefile_img').attr('src','img/agent/'+fn);
@@ -35,7 +35,7 @@ $(function(){
     });
     var uploader2 = new qq.FileUploader({
         element: $('#avafile-uploader')[0],
-        action: 'put/save_agent_image',
+        action: 'put/save_image',
         onComplete: function(id, fileName, responseJSON){
           var fn = responseJSON['filename']+'.'+responseJSON['ext'];
           $('#avafile_img').attr('src','img/avatar/'+fn);

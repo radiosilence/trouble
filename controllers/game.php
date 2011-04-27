@@ -41,6 +41,7 @@ class Game extends \Controllers\GamePage {
             if(!$g->is_joined($this->_auth->user_id())){
                 throw new UserNotJoinedError();
             }
+            $t->joined = True;
             $tabs['dashboard'] = array(
                 'title' => 'Dashboard',
                 'content' => $this->_game_dashboard()
@@ -48,12 +49,13 @@ class Game extends \Controllers\GamePage {
 
         } catch(\Core\AuthNotLoggedInError $e) {
         } catch(UserNotJoinedError $e) {
-            $tabs['information'] = array(
-                'title' => 'Information',
-                'content' => $this->_game_info()
-            );
+            $t->joined = False;
         }
 
+        $tabs['information'] = array(
+            'title' => 'Information',
+            'content' => $this->_game_info()
+        );
         $tabs['killboard'] = array(
             'title' => 'Killboard',
             'content' => $this->_game_killboard()

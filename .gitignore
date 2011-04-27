@@ -8,7 +8,11 @@ config/*.php
 core/*
 _wwwroot/core_path.php
 _wwwroot/img/agent/*
+!_wwwroot/img/agent/default.png
 _wwwroot/img/avatar/*
+!_wwwroot/img/avatar/default.png
+_wwwroot/img/game/*
+!_wwwroot/img/game/default.png
 .project
 _wwwroot/xhprof*
 *.css

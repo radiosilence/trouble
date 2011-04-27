@@ -18,10 +18,12 @@ class Put extends \Controllers\StandardPage {
         $this->_async = True;
     }
     public function index() {}
-    public function save_agent_image() {
+    public function save_image() {
         import('3rdparty.qquploader');
         if($_GET['type'] == 'avatar') {
             $type = 'avatar';
+        } else if($_GET['type'] == 'game') {
+            $type = 'game';
         } else if($_GET['type'] == 'photo') {
             $type = 'agent';
         } else {
@@ -31,19 +33,30 @@ class Put extends \Controllers\StandardPage {
         // list of valid extensions, ex. array("jpeg", "xml", "bmp")
         $allowedExtensions = array('jpeg', 'png', 'jpg');
         // max file size in bytes
-        $sizeLimit = 0.5 * 1024 * 1024;
-
+        $sizeLimit = 1 * 1024 * 1024;
         $uploader = new \qqFileUploader($allowedExtensions, $sizeLimit);
         $result = $uploader->handleUpload("img/{$type}/", False, True);
+        $file = "{$result['filename']}.{$result['ext']}";
         if($type == 'avatar') {
-            $out = array();
-            $dir = realpath(SITE_PATH .'/_wwwroot/img/avatar/');
-            exec("convert {$dir}/{$result['filename']}.{$result['ext']} -resize 80x80^ -gravity center -extent 80x80 {$dir}/{$result['filename']}.{$result['ext']}", $out);
+            $this->thumb_image($file, 'avatar', 80);
+        } else if($type == 'game') {
+            $this->thumb_image($file, 'game', 120);
         }
         // to pass data through iframe you will need to encode all html tags
         echo htmlspecialchars(json_encode($result), ENT_NOQUOTES);
     }
 
+    protected function thumb_image($file, $type, $x, $y=False) {
+        if(!$y) {
+            $y = $x;
+        }
+        $filename = realpath(SITE_PATH
+            ."/_wwwroot/img/{$type}/{$file}");
+
+        $out = array();
+        exec("convert {$filename} -resize {$x}x{$y}^ -gravity center -extent {$x}x{$y} $filename", $out);
+        return $out;
+    }
     public function buy_intel() {
         import('trouble.intel');
         import('trouble.player');

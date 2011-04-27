@@ -8,6 +8,9 @@ if (extension_loaded('xhprof')) {
 require_once('core_path.php');
 require_once(CORE_PATH . '/core.php');
 
+define('DATETIME_FORMAT', "Ymd.Hi");
+define('DATE_FORMAT', "l j<\s\u\p>S</\s\u\p> F 'y");
+
 import('core.routing');
 
 $router = new \Core\Router();

@@ -111,6 +111,11 @@ abstract class GamePage extends StandardPage {
         import('trouble.game');
         $this->_init_game();
         $this->_template->add('_jsapps', 'games');
+        $this->_template->states = array(
+            0 => 'Waiting for Players',
+            1 => 'In Progress',
+            2 => 'Ended'
+        );
     }
     private function _init_game() {
         if(!$this->_args['game_id']) {

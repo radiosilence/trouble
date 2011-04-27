@@ -55,4 +55,19 @@ $(function() {
        set_invite_only_state($(this).val());
     });
     set_invite_only_state($("input[name=invite_only]:checked").val(), true);
+
+    var uploader = new qq.FileUploader({
+        element: $('#gamefile-uploader')[0],
+        action: 'put/save_image',
+        onComplete: function(id, fileName, responseJSON){
+          var fn = responseJSON['filename']+'.'+responseJSON['ext'];
+          $('#gamefile_img').attr('src','img/game/'+fn);
+          $('#gamefile_img').css('display','block');
+          $('#gamefile').val(fn);
+        },
+        params: {
+          _tok: $.cookie('tok'),
+          type: "game"
+        }
+    });
 });

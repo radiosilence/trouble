@@ -26,7 +26,7 @@ class Game extends \Core\Mapped {
 
     public static $fields = array("name", "start_date", "end_date", "location",
         "victor", "description", "invite_only",
-        "entry_fee", "creator", 'password');
+        "entry_fee", "creator", 'password', 'imagefile');
 
     public function test_entry($data) {
         if($this->invite_only == 1) {
@@ -323,7 +323,7 @@ class GameMapper extends \Core\Mapper {
             $game['active'] = False;
             $game['state'] = 0;
         }
-        else if($game->start_date < $now && $game->end_date > $now) {
+        else if($game->start_date < $now && $now < $game->end_date) {
             $game['joinable'] = False;
             $game['active'] = True;
             $game['state'] = 1;
