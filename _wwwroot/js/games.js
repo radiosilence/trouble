@@ -207,6 +207,11 @@ $(function(){
         window.open('/game/'+game_id+'/generate-vouchers/'+number+'/'+type);
         console.log(number, type);
     });
+
+    $('#vouchers_number').change(function() {
+        $('#vouchers_numval').text($(this).val() + " vouchers / " + ($(this).val() / 14) + " page(s)");
+    });
+
     $(".datepick").datepicker({
         dateFormat: 'yy-mm-dd'
     });

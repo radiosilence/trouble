@@ -7,5 +7,5 @@
     <option value="credit20">20 Credits</option>
     </select></p>
 <p><label for="vouchers_number">Number of Vouchers</label><br />
-    <input id="vouchers_number" name="vouchers_number" type="number" value="24"></p>
+    <input id="vouchers_number" name="vouchers_number" type="range" min="14" max="280" step="14" value="14"><sup id="vouchers_numval">14 vouchers / 1 page(s)</sup></p>
 <button id="vouchers_submit" game_id="<?=$game->id?>">Generate Vouchers</button>

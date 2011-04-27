@@ -273,6 +273,11 @@ class Game extends \Controllers\GamePage {
 
     public function generate_vouchers() {
         $t = $this->_template;
+        if($_args['number'] > 280) {
+            $_args['number'] = 280;
+        } else if($_args['number'] < 1) {
+            $_args['number'] = 0;
+        }
         try {
             $this->_auth->check_admin('game', $this->_game->id);
             $vouchers = array();
