@@ -16,7 +16,7 @@ code {
     font-size: 14pt;
     padding: 0em 1em;
 }
-
+tr {page-break-inside:avoid}
 td.text {
     padding-left: 1em;
 }
