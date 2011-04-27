@@ -8,6 +8,13 @@ import('core.hasher');
 class Voucher extends \Core\Mapped {
     public static $fields = array('code', 'type', 'active', 'game');
 
+    public function credit_value() {
+        if(strpos($this->type) === False) {
+            throw new InvalidVoucherError();
+        }
+        return (int)str_replace('credit', null, $this->type);
+    }
+
     public function spend() {
         $this->active = False;
         $this->save();
@@ -55,13 +62,17 @@ class VoucherContainer extends \Core\MappedContainer {
     }
 
     public function get_valid($code, $type, $game) {
-        $v = $this->get(array(
+        $pars = array(
             'filters' => array(
                 new \Core\Filter('game', $game->id),
-                new \Core\Filter('code', $code),
-                new \Core\Filter('type', $type)
+                new \Core\Filter('code', $code)
             )
-        ))->{0};
+        );
+        if($type) {
+            array_pop($pars['filters'],
+                new \Core\Filter('type', $type));
+        }
+        $v = $this->get($pars)->{0};
         if(!$v) {
             throw new InvalidVoucherError();
         }

@@ -28,11 +28,20 @@
 <?php endif;?>
 <article>
 <h1>Balance</h1>
-Credits: <?=$player->credits?>&nbsp;&nbsp;<button>Buy Credits</button>
+Credits: <?=$player->credits?>&nbsp;&nbsp;<button class="redeem_credit" game_id="<?=$game->id?>">Redeem Credit Voucher</button>
 </article>
 <article>
 <h1>Leave Game</h1>
 <p>Note that if the game you are leaving is in progress or ended, you <strong>cannot</strong> rejoin! This is akin to forfeiting.</p>
 <p><button class="leave_game" game_id="<?=$game->id?>">Leave</button></p>
 </article>
-<?=$_dialog_kill?>
+<div style="display: nome">
+	<?=$_dialog_kill?>
+	<div id="dialog-redeem-credit" title="Redeem Credit Voucher">
+	  <form>
+	    <p><label for="voucher">Voucher</label><br/>
+	    <input type="text" name="voucher" id="voucher" class="voucher" placeholder="Ex. XXX-XXX-XX"/></p>
+	    <p>You can acquire vouchers from the game organisers.</p>
+	  </form>
+	</div>
+</div>

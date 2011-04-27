@@ -89,7 +89,7 @@ class Game extends \Controllers\GamePage {
         $t->_join_dialogs = $t->render('forms/join.php');
         return $t->render('game_info.php');
     }
-
+    
     public function intel() {
         $t = $this->_template;
         $t->game = $this->_game;

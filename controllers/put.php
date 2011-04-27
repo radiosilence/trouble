@@ -101,6 +101,28 @@ class Put extends \Controllers\StandardPage {
         }
     }
 
+    public function redeem_credit() {
+        import('trouble.voucher');
+        try {
+            $this->_game_action(function($agent_id) {
+                $game = \Trouble\Game::container()
+                    ->get_by_id($_POST['game_id'])
+                    ->load_players();
+                
+                $p = $game->all_players->filter($agent_id, 'agent')->{0};
+                $v = \Trouble\Voucher::container()
+                    ->get_valid($_POST['voucher'], False, $game)
+                    ->spend();
+                $p->credits = $p->credits + $v->credit_value();
+                $p->save();
+
+            }, 'Voucher redeemed.');
+        } catch(\Trouble\VoucherError $e) {
+            echo $this->_return_message('Fail',
+                'Invalid voucher.');
+        }
+    }
+
     /**
      * TODO: restrict agent to logged in user or admin
      */

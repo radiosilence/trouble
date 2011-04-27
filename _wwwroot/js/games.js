@@ -116,7 +116,6 @@ $(function(){
 
     $("#dialog-intel").dialog({
         autoOpen: false,
-        height: 500,
         width: 450,
         modal: true,
         buttons: {
@@ -152,16 +151,35 @@ $(function(){
 
     $("#buy_intel").click(function() {
         $('#dialog-intel').dialog("open");
+    });
+
+    $("#dialog-redeem-credit").dialog({
+       autoOpen: false,
+       width: 450,
+       modal: true,
+       buttons: {
+           "Redeem Voucher": function() {
+               d = {
+                   'game_id': $("#dialog-redeem-credit").attr('game_id'),
+                   'voucher': $("#voucher").val()
+               };
+               dialogResponse('/put/redeem_credit', d, function(){
+                   window.location = '/game/'+$('#dialog-redeem-credit').attr('game_id');
+               });
+           },
+           Cancel: function() {
+               $(this).dialog('close');
+           }
+       }
+    });
+
+    $("button.redeem_credit").click(function() {
+
+        $("#dialog-redeem-credit")
+            .attr('game_id', $(this).attr('game_id'))
+            .dialog("open");
     })
 
-    $("select").change(function () {
-        var str = "";
-        if($(this).val() != 0) {
-            $(this).removeClass('default');
-        } else {
-            $(this).addClass('default');
-        }
-    });
     $('#intel').change(function() {
         $('#inteldescription').fadeOut(function() {
             $.post('/get/intel_description', {'field': $('#intel').val()}, function(data) {
