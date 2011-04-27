@@ -175,10 +175,8 @@ class Game extends \Controllers\GamePage {
         $params = \Trouble\GameContainer::params($user);
         $params['order'] = new \Core\Order('end_date', 'asc');
         $params["filters"][] = \Core\Filter::create_complex('games.id in(Select game from players where agent = :currentid)');
-        $t->games = \Trouble\Game::mapper()
-            ->attach_storage(\Core\Storage::container()
-                ->get_storage('Game'))
-            ->get_list($params);
+        $t->games = \Trouble\Game::container()
+            ->get($params);
         $t->title = "Your Games";
         return $t->render('games_list.php');
     }
