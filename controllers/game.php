@@ -20,6 +20,7 @@ import('trouble.kill');
 import('trouble.game');
 import('trouble.agent');
 import('trouble.intel');
+import('trouble.voucher');
 
 class UserNotJoinedError extends \Core\StandardError {}
 class Game extends \Controllers\GamePage {
@@ -243,6 +244,7 @@ class Game extends \Controllers\GamePage {
                 $game->form_start_date = $game->start_date->format('Y-m-d');
                 $game->form_end_date = $game->end_date->format('Y-m-d');
                 $t->administration = $this->_administration($game);
+                $t->vouchers = $this->_vouchers($game);
             } else {
                 $t->title = "Game Creation";
                 $t->new = True;
@@ -258,11 +260,39 @@ class Game extends \Controllers\GamePage {
             throw new \Core\HTTPError(401, "Editing Game");
         }
     }
-
+    protected function _vouchers($game) {
+        $t = $this->_template;
+        return $t->render('vouchers_admin.php');
+    }
     protected function _administration($game) {
         $t = $this->_template;
         $game->load_players();
         $t->all_players = $game->all_players;
         return $t->render('game_admin.php');
+    }
+
+    public function generate_vouchers() {
+        $t = $this->_template;
+        try {
+            $this->_auth->check_admin('game', $this->_game->id);
+            $vouchers = array();
+            for($i=0; $i<$this->_args['number']; $i++) {
+                array_push($vouchers, \Trouble\Voucher::container()
+                    ->make_new($this->_args['type'], $this->_game));
+            }
+            $t->vouchers = $vouchers;
+            $t->types = array(
+                'join' => 'Game Join Code',
+                'credit1' => '1 Credit',
+                'credit2' => '2 Credits',
+                'credit5' => '5 Credits',
+                'credit10' => '10 Credits',
+                'credit20' => '20 Credits'
+            );
+            echo $t->render('vouchers_print.php');
+        } catch(\Core\AuthError $e) {
+            throw new \Core\HTTPError(403, 'generate-vouchers');
+        }
+
     }
 }

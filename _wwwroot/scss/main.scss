@@ -94,3 +94,23 @@ img.photo {
 p.game_description {
   color: #888;
 }
+
+div.listcol1 {
+  display: block;
+  float: left;
+  width: 120px;
+  margin-right: 1em;
+}
+div.listcol2 {
+  display: block;
+  float: left;
+  width: 560px;
+}
+
+span.joininfo {
+  font-size: 12pt;
+  font-style: italic;
+}
+
+h1.gamelist {
+}

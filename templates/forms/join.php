@@ -3,8 +3,8 @@
     <p>Are you sure you wish to join this game?</p>
   </form>
   <form id="join-password">
-    <p><label for="password">Password</label><br/>
-      <input type="password" name="password" id="password" placeholder="Ex. blah"/></p>
+    <p><label for="gamepass">Password</label><br/>
+      <input type="password" name="password" id="gamepass" placeholder="Ex. blah"/></p>
     <p>This game requires a password in order to join. Please enter it here.</p>
   </form>
   <form id="join-voucher">

@@ -19,6 +19,7 @@ $routes = array(
     '^create-game' => 'Game:method=edit',
     '^weapon/([0-9]+)' => 'Weapon:weapon_id=$1',
     '^game/([0-9]+)/intel/([^/]+)$' => 'Game:game_id=$1;method=intel;agent_alias=$2',
+    '^game/([0-9]+)/generate-vouchers/([0-9]+)/([a-z0-9]+)?$' => 'Game:method=generate_vouchers;game_id=$1;number=$2;type=$3',
     '^game/([0-9]+)/?$' => 'Game:game_id=$1',
     '^games/starting-soon(.*)$' => 'Game:method=starting_soon',
     '^games(.*)$' => 'Game:method=ending_soon',

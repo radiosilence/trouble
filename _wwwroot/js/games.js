@@ -33,6 +33,9 @@ $(function(){
         return false;
     });
 
+    $("#dialog-join form").submit(function(e) {
+        e.preventDefault();
+    });
     $("#dialog-join").dialog({
         autoOpen: false,
         width: 450,
@@ -69,10 +72,10 @@ $(function(){
         );
         return false;
     });
-    $(".datepick").datepicker({
-        dateFormat: 'yy-mm-dd'
+
+    $("#dialog-kill form").submit(function(e) {
+        e.preventDefault();
     });
-    $('.timepick').timepicker();
     $("#dialog-kill").dialog({
         autoOpen: false,
         height: 500,
@@ -114,6 +117,11 @@ $(function(){
         $("#dialog-kill").dialog("open");
     });
 
+
+    $("#dialog-intel form").submit(function(e) {
+        e.preventDefault();
+    });
+
     $("#dialog-intel").dialog({
         autoOpen: false,
         width: 450,
@@ -153,6 +161,9 @@ $(function(){
         $('#dialog-intel').dialog("open");
     });
 
+    $("#dialog-redeem-credit form").submit(function(e) {
+        e.preventDefault();
+    });
     $("#dialog-redeem-credit").dialog({
        autoOpen: false,
        width: 450,
@@ -187,4 +198,17 @@ $(function(){
             });            
         });
     });
+
+    $('#vouchers_submit').click(function(e) {
+        e.preventDefault();
+        number = $('#vouchers_number').val();
+        type = $('#vouchers_type').val();
+        game_id = $(this).attr('game_id');
+        window.open('/game/'+game_id+'/generate-vouchers/'+number+'/'+type);
+        console.log(number, type);
+    });
+    $(".datepick").datepicker({
+        dateFormat: 'yy-mm-dd'
+    });
+    $('.timepick').timepicker();
 });
