@@ -1,4 +1,5 @@
 <article>
+<img src="/img/game/<?=($game->imagefile ? $game->imagefile : 'default.png')?>" class="itempic"/>
 <p><code>State: <?=$states[$game->state]?></code></p>
 <?php if($player->status == 0): ?>
 	<p>You are dead.</p>
@@ -13,7 +14,7 @@
 	<p>Your PKN: <span class="pkn"><?=$player->pkn?></span></p>
 	<?php if($game['active']): ?>
 	</article>
-	<article>
+	<article><img src="/img/avatar/<?=$target['avatar']?>" class="itempic"/>
 	<h1>Current Target</h1>
 	<p><a class="target" href="/game/<?=$game->id?>/intel/<?=$target["alias"]?>"><?=$target["alias"]?></a>&nbsp;<button id="register_kill" game_id="<?=$game->id?>">Register Kill</button></p>
 	<?php endif;?>

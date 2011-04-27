@@ -56,6 +56,7 @@ class Agent extends \Core\Mapped {
 
 class AgentMapper extends \Core\Mapper {
     public function create_object($data) {
+        $data['avatar'] = $data['avatar'] ? $data['avatar'] : 'default.png';
         return Agent::create($data);
     }
 }

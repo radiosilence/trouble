@@ -1,4 +1,4 @@
-<img src="/img/avatar/<?=($agent->avatar ? $agent->avatar : 'default.png')?>" class="itempic"/>
+<img src="/img/avatar/<?=$agent->avatar?>" class="itempic"/>
 <h1><?=$agent->alias?></h1>
 <h2>Intel in game <a href="game/<?=$game->id?>"><?=$game->name?></a>&nbsp;<button id="buy_intel" game_id="<?=$game->id?>" subject_id="<?=$agent->id?>">Buy Intel</button>
 <?php if($is_target): ?>

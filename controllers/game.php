@@ -244,7 +244,9 @@ class Game extends \Controllers\GamePage {
                 $game->form_start_date = $game->start_date->format('Y-m-d');
                 $game->form_end_date = $game->end_date->format('Y-m-d');
                 $t->administration = $this->_administration($game);
-                $t->vouchers = $this->_vouchers($game);
+                if($game->invite_only == 2) {
+                    $t->vouchers = $this->_vouchers($game);                    
+                }
             } else {
                 $t->title = "Game Creation";
                 $t->new = True;

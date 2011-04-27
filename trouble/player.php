@@ -26,7 +26,8 @@ class PlayerMapper extends \Core\Mapper {
 	public function create_object($data) {
         $agent = Agent::mapper()->create_object(array(
             'id' => $data['agent'],
-            'alias' => $data['agent_alias']
+            'alias' => $data['agent_alias'],
+            'avatar' => $data['agent_avatar']
         ));
 
         return Player::create(array(
@@ -46,11 +47,10 @@ class PlayerContainer extends \Core\MappedContainer {
 	protected $_index;
 	
 	public function find_by_game(\Trouble\Game $game) {
-		$results = \Core\Storage::container()
-			->get_storage('Player')
-			->fetch(array(
+		$this->_players = \Trouble\Player::container()
+			->get(array(
 	            "joins" => array(
-	                new \Core\Join("agent", "Agent", array('id', 'alias'))
+	                new \Core\Join("agent", "Agent", array('id', 'alias', 'avatar'))
 	            ),
 	            "filters" => array(
 		            new \Core\Filter("game", $game['id']),
@@ -58,8 +58,6 @@ class PlayerContainer extends \Core\MappedContainer {
 		        ),
 	            "order" => new \Core\Order("id")
         	));
-        $this->_players = Player::mapper()
-        	->get_list($results);
         $this->_index = \Core\Dict::create();
         $this->_alive_players = \Core\Li::create();
 
@@ -94,19 +92,17 @@ class PlayerContainer extends \Core\MappedContainer {
 	}
 
 	public function get_by_agent_game($game_id, $agent_id) {
-		$results = \Core\Storage::container()
-			->get_storage('Player')
-			->fetch(array(
+        return \Trouble\Player::container()
+			->get(array(
 	            "joins" => array(
-	                new \Core\Join("agent", "Agent", array('id', 'alias'))
+	                new \Core\Join("agent", "Agent", array('id', 'alias', 'avatar'))
 	            ),
 	            "filters" => array(
 		            new \Core\Filter("game", $game_id),
 		            new \Core\Filter("agent", $agent_id)
 		        ),
 	            "order" => new \Core\Order("id")
-        	));
-        return Player::mapper()
-        	->create_object($results[0]);
+        	))->{0};
+
 	}
 }

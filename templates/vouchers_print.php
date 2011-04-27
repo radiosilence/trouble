@@ -13,8 +13,7 @@ h1 {
 code {
     font-family: "Consolas", "Monaco", "Lucida Console", monospace;
     font-weight: bold;
-    font-size: 14pt;
-    padding: 0em 1em;
+    font-size: 14pt;;
 }
 tr {page-break-inside:avoid}
 td.text {
@@ -36,7 +35,7 @@ td.text {
    <td class="text"><?=$types[$voucher->type]?></td>
   </tr>
   <tr>
-   <td class="text"><strong>Code: </strong><code><?=$voucher->code?></code></td>
+   <td class="text">Code: <code><?=$voucher->code?></code></td>
   </tr>
  </table>
  </td>
