@@ -71,7 +71,7 @@ class KillMapper extends \Core\Mapper {
             'weapon' => $weapon,
             'game' => $game,
             'when_happened' => new \DateTime($data->when_happened)
-        ));
+        ), True);
     }
 }
 

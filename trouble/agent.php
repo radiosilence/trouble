@@ -56,7 +56,7 @@ class Agent extends \Core\Mapped {
 
 class AgentMapper extends \Core\Mapper {
     public function create_object($data) {
-        return Agent::create($data);
+        return Agent::create($data, True);
     }
 }
 
