@@ -4,9 +4,7 @@
       <input type="hidden" name="id" value="<?=$game->id?>"/>
     <ul>
       <li><a href="#cpanel">Control Panel</a></li>
-      <?php if($game->invite_only == 2): ?>
-        <li><a href="#vouchers">Vouchers</a></li>
-      <?php endif;?>
+      <li><a href="#vouchers">Vouchers</a></li> 
       <li><a href="#fieldset-info">Basic Information</a></li>
       <li><a href="#fieldset-dates">Dates</a></li>
       <li><a href="#fieldset-options">Options</a></li>
@@ -19,13 +17,11 @@
           <p>Here is where you can kick players, view the current order, and see the status of your game.</p>
           <?=$administration?>
       </div>
-      <?php if($game->invite_only == 2): ?>
-        <div class="fieldset" id="vouchers">
-          <h1>Voucher Generator</h1>
-          <p>This section allows you to generate vouchers for your game. They will be created in a printable format with your game's image on them.</p>
-          <?=$vouchers?>
-        </div>
-      <?php endif;?>
+      <div class="fieldset" id="vouchers">
+        <h1>Voucher Generator</h1>
+        <p>This section allows you to generate vouchers for your game. They will be created in a printable format with your game's image on them.</p>
+        <?=$vouchers?>
+      </div>
     <?php endif; ?>
     <?php if($new):?><h3><a href="#">Basic Information</a></h3><?php endif;?>
     <div class="fieldset" id="fieldset-info">
