@@ -172,7 +172,7 @@ $(function(){
            "Redeem Voucher": function() {
                d = {
                    'game_id': $("#dialog-redeem-credit").attr('game_id'),
-                   'voucher': $("#voucher").val()
+                   'voucher': $("#voucher-input").val()
                };
                dialogResponse('/put/redeem_credit', d, function(){
                    window.location = '/game/'+$('#dialog-redeem-credit').attr('game_id');

@@ -36,7 +36,7 @@ Credits: <?=$player->credits?>&nbsp;&nbsp;<button class="redeem_credit" game_id=
 	<div id="dialog-redeem-credit" title="Redeem Credit Voucher">
 	  <form>
 	    <p><label for="voucher">Voucher</label><br/>
-	    <input type="text" name="voucher" id="voucher" class="voucher" placeholder="Ex. XXX-XXX-XX"/></p>
+	    <input type="text" name="voucher" id="voucher-input" class="voucher" placeholder="Ex. XXX-XXX-XX"/></p>
 	    <p>You can acquire vouchers from the game organisers.</p>
 	  </form>
 	</div>

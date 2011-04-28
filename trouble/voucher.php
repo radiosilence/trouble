@@ -69,7 +69,7 @@ class VoucherContainer extends \Core\MappedContainer {
             )
         );
         if($type) {
-            array_pop($pars['filters'],
+            array_push($pars['filters'],
                 new \Core\Filter('type', $type));
         }
         $v = $this->get($pars)->{0};

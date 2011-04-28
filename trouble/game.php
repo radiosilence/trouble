@@ -28,6 +28,19 @@ class Game extends \Core\Mapped {
         "victor", "description", "invite_only",
         "entry_fee", "creator", 'password', 'imagefile');
 
+    public static function validation() {
+        return array(
+            'name' => array(
+                array(
+                    'type' => 'unique',
+                    'mapper' => 'game'
+                ),
+                'default'
+            ),
+            'location' => 'default'
+        );
+    }
+
     public function test_entry($data) {
         if($this->invite_only == 1) {
             $hasher = \Core\Hasher::create()
@@ -249,15 +262,6 @@ class Game extends \Core\Mapped {
 
     protected function _delete_player(Player $player) {
         $this->_storage->delete($player);
-    }
-
-    public static function validation() {
-       return array(
-            'name' => array(
-                'type' => 'default',
-                'title' => 'Game Name'
-            )
-        );
     }
 }
 class GameError extends \Core\StandardError {}

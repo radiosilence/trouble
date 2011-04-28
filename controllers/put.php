@@ -163,7 +163,7 @@ class Put extends \Controllers\StandardPage {
                 }
                 $agent = \Trouble\Agent::create($_POST, True);
             }
-            $validator->validate($_POST, \Trouble\Agent::validation());
+            $validator->validate($_POST);
             try {
                 \Core\Auth::hash($agent, 'password');
             } catch(\Core\AuthEmptyPasswordError $e) {
@@ -198,7 +198,7 @@ class Put extends \Controllers\StandardPage {
         import('core.validation');
         import('trouble.game');
 
-        $validator = \Core\Validator::validator('\Trouble\Gane');
+        $validator = \Core\Validator::validator('\Trouble\Game');
         $editing = $_POST['id'] > 0 ? True : False;
             
         try {
@@ -218,6 +218,7 @@ class Put extends \Controllers\StandardPage {
             } catch(\Core\AuthEmptyPasswordError $e) {
                 $game->remove('password');
             }
+            $validator->validate($_POST);
 
             \Core\Storage::container()
                 ->get_storage('Game')
