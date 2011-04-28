@@ -141,29 +141,24 @@ class Game extends \Controllers\GamePage {
         
     }
 
-    public function ending_soon() {
+    public function games_list() {
         $t = $this->_template;
-        $now = new \DateTime();
-
-        try {
-            $params = \Trouble\GameContainer::params($this->_auth->user_id());
-        } catch(\Core\AuthNotLoggedInError $e) {
-            $params = \Trouble\GameContainer::params();
-        }
-        $params['filters'][] = new \Core\Filter('end_date', $now->format('c'), '>');
-        $params['order'] = new \Core\Order('end_date', 'asc');
-        
-        $t->games = \Trouble\Game::container()
-            ->get($params);
-            
-        $t->_join_dialogs = $t->render('forms/join.php');
-        $t->content = $t->render('games_list.php');
-        $t->title = "Games Ending Soon";
+        $t->tabs = array(
+            'starting-soon' => array(
+                'title' => 'Waiting for Players',
+                'content' => $this->_starting_soon()
+            ),
+            'ending-soon' => array(
+                'title' => 'In Progress',
+                'content' => $this->_in_progress()
+            )
+        );
+        $t->content = $t->render('tabs.php');
+        $t->title = "Games";
         echo $t->render('main.php');
-
     }
 
-    public function starting_soon() {
+    protected function _starting_soon() {
         $t = $this->_template;
         $now = new \DateTime();
         try {
@@ -178,9 +173,27 @@ class Game extends \Controllers\GamePage {
             ->get($params);
             
         $t->_join_dialogs = $t->render('forms/join.php');
-        $t->content = $t->render('games_list.php');
-        $t->title = "Games Starting Soon";
-        echo $t->render('main.php');
+        return $t->render('games_list.php');
+    }
+
+    protected function _in_progress() {
+        $t = $this->_template;
+        $now = new \DateTime();
+
+        try {
+            $params = \Trouble\GameContainer::params($this->_auth->user_id());
+        } catch(\Core\AuthNotLoggedInError $e) {
+            $params = \Trouble\GameContainer::params();
+        }
+        $params['filters'][] = new \Core\Filter('end_date', $now->format('c'), '>');
+        $params['filters'][] = new \Core\Filter('start_date', $now->format('c'), '<');
+        $params['order'] = new \Core\Order('end_date', 'asc');
+        
+        $t->games = \Trouble\Game::container()
+            ->get($params);
+            
+        $t->_join_dialogs = $t->render('forms/join.php');
+        return $t->render('games_list.php');
 
     }
 

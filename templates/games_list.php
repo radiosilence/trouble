@@ -27,3 +27,6 @@
 <p>There are no games to display.</p>
 <?php endif;?>
 </div>
+<?php if($link): ?>
+<article><p><a href="<?=$link[1]?>"><?=$link[0]?></a></p></article>
+<?php endif; ?>
