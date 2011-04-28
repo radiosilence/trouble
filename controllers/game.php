@@ -153,6 +153,7 @@ class Game extends \Controllers\GamePage {
                 'content' => $this->_in_progress()
             )
         );
+        $t->dialogs = $t->render('forms/join.php');
         $t->content = $t->render('tabs.php');
         $t->title = "Games";
         echo $t->render('main.php');
@@ -172,7 +173,6 @@ class Game extends \Controllers\GamePage {
         $t->games = \Trouble\Game::container()
             ->get($params);
             
-        $t->_join_dialogs = $t->render('forms/join.php');
         return $t->render('games_list.php');
     }
 
@@ -192,7 +192,6 @@ class Game extends \Controllers\GamePage {
         $t->games = \Trouble\Game::container()
             ->get($params);
             
-        $t->_join_dialogs = $t->render('forms/join.php');
         return $t->render('games_list.php');
 
     }

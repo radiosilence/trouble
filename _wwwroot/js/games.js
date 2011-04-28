@@ -12,16 +12,16 @@ $(function() {
 });
 $(function(){
     $('button.join_game').click(function(){
+        var game_id = $(this).attr('game_id');
         data = {
-            'id': $(this).attr('game_id')
+            'id': game_id
         };
-
         var type = $(this).attr('invite_only');
 
         $('#join-normal').hide();
         $('#join-voucher').hide();
         $('#join-password').hide();
-        $('#dialog-join').attr('game_id', $(this).attr('game_id'));
+        $('#dialog-join').attr('game_id', game_id);
         if(type == 0) {
             $('#join-normal').show();
         } else if(type == 1) {
@@ -55,7 +55,7 @@ $(function(){
                 $(this).dialog("close");
             }
         }
-    })
+    });
 
     $('button.leave_game').click(function(){
         data = {

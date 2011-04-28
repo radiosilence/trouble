@@ -22,7 +22,6 @@
     </div>
   </article>
 <?php endforeach; ?>
-<div style="display: none"><?=$_join_dialogs?></div>
 <?php else: ?>
 <p>There are no games to display.</p>
 <?php endif;?>
