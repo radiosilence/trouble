@@ -133,7 +133,6 @@ $(function(){
                     'intel': $('select#intel').val(),
                     'subject': $('#buy_intel').attr('subject_id')
                 };
-                console.log(d);
                 dialogResponse('/put/buy_intel', d, function(){
                         location.reload();
                 });
