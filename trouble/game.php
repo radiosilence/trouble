@@ -272,7 +272,7 @@ class GameIncorrectPKNError extends GameError {}
 class GameMapper extends \Core\Mapper {
     private $_default_order = array("start_date", "desc");
 
-    public function get_list($parameters=False) {
+    /*public function get_list($parameters=False) {
         if(!$order) {
             $order = $_default_order;
         }
@@ -285,7 +285,7 @@ class GameMapper extends \Core\Mapper {
             $games->append($this->create_object($result));            
         }
         return $games;
-    }
+    }*/
 
     public function create_object($data) {
         if(empty($data['victor'])) {
@@ -360,6 +360,11 @@ class GameContainer extends \Core\MappedContainer {
                 ),
                 'fields' => array(
                         'games.id in(SELECT game FROM players WHERE agent = :currentid AND players.status >= 0) as joined'
+                ),
+                'joins' => array(
+                    new \Core\Join("victor", "Player", False,
+                        new \Core\Join("agent", "Agent", array('alias')
+                    ))
                 )
             );
             

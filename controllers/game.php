@@ -150,16 +150,36 @@ class Game extends \Controllers\GamePage {
         } catch(\Core\AuthNotLoggedInError $e) {
             $params = \Trouble\GameContainer::params();
         }
-        $params['filters'][] = new \Core\Filter('end_date', $now->format('Y-m-d'), '>');
+        $params['filters'][] = new \Core\Filter('end_date', $now->format('c'), '>');
         $params['order'] = new \Core\Order('end_date', 'asc');
         
-        $t->games = \Trouble\Game::mapper()
-            ->attach_storage(\Core\Storage::container()
-                ->get_storage('Game'))
-            ->get_list($params);
+        $t->games = \Trouble\Game::container()
+            ->get($params);
+            
         $t->_join_dialogs = $t->render('forms/join.php');
         $t->content = $t->render('games_list.php');
         $t->title = "Games Ending Soon";
+        echo $t->render('main.php');
+
+    }
+
+    public function starting_soon() {
+        $t = $this->_template;
+        $now = new \DateTime();
+        try {
+            $params = \Trouble\GameContainer::params($this->_auth->user_id());
+        } catch(\Core\AuthNotLoggedInError $e) {
+            $params = \Trouble\GameContainer::params();
+        }
+        $params['filters'][] = new \Core\Filter('start_date', $now->format('c'), '>');
+        $params['order'] = new \Core\Order('start_date', 'asc');
+        
+        $t->games = \Trouble\Game::container()
+            ->get($params);
+            
+        $t->_join_dialogs = $t->render('forms/join.php');
+        $t->content = $t->render('games_list.php');
+        $t->title = "Games Starting Soon";
         echo $t->render('main.php');
 
     }
@@ -173,7 +193,7 @@ class Game extends \Controllers\GamePage {
     protected function _user_games($user) {
         $t = $this->_template;
         $params = \Trouble\GameContainer::params($user);
-        $params['order'] = new \Core\Order('end_date', 'asc');
+        $params['orders'][] = new \Core\Order('end_date', 'asc');
         $params["filters"][] = \Core\Filter::create_complex('games.id in(Select game from players where agent = :currentid)');
         $t->games = \Trouble\Game::container()
             ->get($params);
@@ -189,10 +209,8 @@ class Game extends \Controllers\GamePage {
             $params = \Trouble\GameContainer::params($this->_auth->user_id());
             $params['filters'][] = new \Core\Filter('id', $ids, 'in');
             $params['order'] = new \Core\Order('start_date', 'desc');
-            $t->games->extend(\Trouble\Game::mapper()
-                ->attach_storage(\Core\Storage::container()
-                    ->get_storage('Game'))
-                ->get_list($params));
+            $t->games->extend(\Trouble\Game::container()
+                ->get($params));
         }
 
         return $t->render('games_list.php');
